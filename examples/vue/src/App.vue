@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import os from 'node:os';
 import HelloWorld from './components/HelloWorld.vue';
+
+const info = os.platform() + ' ' + os.arch();
 </script>
 
 <template>
@@ -7,11 +10,15 @@ import HelloWorld from './components/HelloWorld.vue';
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
-    <a href="https://vuejs.org/" target="_blank">
+    <a href="https://www.electronjs.org" target="_blank">
+      <img src="./assets/electron.svg" class="logo electron" alt="Vite logo" />
+    </a>
+    <a href="https://vuejs.org" target="_blank">
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  <div>{{ info }}</div>
+  <HelloWorld msg="Vite + Electron + Vue" />
 </template>
 
 <style scoped>
@@ -24,6 +31,10 @@ import HelloWorld from './components/HelloWorld.vue';
 
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.electron:hover {
+  filter: drop-shadow(0 0 2em #1b1c26aa);
 }
 
 .logo.vue:hover {
