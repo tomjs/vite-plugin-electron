@@ -39,7 +39,7 @@
   },
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup --minify",
+    "build": "tsup",
     "lint": "run-s lint:eslint lint:stylelint lint:prettier",
     "lint:eslint": "eslint \"{src,examples}/**/*.{js,cjs,ts,tsx,vue}\" *.{js,cjs,ts} --fix --cache",
     "lint:stylelint": "stylelint \"examples/**/*.{css,scss,less,vue,html}\" --fix --cache",
@@ -76,6 +76,6 @@
     "stylelint": "^15.11.0",
     "tsx": "^4.6.2",
     "typescript": "~5.2.2",
-    "vite": "^5.0.6"
+    "vite": "^5.0.7"
   }
 }
