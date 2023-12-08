@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@tomjs/vite-plugin-electron)
 
-> A simple [vite](https://vitejs.dev/) plugin to help [electron](https://www.electronjs.org) apps develop
+> A simple [vite](https://vitejs.dev/) plugin for [electron](https://www.electronjs.org) that supports `esm` and `cjs`.
 
 **English** | [中文](./README.zh_CN.md)
 
