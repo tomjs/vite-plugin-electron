@@ -61,6 +61,19 @@ For example, for vue/react projects, `vite.config.ts` configuration.
 
 ### vue
 
+Support `ES modules`
+
+- `package.json`
+
+```json
+{
+  "type": "module",
+  "main": "dist/main/index.mjs"
+}
+```
+
+- `vite.config.ts`
+
 ```ts
 import { defineConfig } from 'vite';
 // import renderer from 'vite-plugin-electron-renderer'; // Enable nodeIntegration
@@ -83,6 +96,19 @@ export default defineConfig({
 ```
 
 ### react
+
+Support `CommonJS`
+
+- `package.json`
+
+```json
+{
+  // "type": "commonjs",
+  "main": "dist/main/index.js"
+}
+```
+
+- `vite.config.ts`
 
 ```ts
 import { defineConfig } from 'vite';

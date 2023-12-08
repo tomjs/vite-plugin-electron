@@ -61,6 +61,19 @@ npm i @tomjs/vite-plugin-electron --save-dev
 
 ### vue
 
+支持 `ES modules`
+
+- `package.json`
+
+```json
+{
+  "type": "module",
+  "main": "dist/main/index.mjs"
+}
+```
+
+- `vite.config.ts`
+
 ```ts
 import { defineConfig } from 'vite';
 // import renderer from 'vite-plugin-electron-renderer'; // 启用 nodeIntegration
@@ -84,6 +97,19 @@ export default defineConfig({
 ```
 
 ### react
+
+支持 `CommonJS`
+
+- `package.json`
+
+```json
+{
+  // "type": "commonjs",
+  "main": "dist/main/index.js"
+}
+```
+
+- `vite.config.ts`
 
 ```ts
 import { defineConfig } from 'vite';

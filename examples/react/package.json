@@ -2,11 +2,10 @@
   "name": "template-react",
   "version": "0.0.0",
   "description": "vite + react",
-  "type": "module",
   "engines": {
     "node": ">=18"
   },
-  "main": "./dist/main/index.mjs",
+  "main": "./dist/main/index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
