@@ -8,23 +8,26 @@ export type MainOptions = Omit<
   'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'
 > & {
   /**
-   * main output folder name
+   * The name of the electron main process.
    * @default "main"
    */
   name?: string;
   /**
-   * main entry file
+   * The main process entry file.
    */
   entry: string;
   /**
-   * bundle format. if not specified, will use package.json "type" field
+   * The bundle format. If not specified, it will use the "type" field from package.json.
    */
   format?: 'cjs' | 'esm';
   /**
-   * preload outDir
+   * The output directory for the main process files. Defaults to `"dist-electron/main"`.
    * @default "dist-electron/main"
    */
   outDir?: string;
+  /**
+   * A function that will be executed after the build succeeds.
+   */
   onSuccess?: () => Promise<void | undefined | (() => void | Promise<void>)>;
 };
 
@@ -36,27 +39,40 @@ export type PreloadOptions = Omit<
   'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'
 > & {
   /**
-   * preload output folder name
+   * The name of the electron preload process.
    * @default "preload"
    */
   name?: string;
+  /**
+   * The preload process entry file
+   */
   entry?: string | string[] | Record<string, string>;
+  /**
+   * The bundle format. If not specified, it will use the "type" field from package.json.
+   */
   format?: 'cjs' | 'esm';
   /**
-   * preload outDir
+   * The output directory for the preload process files. Defaults to `"dist-electron/preload"`.
    * @default "dist-electron/preload"
    */
   outDir?: string;
+  /**
+   * A function that will be executed after the build succeeds.
+   */
   onSuccess?: () => Promise<void | undefined | (() => void | Promise<void>)>;
 };
 
+/**
+ * vite plugin options
+ */
 export interface PluginOptions {
   /**
-   * If true, will change the main/preload/renderer outDir to be parallel outDir;
+   * Recommended switch, if true, will have the following default behavior
+   * * will change the main/preload/renderer outDir to be parallel outDir;
    * eg. if vite build.outDir is 'dist', will change main/preload/render to 'dist/main' and 'dist/preload' and 'dist/renderer'
    * @default true
    */
-  parallelOutDir?: boolean;
+  recommended?: boolean;
   /**
    * Don't bundle these modules
    */
@@ -71,6 +87,7 @@ export interface PluginOptions {
   preload?: PreloadOptions;
   /**
    * electron start with the `--inspect`
+   * @default true
    */
   inspect?: boolean;
 }

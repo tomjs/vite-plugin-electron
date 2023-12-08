@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import os from 'node:os';
 import { ref } from 'vue';
 
 defineProps<{ msg: string }>();
 
 const count = ref(0);
+const info = os.platform() + ' ' + os.arch();
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
 
   <div class="card">
+    <span style="margin-right: 8px">{{ info }}</span>
     <button type="button" @click="count++">count is {{ count }}</button>
     <p>
       Edit

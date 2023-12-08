@@ -6,10 +6,10 @@
   "engines": {
     "node": ">=18"
   },
-  "main": "./dist/main/index.js",
+  "main": "./dist/main/index.mjs",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

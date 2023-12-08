@@ -1,6 +1,6 @@
 import type { AddressInfo } from 'node:net';
 import type { Plugin } from 'vite';
-import type { InnerOptions, PluginOptions } from './types';
+import type { InnerOptions, MainOptions, PluginOptions, PreloadOptions } from './types';
 import fs from 'node:fs';
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
@@ -27,37 +27,45 @@ function preMergeOptions(options?: PluginOptions) {
   const pkg = getPkg();
   const format = pkg.type === 'module' ? 'esm' : 'cjs';
 
+  const electron: MainOptions | PreloadOptions = {
+    format,
+    clean: true,
+    dts: false,
+    outExtension({ format }) {
+      return {
+        js: format === 'esm' ? '.mjs' : `.js`,
+      };
+    },
+  };
+
   const opts: PluginOptions = merge(
     {
-      parallelOutDir: true,
+      recommended: true,
       external: ['electron'],
       main: {
         name: 'main',
-        format,
-        clean: true,
-        dts: false,
+        ...electron,
       },
       preload: {
         name: 'payload',
-        format,
-        clean: true,
-        dts: false,
+        ...electron,
       },
     } as PluginOptions,
     cloneDeep(options),
   );
 
   ['main', 'preload'].forEach(prop => {
-    const fmt = opts[prop].format;
-    opts[prop].format = ['cjs', 'esm'].includes(fmt) ? [fmt] : [format];
+    const opt = opts[prop];
+    const fmt = opt.format;
+    opt.format = ['cjs', 'esm'].includes(fmt) ? [fmt] : [format];
 
-    const entry = opts[prop].entry;
+    const entry = opt.entry;
     if (typeof entry === 'string') {
-      opts[prop].entry = [entry];
+      opt.entry = [entry];
     }
 
-    const external = opts[prop].external || opts.external || ['electron'];
-    opts[prop].external = [...new Set(['electron'].concat(external))];
+    const external = opt.external || opts.external || ['electron'];
+    opt.external = [...new Set(['electron'].concat(external))];
   });
 
   const innerOpts: InnerOptions = {
@@ -69,6 +77,7 @@ function preMergeOptions(options?: PluginOptions) {
 
 export function vitePluginElectron(options?: PluginOptions): Plugin {
   const { opts, innerOpts } = preMergeOptions(options);
+  const isDev = process.env.NODE_ENV === 'development';
 
   return {
     name: PLUGIN_NAME,
@@ -77,13 +86,22 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
 
       let outDir = config?.build?.outDir || 'dist';
       opts.preload = opts.preload || {};
-      if (opts.parallelOutDir ?? true) {
+      if (opts.recommended) {
         opts.main.outDir = path.join(outDir, 'main');
         opts.preload.outDir = path.join(outDir, 'preload');
         outDir = path.join(outDir, 'renderer');
       } else {
         opts.main.outDir = opts.main.outDir || path.join('dist-electron', 'main');
         opts.preload.outDir = opts.preload.outDir || path.join('dist-electron', 'preload');
+      }
+
+      if (isDev) {
+        opts.main.sourcemap = opts.main.sourcemap ?? true;
+        opts.preload.sourcemap = opts.main.sourcemap ?? true;
+        opts.inspect = opts.inspect ?? true;
+      } else {
+        opts.main.minify = opts.main.minify ?? true;
+        opts.preload.minify = opts.preload.minify ?? true;
       }
 
       return {

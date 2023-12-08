@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import os from 'node:os';
 import HelloWorld from './components/HelloWorld.vue';
-
-const info = os.platform() + ' ' + os.arch();
 </script>
 
 <template>
@@ -17,7 +14,6 @@ const info = os.platform() + ' ' + os.arch();
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
-  <div>{{ info }}</div>
   <HelloWorld msg="Vite + Electron + Vue" />
 </template>
 
@@ -39,5 +35,21 @@ const info = os.platform() + ' ' + os.arch();
 
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 </style>

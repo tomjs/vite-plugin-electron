@@ -25,8 +25,8 @@ function App() {
         </a>
       </div>
       <h1>Vite + Electron + React</h1>
-      <div>{info}</div>
       <div className="card">
+        <span style={{ marginRight: 8 }}>{info}</span>
         <button onClick={() => setCount(count => count + 1)}>count is {count}</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
