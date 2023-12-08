@@ -2,9 +2,16 @@
 
 [![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@tomjs/vite-plugin-electron)
 
+[English](./README.md) | **中文**
+
 > 一个简单的 [electron](https://www.electronjs.org/zh/) [vite](https://cn.vitejs.dev/) 插件，支持 `esm` 和 `cjs`
 
-[English](./README.md) | **中文**
+## 特性
+
+- 使用 [tsup](https://github.com/egoist/tsup) 快速构建 `main` 和 `preload`
+- 配置简单，专注业务
+- 支持 `esm` 和 `cjs` ，你可以在 [electron v28+](https://www.electronjs.org/zh/blog/electron-28-0) 中使用 `esm`
+- 支持 `vue` 和 `react` 以及 [其他框架](https://cn.vitejs.dev/guide/#trying-vite-online)
 
 ## 安装
 

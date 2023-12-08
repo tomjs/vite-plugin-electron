@@ -2,9 +2,16 @@
 
 [![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@tomjs/vite-plugin-electron)
 
-> A simple [vite](https://vitejs.dev/) plugin for [electron](https://www.electronjs.org) that supports `esm` and `cjs`.
-
 **English** | [中文](./README.zh_CN.md)
+
+> A Simple [vite](https://vitejs.dev/) plugin for [electron](https://www.electronjs.org), supports `esm` and `cjs`.
+
+## Features
+
+- Fast build `main` and `preload` with [tsup](https://github.com/egoist/tsup)
+- Little configuration, focus on business
+- Support `esm` and `cjs`, you can use `esm` in [electron v28+](https://www.electronjs.org/blog/electron-28-0)
+- Support `vue` and `react` and [other frameworks](https://vitejs.dev/guide/#trying-vite-online)
 
 ## Install
 
