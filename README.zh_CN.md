@@ -200,7 +200,6 @@ export default defineConfig({
 
 | 参数名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| name | `string` | "main" | main 名称 |
 | **entry** | `string` | `-` | main 入口文件 |
 | format | `'cjs' \| 'esm'` | `-` | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
 | outDir | `string` | `"dist-electron/main"` | main 输出文件夹 |
@@ -212,7 +211,6 @@ export default defineConfig({
 
 | 参数名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| name | `string` | "preload" | preload 名称 |
 | **entry** | `string` | `-` | preload 入口文件 |
 | format | `'cjs' \| 'esm'` | `-` | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
 | outDir | `string` | `"dist-electron/preload"` | preload 输出文件夹 |

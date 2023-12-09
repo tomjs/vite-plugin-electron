@@ -199,7 +199,6 @@ Based on [Options](https://paka.dev/npm/tsup) of [tsup](https://tsup.egoist.dev/
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| name | `string` | "main" | The name of the electron main process. |
 | entry | `string` | `-` | The main process entry file. |
 | format | `'cjs' \| 'esm'` | `-` | The bundle format. If not specified, it will use the "type" field from package.json. |
 | outDir | `string` | "dist-electron/main" | The output directory for the main process files |
@@ -211,7 +210,6 @@ Based on [Options](https://paka.dev/npm/tsup) of [tsup](https://tsup.egoist.dev/
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| name | `string` | "preload" | The name of the electron preload process. |
 | entry | `string` | `-` | The preload process entry file. |
 | format | `'cjs' \| 'esm'` | `-` | The bundle format. If not specified, it will use the "type" field from package.json. |
 | outDir | `string` | "dist-electron/preload" | The output directory for the preload process files |
