@@ -1,7 +1,9 @@
 import type { Options } from 'tsup';
 
 /**
- * Electron main process options
+ * Electron main process options.
+ * @see https://paka.dev/npm/tsup
+ * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface MainOptions
   extends Omit<Options, 'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
@@ -30,7 +32,9 @@ export interface MainOptions
 }
 
 /**
- * Electron preload process options
+ * Electron preload process options.
+ * @see https://paka.dev/npm/tsup
+ * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface PreloadOptions
   extends Omit<Options, 'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
@@ -48,7 +52,7 @@ export interface PreloadOptions
    */
   format?: 'cjs' | 'esm';
   /**
-   * The output directory for the preload process files. Defaults to `"dist-electron/preload"`.
+   * The output directory for the preload process files. Defaults is `"dist-electron/preload"`.
    * @default "dist-electron/preload"
    */
   outDir?: string;
@@ -63,7 +67,8 @@ export interface PreloadOptions
  */
 export interface PluginOptions {
   /**
-   * Recommended switch, if true, will have the following default behavior
+   * Recommended switch. Default is true.
+   * if true, will have the following default behavior:
    * * will change the main/preload/renderer outDir to be parallel outDir;
    * eg. if vite build.outDir is 'dist', will change main/preload/render to 'dist/main' and 'dist/preload' and 'dist/renderer'
    * @default true
