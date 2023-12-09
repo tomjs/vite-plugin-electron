@@ -10,6 +10,8 @@
 
 - Fast build `main` and `preload` with [tsup](https://github.com/egoist/tsup)
 - Little configuration, focus on business
+- Support `main`'s `Hot Restart`
+- Support `preload`'s `Hot Reload`
 - Support `esm` and `cjs`, you can use `esm` in [electron v28+](https://www.electronjs.org/blog/electron-28-0)
 - Support `vue` and `react` and [other frameworks](https://vitejs.dev/guide/#trying-vite-online)
 

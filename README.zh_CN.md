@@ -10,6 +10,8 @@
 
 - 使用 [tsup](https://github.com/egoist/tsup) 快速构建 `main` 和 `preload`
 - 配置简单，专注业务
+- 支持 `main` 的 `热重启`
+- 支持 `preload` 的 `热重载`
 - 支持 `esm` 和 `cjs` ，你可以在 [electron v28+](https://www.electronjs.org/zh/blog/electron-28-0) 中使用 `esm`
 - 支持 `vue` 和 `react` 以及 [其他框架](https://cn.vitejs.dev/guide/#trying-vite-online)
 

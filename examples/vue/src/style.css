@@ -55,9 +55,9 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.card {
-  padding: 2em;
-}
+/* .card {
+  padding: 1em;
+} */
 
 #app {
   max-width: 1280px;

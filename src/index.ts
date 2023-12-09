@@ -98,7 +98,7 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
       if (isDev) {
         opts.main.sourcemap = opts.main.sourcemap ?? true;
         opts.preload.sourcemap = opts.main.sourcemap ?? true;
-        opts.inspect = opts.inspect ?? true;
+        // opts.inspect = opts.inspect ?? true;
       } else {
         opts.main.minify = opts.main.minify ?? true;
         opts.preload.minify = opts.preload.minify ?? true;
@@ -129,7 +129,7 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
         // @ts-ignore
         process.__tomjs_electron_serve__?.kill();
         // @ts-ignore
-        process.__tomjs_electron_serve__ = await runServe(opts, innerOpts);
+        process.__tomjs_electron_serve__ = await runServe(opts, innerOpts, server);
       });
     },
     async closeBundle() {
