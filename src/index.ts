@@ -9,6 +9,8 @@ import { PLUGIN_NAME } from './constants';
 import { runBuild, runServe } from './main';
 import { readJson } from './utils';
 
+export * from './types';
+
 function getPkg() {
   const pkgFile = path.resolve(process.cwd(), 'package.json');
   if (!fs.existsSync(pkgFile)) {

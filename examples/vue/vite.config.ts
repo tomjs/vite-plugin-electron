@@ -9,11 +9,9 @@ export default defineConfig({
     electron({
       main: {
         entry: 'electron/main/index.ts',
-        minify: process.env.NODE_ENV === 'production',
       },
       preload: {
         entry: 'electron/preload/index.ts',
-        minify: process.env.NODE_ENV === 'production',
       },
     }),
     renderer(),

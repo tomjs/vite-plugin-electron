@@ -1,12 +1,10 @@
-import type { Options as TsupOptions } from 'tsup';
+import type { Options } from 'tsup';
 
 /**
  * Electron main process options
  */
-export type MainOptions = Omit<
-  TsupOptions,
-  'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'
-> & {
+export interface MainOptions
+  extends Omit<Options, 'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
   /**
    * The name of the electron main process.
    * @default "main"
@@ -29,15 +27,13 @@ export type MainOptions = Omit<
    * A function that will be executed after the build succeeds.
    */
   onSuccess?: () => Promise<void | undefined | (() => void | Promise<void>)>;
-};
+}
 
 /**
  * Electron preload process options
  */
-export type PreloadOptions = Omit<
-  TsupOptions,
-  'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'
-> & {
+export interface PreloadOptions
+  extends Omit<Options, 'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
   /**
    * The name of the electron preload process.
    * @default "preload"
@@ -60,7 +56,7 @@ export type PreloadOptions = Omit<
    * A function that will be executed after the build succeeds.
    */
   onSuccess?: () => Promise<void | undefined | (() => void | Promise<void>)>;
-};
+}
 
 /**
  * vite plugin options
