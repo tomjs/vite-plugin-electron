@@ -24,7 +24,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "env.d.ts"
   ],
   "engines": {
     "node": ">=16"

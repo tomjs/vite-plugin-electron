@@ -126,9 +126,7 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
           }
         }
 
-        // @ts-ignore
         process.__tomjs_electron_serve__?.kill();
-        // @ts-ignore
         process.__tomjs_electron_serve__ = await runServe(opts, innerOpts, server);
       });
     },

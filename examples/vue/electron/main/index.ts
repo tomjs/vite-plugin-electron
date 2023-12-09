@@ -5,8 +5,8 @@ import '../polyfills';
 
 console.log('Electron Main Process!');
 
+const isDev = process.env.NODE_ENV == 'development';
 process.env.DIST = join(__dirname, '../renderer');
-const isDev = !!process.env.APP_DEV_SERVER_URL;
 
 console.log('process.env.DIST', process.env.DIST);
 
@@ -29,7 +29,7 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null;
 // Here, you can also use other preload
 const preload = join(__dirname, '../preload/index.mjs');
-const url = process.env.APP_DEV_SERVER_URL as string;
+const url = process.env.APP_DEV_SERVER_URL;
 const indexHtml = join(process.env.DIST, 'index.html');
 
 async function createWindow() {
@@ -48,7 +48,6 @@ async function createWindow() {
   });
 
   if (isDev) {
-    // electron-vite-vue#298
     win.loadURL(url);
     // Open devTool if the app is not packaged
     win.webContents.openDevTools();
@@ -66,7 +65,6 @@ async function createWindow() {
     if (url.startsWith('https:')) shell.openExternal(url);
     return { action: 'deny' };
   });
-  // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 
 app.whenReady().then(createWindow);
@@ -103,7 +101,7 @@ ipcMain.handle('open-win', (_, arg) => {
     },
   });
 
-  if (process.env.VITE_DEV_SERVER_URL) {
+  if (process.env.APP_DEV_SERVER_URL) {
     childWindow.loadURL(`${url}#${arg}`);
   } else {
     childWindow.loadFile(indexHtml, { hash: arg });

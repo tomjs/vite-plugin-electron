@@ -4,8 +4,8 @@ import { join } from 'path';
 
 console.log('Electron Main Process!');
 
+const isDev = process.env.NODE_ENV == 'development';
 process.env.DIST = join(__dirname, '../renderer');
-const isDev = !!process.env.APP_DEV_SERVER_URL;
 
 console.log('process.env.DIST', process.env.DIST);
 
@@ -102,7 +102,7 @@ ipcMain.handle('open-win', (_, arg) => {
     },
   });
 
-  if (process.env.VITE_DEV_SERVER_URL) {
+  if (process.env.APP_DEV_SERVER_URL) {
     childWindow.loadURL(`${url}#${arg}`);
   } else {
     childWindow.loadFile(indexHtml, { hash: arg });

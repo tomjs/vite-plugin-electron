@@ -66,7 +66,42 @@ npm i @tomjs/vite-plugin-electron --save-dev
 |  |  |--index.html
 ```
 
-以 vue/react 项目为例，`vite.config.ts` 配置。
+### electron
+
+`electron/main/index.ts`
+
+```ts
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { app, BrowserWindow } from 'electron';
+
+// when package.json "type": module"
+global.__dirname = dirname(fileURLToPath(import.meta.url));
+
+const preload = join(__dirname, '../preload/index.mjs');
+const url = process.env.APP_DEV_SERVER_URL;
+
+async function createWindow() {
+  win = new BrowserWindow({
+    title: 'Main window',
+    width: 800,
+    height: 700,
+    webPreferences: {
+      preload,
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
+  if (isDev) {
+    win.loadURL(url);
+  } else {
+    win.loadFile(indexHtml);
+  }
+}
+
+app.whenReady().then(createWindow);
+```
 
 ### vue
 
