@@ -1,26 +1,15 @@
-import type { ChildProcess } from 'node:child_process';
 import type { Options as TsupOptions } from 'tsup';
 import type { ViteDevServer } from 'vite';
-import type { InnerOptions, PluginOptions } from './types';
+import type { PluginOptions } from './types';
 import { spawn } from 'node:child_process';
 import electron from 'electron';
-import { lightGreen } from 'kolorist';
+import treeKill from 'tree-kill';
 import { build as tsupBuild } from 'tsup';
 import { createLogger } from './logger';
 
 const logger = createLogger();
 
-function getBuildOptions(options: PluginOptions, innerOpts: InnerOptions) {
-  const env = {
-    APP_DEV_SERVER_URL: innerOpts?.serverUrl,
-  };
-
-  Object.keys(env).forEach(key => {
-    if (env[key] === undefined) {
-      delete env[key];
-    }
-  });
-
+function getBuildOptions(options: PluginOptions) {
   return ['main', 'preload']
     .filter(s => options[s] && options[s].entry)
     .map(s => {
@@ -30,45 +19,54 @@ function getBuildOptions(options: PluginOptions, innerOpts: InnerOptions) {
     .map(cfg => {
       return {
         ...cfg,
-        env,
         silent: true,
       } as TsupOptions & { __NAME__: string };
     });
 }
 
-function exitMainProcess() {
-  logger.info('exit main process');
-  process.exit(0);
-}
+/**
+ *
+ */
+async function startup(options: PluginOptions) {
+  await startup.exit();
 
-function runMainProcess(options: PluginOptions, innerOpts: InnerOptions) {
-  const mainFile = innerOpts.mainFile as string;
-  logger.info(`run main file: ${lightGreen(mainFile)}`);
-  const args = options.inspect ? ['--inspect'] : [];
-  return spawn(electron as any, [...args, mainFile], {
+  const args: string[] = [];
+  options.inspect && args.push('--inspect');
+
+  // start electron app
+  process.electronApp = spawn(electron as any, ['.', ...args], {
     stdio: 'inherit',
-  }).on('exit', exitMainProcess);
-}
-
-export async function runServe(
-  options: PluginOptions,
-  innerOpts: InnerOptions,
-  server: ViteDevServer,
-) {
-  let mainProcess: ChildProcess;
-
-  const killProcess = () => {
-    if (mainProcess) {
-      mainProcess.off('exit', exitMainProcess);
-      mainProcess.kill();
-    }
-  };
-
-  process.on('exit', () => {
-    killProcess();
   });
 
-  const buildOptions = getBuildOptions(options, innerOpts);
+  // exit process after electron app exit
+  process.electronApp.once('exit', process.exit);
+
+  process.once('exit', () => {
+    startup.exit();
+    process.electronApp.kill();
+  });
+}
+
+startup.exit = async () => {
+  if (!process.electronApp) {
+    return;
+  }
+
+  process.electronApp.removeAllListeners();
+
+  return new Promise((resolve, reject) => {
+    treeKill(process.electronApp.pid!, err => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+};
+
+export async function runServe(options: PluginOptions, server: ViteDevServer) {
+  const buildOptions = getBuildOptions(options);
 
   for (let i = 0; i < buildOptions.length; i++) {
     let isFirstBuild = true;
@@ -91,8 +89,8 @@ export async function runServe(
       logger.success(`${name} rebuild succeeded!`);
 
       if (name === 'main') {
-        killProcess();
-        mainProcess = runMainProcess(options, innerOpts);
+        console.log('main process exit');
+        await startup(options);
       } else {
         server.ws.send({
           type: 'full-reload',
@@ -103,15 +101,11 @@ export async function runServe(
     await tsupBuild({ onSuccess, watch: true, ...tsupOptions });
   }
 
-  mainProcess = runMainProcess(options, innerOpts);
-
-  return {
-    kill: killProcess,
-  };
+  await startup(options);
 }
 
-export async function runBuild(options: PluginOptions, innerOpts: InnerOptions) {
-  const buildOptions = getBuildOptions(options, innerOpts);
+export async function runBuild(options: PluginOptions) {
+  const buildOptions = getBuildOptions(options);
   for (let i = 0; i < buildOptions.length; i++) {
     await tsupBuild(buildOptions[i]);
   }

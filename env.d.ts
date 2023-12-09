@@ -12,6 +12,6 @@ declare namespace NodeJS {
     /**
      * The url of the dev server.
      */
-    readonly APP_DEV_SERVER_URL: string;
+    APP_DEV_SERVER_URL?: string;
   }
 }

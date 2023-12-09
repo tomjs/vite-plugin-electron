@@ -92,25 +92,3 @@ export interface PluginOptions {
    */
   inspect?: boolean;
 }
-
-/**
- * Only used internally
- */
-export interface InnerOptions {
-  /**
-   * whether is vite server
-   */
-  isServer?: boolean;
-  /**
-   * vite server url, will be passed to electron
-   */
-  serverUrl?: string;
-  /**
-   * renderer outDir
-   */
-  rendererOutDir?: string;
-  /**
-   * electron main entry file
-   */
-  mainFile?: string;
-}

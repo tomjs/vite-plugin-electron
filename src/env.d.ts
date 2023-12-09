@@ -1,5 +1,8 @@
 declare namespace NodeJS {
   interface Process {
-    __tomjs_electron_serve__: { kill: () => void };
+    /**
+     * The electron app instance.
+     */
+    electronApp: import('node:child_process').ChildProcess;
   }
 }

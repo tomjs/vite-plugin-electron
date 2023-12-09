@@ -6,6 +6,8 @@
 
 > A Simple [vite](https://vitejs.dev/) plugin for [electron](https://www.electronjs.org), supports `esm` and `cjs`.
 
+I learned [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-electron](https://github.com/electron-vite/vite-plugin-electron) and [Doubleshotjs](https://github.com/Doubleshotjs)'s [doubleshot](https://github.com/Doubleshotjs/doubleshot) These two excellent works, combined with some of my own ideas, developed this plugin. I hope that using it can simplify the development configuration and only focus on business development.
+
 ## Features
 
 - Fast build `main` and `preload` with [tsup](https://github.com/egoist/tsup)

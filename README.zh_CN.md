@@ -6,6 +6,8 @@
 
 > 一个简单的 [electron](https://www.electronjs.org/zh/) [vite](https://cn.vitejs.dev/) 插件，支持 `esm` 和 `cjs`
 
+学习了 [caoxiemeihao](https://github.com/caoxiemeihao) 的 [vite-plugin-electron](https://github.com/electron-vite/vite-plugin-electron) 和 [Doubleshotjs](https://github.com/Doubleshotjs) 的 [doubleshot](https://github.com/Doubleshotjs/doubleshot) 这两个优秀的作品，结合自己的一些想法，开发了该插件。希望使用它能简化开发配置，只关注业务开发。
+
 ## 特性
 
 - 使用 [tsup](https://github.com/egoist/tsup) 快速构建 `main` 和 `preload`

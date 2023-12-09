@@ -23,6 +23,9 @@ importers:
       shelljs:
         specifier: ^0.8.5
         version: 0.8.5
+      tree-kill:
+        specifier: ^1.2.2
+        version: 1.2.2
       tsup:
         specifier: 7.2.0
         version: 7.2.0(postcss@8.4.32)(typescript@5.2.2)
@@ -40,11 +43,11 @@ importers:
         specifier: ^1.0.6
         version: 1.0.6(prettier@3.1.0)
       '@tomjs/stylelint':
-        specifier: ^1.1.0
-        version: 1.1.0(prettier@3.1.0)(stylelint@15.11.0)
+        specifier: ^1.1.1
+        version: 1.1.1(prettier@3.1.0)(stylelint@15.11.0)
       '@tomjs/tsconfig':
-        specifier: ^1.0.8
-        version: 1.0.8
+        specifier: ^1.1.2
+        version: 1.1.2
       '@types/lodash.clonedeep':
         specifier: ^4.5.9
         version: 4.5.9
@@ -67,8 +70,8 @@ importers:
         specifier: ^15.2.0
         version: 15.2.0
       np:
-        specifier: ^9.1.0
-        version: 9.1.0(typescript@5.2.2)
+        specifier: ^9.2.0
+        version: 9.2.0(typescript@5.2.2)
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
@@ -1274,8 +1277,8 @@ packages:
       prettier: 3.1.0
     dev: true
 
-  /@tomjs/stylelint@1.1.0(prettier@3.1.0)(stylelint@15.11.0):
-    resolution: {integrity: sha512-vIXBGpr6svnlUtw1aEjwVhM0aCtknMBaIu0t164zsLJCbyRrAIWxXZSei0R6KzMwZAz6vGF4RXufYwdRjwPJfw==}
+  /@tomjs/stylelint@1.1.1(prettier@3.1.0)(stylelint@15.11.0):
+    resolution: {integrity: sha512-cFAzXnXJ9t4NEMgOuEg+xjMHskFhnpxFiqTyMbRGYMc+zJiFIsP+F0e9TdFrbjwNyDU5CYn/ZP1Mx4wig1kdZA==}
     engines: {node: '>=16'}
     peerDependencies:
       prettier: '>=3.0.0'
@@ -1288,15 +1291,16 @@ packages:
       prettier: 3.1.0
       stylelint: 15.11.0(typescript@5.2.2)
       stylelint-config-property-sort-order-smacss: 9.1.0(stylelint@15.11.0)
+      stylelint-config-recommended: 13.0.0(stylelint@15.11.0)
       stylelint-config-recommended-vue: 1.5.0(postcss-html@1.5.0)(stylelint@15.11.0)
       stylelint-config-standard: 34.0.0(stylelint@15.11.0)
       stylelint-config-standard-scss: 11.1.0(postcss@8.4.32)(stylelint@15.11.0)
-      stylelint-order: 6.0.3(stylelint@15.11.0)
+      stylelint-order: 6.0.4(stylelint@15.11.0)
       stylelint-prettier: 4.1.0(prettier@3.1.0)(stylelint@15.11.0)
     dev: true
 
-  /@tomjs/tsconfig@1.0.8:
-    resolution: {integrity: sha512-fz07vGyGRZgLTc48gsQolfR6XjNWTXTmcryXRyf2f5yPcgfao8wRPNDhKaIB3Mkp/nCsYfDkJZEJgCPoXtM5yw==}
+  /@tomjs/tsconfig@1.1.2:
+    resolution: {integrity: sha512-98yEZQ4JTJCH3sOFnO0vbqFwrZVI1u8MtiBwzisoevs/dhWotSy62IG3t9hBZKh/MCS4kX3zcDr0EfnrC3AIsA==}
     engines: {node: '>=16'}
     dependencies:
       '@vue/tsconfig': 0.4.0
@@ -5083,8 +5087,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /np@9.1.0(typescript@5.2.2):
-    resolution: {integrity: sha512-c1QCU/+qN2N6epFyW4HpfIG5/wLIBOzmvjb2isjbecRK5qhHNjS67WnZ93jPScL1N3Iss7LfS9RFhpdj/VD7qQ==}
+  /np@9.2.0(typescript@5.2.2):
+    resolution: {integrity: sha512-VYA8IKyx5XJqROr2vu8NAstfgBznrnOu3PUByFl3TBwzQVkeGC+gzOPzGbvYKM1QwlX6Gt7kVSPMzDP4qkSs1g==}
     engines: {git: '>=2.11.0', node: '>=18', npm: '>=9', yarn: '>=1.7.0'}
     hasBin: true
     dependencies:
@@ -6553,7 +6557,7 @@ packages:
     dependencies:
       css-property-sort-order-smacss: 2.2.0
       stylelint: 15.11.0(typescript@5.2.2)
-      stylelint-order: 6.0.3(stylelint@15.11.0)
+      stylelint-order: 6.0.4(stylelint@15.11.0)
     dev: true
 
   /stylelint-config-recommended-scss@13.1.0(postcss@8.4.32)(stylelint@15.11.0):
@@ -6620,10 +6624,10 @@ packages:
       stylelint-config-recommended: 13.0.0(stylelint@15.11.0)
     dev: true
 
-  /stylelint-order@6.0.3(stylelint@15.11.0):
-    resolution: {integrity: sha512-1j1lOb4EU/6w49qZeT2SQVJXm0Ht+Qnq9GMfUa3pMwoyojIWfuA+JUDmoR97Bht1RLn4ei0xtLGy87M7d29B1w==}
+  /stylelint-order@6.0.4(stylelint@15.11.0):
+    resolution: {integrity: sha512-0UuKo4+s1hgQ/uAxlYU4h0o0HS4NiQDud0NAUNI0aa8FJdmYHA5ZZTFHiV5FpmE3071e9pZx5j0QpVJW5zOCUA==}
     peerDependencies:
-      stylelint: ^14.0.0 || ^15.0.0
+      stylelint: ^14.0.0 || ^15.0.0 || ^16.0.1
     dependencies:
       postcss: 8.4.32
       postcss-sorting: 8.0.2(postcss@8.4.32)

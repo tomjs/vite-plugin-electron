@@ -1,6 +1,6 @@
 import type { AddressInfo } from 'node:net';
 import type { Plugin } from 'vite';
-import type { InnerOptions, MainOptions, PluginOptions, PreloadOptions } from './types';
+import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import fs from 'node:fs';
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
@@ -70,21 +70,18 @@ function preMergeOptions(options?: PluginOptions) {
     opt.external = [...new Set(['electron'].concat(external))];
   });
 
-  const innerOpts: InnerOptions = {
-    mainFile: pkg.main,
-  };
-
-  return { opts, innerOpts };
+  return opts;
 }
 
 export function vitePluginElectron(options?: PluginOptions): Plugin {
-  const { opts, innerOpts } = preMergeOptions(options);
+  const opts = preMergeOptions(options);
   const isDev = process.env.NODE_ENV === 'development';
+  let isServer = false;
 
   return {
     name: PLUGIN_NAME,
     config(config, env) {
-      innerOpts.isServer = env.mode === 'serve';
+      isServer = env.command === 'serve';
 
       let outDir = config?.build?.outDir || 'dist';
       opts.preload = opts.preload || {};
@@ -122,21 +119,20 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
           const serve = server.httpServer.address() as AddressInfo;
           const { address, port, family } = serve;
           if (family === 'IPv6') {
-            innerOpts.serverUrl = `http://[${address}]:${port}`;
+            process.env.APP_DEV_SERVER_URL = `http://[${address}]:${port}`;
           } else {
-            innerOpts.serverUrl = `http://${address}:${port}`;
+            process.env.APP_DEV_SERVER_URL = `http://${address}:${port}`;
           }
         }
 
-        process.__tomjs_electron_serve__?.kill();
-        process.__tomjs_electron_serve__ = await runServe(opts, innerOpts, server);
+        await runServe(opts, server);
       });
     },
     async closeBundle() {
-      if (innerOpts.isServer) {
+      if (isServer) {
         return;
       }
-      await runBuild(opts, innerOpts);
+      await runBuild(opts);
     },
   };
 }
