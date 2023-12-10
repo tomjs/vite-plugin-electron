@@ -1,6 +1,6 @@
+import { release } from 'node:os';
+import { join } from 'node:path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
-import { release } from 'os';
-import { join } from 'path';
 
 console.log('Electron Main Process!');
 

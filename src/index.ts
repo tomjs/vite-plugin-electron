@@ -31,6 +31,7 @@ function preMergeOptions(options?: PluginOptions) {
   const format = pkg.type === 'module' ? 'esm' : 'cjs';
 
   const electron: MainOptions | PreloadOptions = {
+    target: ['es2021', 'node16'],
     format,
     clean: true,
     dts: false,
@@ -101,8 +102,8 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
       }
 
       if (isDev) {
-        opts.main.sourcemap ??= 'inline';
-        opts.preload.sourcemap ??= 'inline';
+        opts.main.sourcemap ??= true;
+        opts.preload.sourcemap ??= true;
         // opts.inspect = opts.inspect ?? true;
       } else {
         opts.main.minify ??= true;
