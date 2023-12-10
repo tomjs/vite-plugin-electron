@@ -172,8 +172,8 @@ export default defineConfig({
 
 ## Documentation
 
-- [paka.dev](https://paka.dev) 提供的 [API文档](https://paka.dev/npm/@tomjs/vite-plugin-electron).
-- [unpkg.com](https://www.unpkg.com/) 提供的 [index.d.ts](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.ts).
+- [API Documentation](https://paka.dev/npm/@tomjs/vite-plugin-electron) provided by [paka.dev](https://paka.dev).
+- [index.d.ts](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.ts) provided by [unpkg.com](https://www.unpkg.com).
 
 ## Parameters
 
