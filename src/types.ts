@@ -6,16 +6,11 @@ import type { Options } from 'tsup';
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface MainOptions
-  extends Omit<Options, 'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
-  /**
-   * The name of the electron main process.
-   * @default "main"
-   */
-  name?: string;
+  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
   /**
    * The main process entry file.
    */
-  entry: string;
+  entry?: string;
   /**
    * The bundle format. If not specified, it will use the "type" field from package.json.
    */
@@ -37,12 +32,7 @@ export interface MainOptions
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface PreloadOptions
-  extends Omit<Options, 'name' | 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
-  /**
-   * The name of the electron preload process.
-   * @default "preload"
-   */
-  name?: string;
+  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
   /**
    * The preload process entry file
    */
@@ -81,7 +71,7 @@ export interface PluginOptions {
   /**
    * electron main process options
    */
-  main: MainOptions;
+  main?: MainOptions;
   /**
    * electron preload process options
    */

@@ -45,11 +45,9 @@ function preMergeOptions(options?: PluginOptions) {
       recommended: true,
       external: ['electron'],
       main: {
-        name: 'main',
         ...electron,
       },
       preload: {
-        name: 'payload',
         ...electron,
       },
     } as PluginOptions,
@@ -62,7 +60,12 @@ function preMergeOptions(options?: PluginOptions) {
     opt.format = ['cjs', 'esm'].includes(fmt) ? [fmt] : [format];
 
     const entry = opt.entry;
-    if (typeof entry === 'string') {
+    if (entry == undefined) {
+      const filePath = `electron/${prop}/index.ts`;
+      if (fs.existsSync(path.join(process.cwd(), filePath))) {
+        opt.entry = [filePath];
+      }
+    } else if (typeof entry === 'string') {
       opt.entry = [entry];
     }
 
@@ -84,23 +87,24 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
       isServer = env.command === 'serve';
 
       let outDir = config?.build?.outDir || 'dist';
-      opts.preload = opts.preload || {};
+      opts.main ||= {};
+      opts.preload ||= {};
       if (opts.recommended) {
         opts.main.outDir = path.join(outDir, 'main');
         opts.preload.outDir = path.join(outDir, 'preload');
         outDir = path.join(outDir, 'renderer');
       } else {
-        opts.main.outDir = opts.main.outDir || path.join('dist-electron', 'main');
-        opts.preload.outDir = opts.preload.outDir || path.join('dist-electron', 'preload');
+        opts.main.outDir ||= path.join('dist-electron', 'main');
+        opts.preload.outDir ||= path.join('dist-electron', 'preload');
       }
 
       if (isDev) {
-        opts.main.sourcemap = opts.main.sourcemap ?? true;
-        opts.preload.sourcemap = opts.main.sourcemap ?? true;
+        opts.main.sourcemap ??= true;
+        opts.preload.sourcemap ??= true;
         // opts.inspect = opts.inspect ?? true;
       } else {
-        opts.main.minify = opts.main.minify ?? true;
-        opts.preload.minify = opts.preload.minify ?? true;
+        opts.main.minify ??= true;
+        opts.preload.minify ??= true;
       }
 
       return {

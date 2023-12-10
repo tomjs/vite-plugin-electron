@@ -39,9 +39,11 @@ npm i @tomjs/vite-plugin-electron --save-dev
 
 ## Usage
 
-### Project structure
+### Recommended Agreement
 
-- Recommended `electron` front-end code directory structure
+#### Directory Structure
+
+- Recommend `electron` and page `src` code directory structure
 
 ```
 |--electron
@@ -54,7 +56,7 @@ npm i @tomjs/vite-plugin-electron --save-dev
 |  |--main.ts
 ```
 
-- Use the default dist output directory of the plugin
+- Zero configuration, default dist output directory
 
 ```
 |--dist
@@ -67,6 +69,10 @@ npm i @tomjs/vite-plugin-electron --save-dev
 |  |--renderer
 |  |  |--index.html
 ```
+
+#### Default configuration and behavior
+
+See [PluginOptions](#pluginoptions) and `recommended` parameter descriptions in detail
 
 ### electron
 
@@ -107,9 +113,11 @@ app.whenReady().then(createWindow);
 
 ### vue
 
-Support `ES modules`
+Take using `esm` as an example, but it requires Electron>=28
 
 - `package.json`
+
+Electron preload must use the `mjs` suffix, otherwise an error will be reported. So `esm` also uses the `mjs` suffix for output by default.
 
 ```json
 {
@@ -128,14 +136,17 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [
     vue(),
-    electron({
-      main: {
-        entry: 'electron/main/index.ts',
-      },
-      preload: {
-        entry: 'electron/preload/index.ts',
-      },
-    }),
+    // If you use the agreed directory structure, no configuration is required
+    electron(),
+    // If the directory structure is customized, the value must be assigned according to the actual situation
+    // electron({
+    //   main: {
+    //     entry: 'electron/main/index.ts',
+    //   },
+    //   preload: {
+    //     entry: 'electron/preload/index.ts',
+    //   },
+    // }),
     // renderer(),
   ],
 });
@@ -158,23 +169,11 @@ Support `CommonJS`
 
 ```ts
 import { defineConfig } from 'vite';
-// import renderer from 'vite-plugin-electron-renderer'; // Enable nodeIntegration
 import electron from '@tomjs/vite-plugin-electron';
 import react from '@vitejs/plugin-react-swc';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    electron({
-      main: {
-        entry: 'electron/main/index.ts',
-      },
-      preload: {
-        entry: 'electron/preload/index.ts',
-      },
-    }),
-    // renderer(),
-  ],
+  plugins: [react(), electron()],
 });
 ```
 
@@ -194,6 +193,14 @@ export default defineConfig({
 | main | [MainOptions](#MainOptions) |  | Configuration options for the electron main process. |
 | preload | [PreloadOptions](#PreloadOptions) |  | Configuration options for the electron preload process. |
 | inspect | `boolean` | true | If set to true, electron will start with the `--inspect` flag. |
+
+**Notice**
+
+The `recommended` option is used to set the default configuration and behavior, which can be used with almost zero configuration. The default is `true`. If you want to customize the configuration, set it to `false`. The following default prerequisites are to use the recommended [project structure](#directory-structure).
+
+- Check whether `electron/main/index.ts` and `electron/main/index.ts` exist, and if so, assign values to `main.entry` and `preload.entry` respectively. If it does not exist, `main.entry` must be actively assigned, and an error will be reported.
+- The output directory is based on the `build.outDir` parameter of `vite`, and outputs `electron/main`, `electron/preload` and `src` to `dist/main`, `dist/preload` and `dist/renderer` respectively.
+- Other behaviors to be implemented
 
 ### MainOptions
 

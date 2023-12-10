@@ -39,9 +39,11 @@ npm i @tomjs/vite-plugin-electron --save-dev
 
 ## 使用说明
 
-### 项目结构
+### 推荐约定
 
-- 推荐 `electron` 的 前端代码目录结构
+#### 目录结构
+
+- 推荐 `electron` 和 页面 `src` 代码目录结构
 
 ```
 |--electron
@@ -54,7 +56,7 @@ npm i @tomjs/vite-plugin-electron --save-dev
 |  |--main.ts
 ```
 
-- 使用插件默认 dist 输出目录
+- 零配置，默认 dist 输出目录
 
 ```
 |--dist
@@ -67,6 +69,10 @@ npm i @tomjs/vite-plugin-electron --save-dev
 |  |--renderer
 |  |  |--index.html
 ```
+
+#### 默认配置和行为
+
+详细查看 [PluginOptions](#pluginoptions) 和 `recommended` 参数说明
 
 ### electron
 
@@ -107,9 +113,11 @@ app.whenReady().then(createWindow);
 
 ### vue
 
-支持 `ES modules`
+以使用 `esm` 为例，不过要求 `Electron>=28`
 
 - `package.json`
+
+Electron preload 必须使用 `mjs` 后缀，否则报错。所以 `esm` 也默认输出使用 `mjs` 后缀。
 
 ```json
 {
@@ -129,14 +137,17 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [
     vue(),
-    electron({
-      main: {
-        entry: 'electron/main/index.ts',
-      },
-      preload: {
-        entry: 'electron/preload/index.ts',
-      },
-    }),
+    // 如使用约定的目录结构，则不需要配置
+    electron(),
+    // 如果自定义了目录结构，则必须根据实际情况赋值
+    // electron({
+    //   main: {
+    //     entry: 'electron/main/index.ts',
+    //   },
+    //   preload: {
+    //     entry: 'electron/preload/index.ts',
+    //   },
+    // }),
     // renderer(),
   ],
 });
@@ -159,23 +170,11 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from 'vite';
-// import renderer from 'vite-plugin-electron-renderer'; // 启用 nodeIntegration
 import electron from '@tomjs/vite-plugin-electron';
 import react from '@vitejs/plugin-react-swc';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    electron({
-      main: {
-        entry: 'electron/main/index.ts',
-      },
-      preload: {
-        entry: 'electron/preload/index.ts',
-      },
-    }),
-    // renderer(),
-  ],
+  plugins: [react(), electron()],
 });
 ```
 
@@ -192,9 +191,15 @@ export default defineConfig({
 | --- | --- | --- | --- |
 | recommended | `boolean` | `true` | 推荐开关，如果为true，将具有以下默认行为：将main/preload/renderer的outDir更改为并行的outDir；例如，如果vite build.outDir为'dist'，将main/preload/render更改为'dist/main'、'dist/preload'和'dist/renderer' |
 | external | `string[]` |  | 不打包这些模块 |
-| **main** | [MainOptions](#MainOptions) |  | electron main 进程选项 |
+| main | [MainOptions](#MainOptions) |  | electron main 进程选项 |
 | preload | [PreloadOptions](#PreloadOptions) |  | electron preload 进程选项 |
 | inspect | `boolean` | `true` | electron启动时使用`--inspect`参数 |
+
+`recommended` 选项用于设置默认配置和行为，几乎可以达到零配置使用，默认为 `true` 。如果你要自定义配置，请设置它为`false`。以下默认的前提条件是使用推荐的 [项目结构](#目录结构)。
+
+- 检查是否存在 `electron/main/index.ts` 和 `electron/main/index.ts`，如果有则分别给 `main.entry` 和 `preload.entry` 赋值。如果不存在，`main.entry` 必须主动赋值，负责会报错
+- 输出目录根据 `vite` 的 `build.outDir` 参数， 将 `electron/main`、`electron/preload`、`src` 分别输出到 `dist/main`、`dist/preload`、`dist/renderer`
+- 其他待实现的行为
 
 ### MainOptions
 
