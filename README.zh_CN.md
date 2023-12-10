@@ -182,7 +182,7 @@ export default defineConfig({
 
 | 参数名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| recommended | `boolean` | `true` | 推荐开关，如果为true，将具有以下默认行为：将main/preload/renderer的outDir更改为并行的outDir；例如，如果vite build.outDir为'dist'，将main/preload/render更改为'dist/main'、'dist/preload'和'dist/renderer' |
+| recommended | `boolean` | `true` | 这个选项是为了提供推荐的默认参数和行为 |
 | external | `string[]` |  | 不打包这些模块 |
 | main | [MainOptions](#MainOptions) |  | electron main 进程选项 |
 | preload | [PreloadOptions](#PreloadOptions) |  | electron preload 进程选项 |

@@ -181,7 +181,7 @@ export default defineConfig({
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| recommended | `boolean` | `true` | If set to true, it will change the main/preload/renderer outDir to be parallel outDir. For example, if vite build.outDir is 'dist', it will change main/preload/render to 'dist/main', 'dist/preload', and 'dist/renderer'. |
+| recommended | `boolean` | `true` | This option is intended to provide recommended default parameters and behavior. |
 | external | `string[]` |  | List of modules that should not be bundled. |
 | main | [MainOptions](#MainOptions) |  | Configuration options for the electron main process. |
 | preload | [PreloadOptions](#PreloadOptions) |  | Configuration options for the electron preload process. |
