@@ -19,6 +19,7 @@ function getBuildOptions(options: PluginOptions) {
     .map(cfg => {
       return {
         ...cfg,
+        splitting: false,
         silent: true,
       } as TsupOptions & { __NAME__: string };
     });

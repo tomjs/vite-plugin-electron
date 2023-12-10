@@ -281,9 +281,13 @@ app.whenReady().then(() => {
       "windows": {
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
-      "program": "${workspaceRoot}/dist/main/index.js",
+      "args": ["."],
       "envFile": "${workspaceRoot}/node_modules/@tomjs/vite-plugin-electron/debug/.env"
     }
   ]
 }
 ```
+
+**说明**
+
+`Electron v28` 虽然支持了 `esm`，但是 `VSCode Debug` 断点可能无法正常工作，这时可以考虑使用 `cjs` 模式。

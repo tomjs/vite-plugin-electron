@@ -282,9 +282,13 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
       "windows": {
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
-      "program": "${workspaceRoot}/dist/main/index.js",
+      "args": ["."],
       "envFile": "${workspaceRoot}/node_modules/@tomjs/vite-plugin-electron/debug/.env"
     }
   ]
 }
 ```
+
+**Notice**
+
+Although `Electron v28` supports `esm`, `VSCode Debug` breakpoints may not work properly. In this case, you can consider using `cjs` mode.
