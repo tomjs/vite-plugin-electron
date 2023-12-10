@@ -16,11 +16,13 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@tomjs/electron-devtools-installer": "^2.0.4",
     "@tomjs/vite-plugin-electron": "workspace:^",
     "@types/node": "^18.19.3",
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "electron": "^28.0.0",
     "typescript": "~5.2.2",
     "vite": "^5.0.7",
     "vite-plugin-electron-renderer": "^0.14.5"

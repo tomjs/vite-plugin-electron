@@ -65,7 +65,21 @@ async function createWindow() {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  createWindow();
+
+  if (isDev) {
+    const { installExtension, VUEJS_DEVTOOLS } = await import('@tomjs/electron-devtools-installer');
+
+    installExtension(VUEJS_DEVTOOLS)
+      .then(ext => {
+        console.log('Added Extension: ', ext.name);
+      })
+      .catch(() => {
+        console.log('Failed to install extensions');
+      });
+  }
+});
 
 app.on('window-all-closed', () => {
   win = null;

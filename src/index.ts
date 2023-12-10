@@ -1,7 +1,8 @@
 import type { AddressInfo } from 'node:net';
 import type { Plugin } from 'vite';
 import type { MainOptions, PluginOptions, PreloadOptions } from './types';
-import fs from 'node:fs';
+import fs, { mkdirSync, writeFileSync } from 'node:fs';
+import { cwd } from 'node:process';
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 import path from 'path';
@@ -99,36 +100,63 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
       }
 
       if (isDev) {
-        opts.main.sourcemap ??= true;
-        opts.preload.sourcemap ??= true;
+        opts.main.sourcemap ??= 'inline';
+        opts.preload.sourcemap ??= 'inline';
         // opts.inspect = opts.inspect ?? true;
       } else {
         opts.main.minify ??= true;
         opts.preload.minify ??= true;
       }
 
+      let envPrefix = config.envPrefix;
+      if (!envPrefix) {
+        envPrefix = ['VITE_'];
+      } else if (typeof envPrefix === 'string') {
+        envPrefix = [envPrefix];
+      }
+      if (!envPrefix.includes('APP_')) {
+        envPrefix.push('APP_');
+      }
+
       return {
+        envPrefix: [...new Set(envPrefix)],
         build: {
           outDir,
         },
       };
     },
+    configResolved(config) {
+      opts.debug = config.env.APP_ELECTRON_DEBUG ? !!config.env.APP_ELECTRON_DEBUG : opts.debug;
+    },
     configureServer(server) {
-      if (!server?.httpServer) {
+      if (!server || !server.httpServer) {
         return;
       }
 
       server.httpServer.on('listening', async () => {
-        if (server.httpServer) {
-          const serve = server.httpServer.address() as AddressInfo;
-          const { address, port, family } = serve;
-          if (family === 'IPv6') {
-            process.env.APP_DEV_SERVER_URL = `http://[${address}]:${port}`;
-          } else {
-            process.env.APP_DEV_SERVER_URL = `http://${address}:${port}`;
-          }
-        }
+        const serve = server.httpServer?.address() as AddressInfo;
+        const { address, port, family } = serve;
+        const hostname = family === 'IPv6' ? `[${address}]` : address;
+        const protocol = server.config.server.https ? 'https' : 'http';
+        process.env.APP_DEV_SERVER_URL = `${protocol}://${hostname}:${port}`;
 
+        const DEBUG_PATH = path.resolve(
+          cwd(),
+          'node_modules',
+          '@tomjs',
+          'vite-plugin-electron',
+          'debug',
+        );
+        if (!fs.existsSync(DEBUG_PATH)) {
+          mkdirSync(DEBUG_PATH, { recursive: true });
+        }
+        const env = Object.keys(process.env)
+          .filter(s => s.startsWith('APP_') || s.startsWith('VITE_'))
+          .map(s => `${s}=${process.env[s]}`)
+          .join('\n');
+        writeFileSync(path.join(DEBUG_PATH, '.env'), `NODE_ENV=development\n${env}`);
+
+        console.log('Server is running');
         await runServe(opts, server);
       });
     },

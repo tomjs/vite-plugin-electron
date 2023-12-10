@@ -224,3 +224,66 @@ export default defineConfig({
 | --------- | -------------- | -------------- |
 | sourcemap | `true`         | `false`        |
 | minify    | `false`        | `true`         |
+
+## 调试
+
+### Web调试
+
+使用 [@tomjs/electron-devtools-installer](https://npmjs.com/package/@tomjs/electron-devtools-installer) 安装 `Chrome Devtools` 插件后像 Web 开发一样使用
+
+```ts
+import { app } from 'electron';
+
+app.whenReady().then(() => {
+  const { installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
+    '@tomjs/electron-devtools-installer'
+  );
+
+  installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+    .then(exts => {
+      console.log(
+        'Added Extension: ',
+        exts.map(s => s.name),
+      );
+    })
+    .catch(err => {
+      console.log('Failed to install extensions');
+      console.error(err);
+    });
+});
+```
+
+### 主线程调试
+
+#### 开启调试
+
+通过如下配置或者 `ELECTRON_DEBUG=1 vite dev` 启动代码编译
+
+- 通过 `.env` 文件设置 `APP_ELECTRON_DEBUG=1` 开启
+- `vite.config.js` 配置 `electron({ debug: true })` 开启
+
+#### VSCODE
+
+通过 `vscode` 运行 `Debug Main Process` 调试主线程，调试工具参考 [官方文档](https://code.visualstudio.com/docs/editor/debugging)
+
+`launch.json` 配置如下：
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      },
+      "program": "${workspaceRoot}/dist/main/index.js",
+      "envFile": "${workspaceRoot}/node_modules/@tomjs/vite-plugin-electron/debug/.env"
+    }
+  ]
+}
+```

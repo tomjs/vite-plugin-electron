@@ -6,7 +6,9 @@
     "vite",
     "plugin",
     "electron",
-    "tsup"
+    "tsup",
+    "esm",
+    "cjs"
   ],
   "author": {
     "name": "Tom Gao",

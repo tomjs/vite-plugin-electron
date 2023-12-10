@@ -8,6 +8,7 @@ const isDev = process.env.NODE_ENV == 'development';
 process.env.DIST = join(__dirname, '../renderer');
 
 console.log('process.env.DIST', process.env.DIST);
+console.log('process.env.APP_DEV_SERVER_URL', process.env.APP_DEV_SERVER_URL);
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration();
@@ -31,7 +32,7 @@ const preload = join(__dirname, '../preload/index.js');
 const url = process.env.APP_DEV_SERVER_URL as string;
 const indexHtml = join(process.env.DIST, 'index.html');
 
-async function createWindow() {
+function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     width: 800,
@@ -68,7 +69,28 @@ async function createWindow() {
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  createWindow();
+
+  if (isDev) {
+    const { installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
+      '@tomjs/electron-devtools-installer'
+    );
+
+    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+      .then(exts => {
+        // console.log('Added Extension: ', exts.name);
+        console.log(
+          'Added Extension: ',
+          exts.map(s => s.name),
+        );
+      })
+      .catch(err => {
+        console.log('Failed to install extensions');
+        console.error(err);
+      });
+  }
+});
 
 app.on('window-all-closed', () => {
   win = null;

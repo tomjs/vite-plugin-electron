@@ -28,13 +28,14 @@ function getBuildOptions(options: PluginOptions) {
  *
  */
 async function startup(options: PluginOptions) {
+  if (options.debug) {
+    return;
+  }
+
   await startup.exit();
 
-  const args: string[] = [];
-  options.inspect && args.push('--inspect');
-
   // start electron app
-  process.electronApp = spawn(electron as any, ['.', ...args], {
+  process.electronApp = spawn(electron as any, ['.'], {
     stdio: 'inherit',
   });
 
@@ -66,10 +67,12 @@ startup.exit = async () => {
 };
 
 export async function runServe(options: PluginOptions, server: ViteDevServer) {
+  options.debug && logger.warn(`debug mode`);
+
   const buildOptions = getBuildOptions(options);
 
+  const buildCounts = [0, buildOptions.length > 1 ? 0 : 1];
   for (let i = 0; i < buildOptions.length; i++) {
-    let isFirstBuild = true;
     const tsOpts = buildOptions[i];
     const { __NAME__: name, onSuccess: _onSuccess, watch, ...tsupOptions } = tsOpts;
 
@@ -80,18 +83,24 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
         await _onSuccess();
       }
 
-      if (isFirstBuild) {
+      if (buildCounts[i] <= 0) {
+        buildCounts[i]++;
         logger.info(`${name} build succeeded`);
-        isFirstBuild = false;
+
+        if (buildCounts[0] == 1 && buildCounts[1] == 1) {
+          logger.info('electron startup');
+          await startup(options);
+        }
         return;
       }
 
       logger.success(`${name} rebuild succeeded!`);
 
       if (name === 'main') {
-        console.log('main process exit');
+        logger.info('electron restart');
         await startup(options);
       } else {
+        logger.info('page reload');
         server.ws.send({
           type: 'full-reload',
         });
@@ -100,8 +109,6 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
 
     await tsupBuild({ onSuccess, watch: true, ...tsupOptions });
   }
-
-  await startup(options);
 }
 
 export async function runBuild(options: PluginOptions) {

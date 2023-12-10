@@ -77,8 +77,8 @@ export interface PluginOptions {
    */
   preload?: PreloadOptions;
   /**
-   * electron start with the `--inspect`
-   * @default true
+   * electron debug mode, don't startup electron. You can also use `process.env.APP_ELECTRON_DEBUG`. Default is false.
+   * @default false
    */
-  inspect?: boolean;
+  debug?: boolean;
 }
