@@ -154,7 +154,7 @@ export default defineConfig({
 
 ### react
 
-Support `CommonJS`
+Take using `cjs` as an example
 
 - `package.json`
 

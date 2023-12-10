@@ -155,7 +155,7 @@ export default defineConfig({
 
 ### react
 
-支持 `CommonJS`
+以使用 `cjs` 为例
 
 - `package.json`
 
