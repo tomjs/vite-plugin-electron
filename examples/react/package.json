@@ -12,14 +12,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tomjs/electron-devtools-installer": "^2.0.4",
+    "@tomjs/electron-devtools-installer": "^2.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@tomjs/vite-plugin-electron": "workspace:^",
     "@types/node": "^18.19.3",
-    "@types/react": "^18.2.42",
+    "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "electron": "^28.0.0",

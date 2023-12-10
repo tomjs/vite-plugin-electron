@@ -13,10 +13,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.10"
+    "@tomjs/electron-devtools-installer": "^2.0.5",
+    "vue": "^3.3.11"
   },
   "devDependencies": {
-    "@tomjs/electron-devtools-installer": "^2.0.4",
     "@tomjs/vite-plugin-electron": "workspace:^",
     "@types/node": "^18.19.3",
     "@vitejs/plugin-vue": "^4.5.2",
