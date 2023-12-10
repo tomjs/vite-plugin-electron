@@ -291,4 +291,4 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
 
 **Notice**
 
-Although `Electron v28` supports `esm`, `VSCode Debug` breakpoints may not work properly. In this case, you can consider using `cjs` mode.
+Although `Electron v28` supports `esm`, there may be problems with `VSCode Debug` sourcemap support and breakpoints cannot work properly. In this case, you can consider using `cjs` mode.

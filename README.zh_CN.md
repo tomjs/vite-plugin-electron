@@ -290,4 +290,4 @@ app.whenReady().then(() => {
 
 **说明**
 
-`Electron v28` 虽然支持了 `esm`，但是 `VSCode Debug` 断点可能无法正常工作，这时可以考虑使用 `cjs` 模式。
+`Electron v28` 虽然支持了 `esm`，但是 `VSCode Debug` sourcemap支持可能有问题，断点无法正常工作，这时可以考虑使用 `cjs` 模式
