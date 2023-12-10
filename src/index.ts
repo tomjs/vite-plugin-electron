@@ -44,6 +44,7 @@ function preMergeOptions(options?: PluginOptions) {
   const opts: PluginOptions = merge(
     {
       recommended: true,
+      debug: false,
       external: ['electron'],
       main: {
         ...electron,

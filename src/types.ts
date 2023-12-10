@@ -65,7 +65,8 @@ export interface PluginOptions {
    */
   recommended?: boolean;
   /**
-   * Don't bundle these modules
+   * Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded. [See more](https://tsup.egoist.dev/#excluding-packages)
+   * @see https://tsup.egoist.dev/#excluding-packages
    */
   external?: string[];
   /**

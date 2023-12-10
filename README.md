@@ -182,10 +182,10 @@ export default defineConfig({
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | recommended | `boolean` | `true` | This option is intended to provide recommended default parameters and behavior. |
-| external | `string[]` |  | List of modules that should not be bundled. |
+| external | `string[]` |  | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsup.egoist.dev/#excluding-packages) |
 | main | [MainOptions](#MainOptions) |  | Configuration options for the electron main process. |
 | preload | [PreloadOptions](#PreloadOptions) |  | Configuration options for the electron preload process. |
-| inspect | `boolean` | true | If set to true, electron will start with the `--inspect` flag. |
+| debug | `boolean` | `false` | Electron debug mode, don't startup electron. |
 
 **Notice**
 

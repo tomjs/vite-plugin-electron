@@ -183,10 +183,10 @@ export default defineConfig({
 | 参数名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | recommended | `boolean` | `true` | 这个选项是为了提供推荐的默认参数和行为 |
-| external | `string[]` |  | 不打包这些模块 |
+| external | `string[]` |  | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsup.egoist.dev/#excluding-packages) |
 | main | [MainOptions](#MainOptions) |  | electron main 进程选项 |
 | preload | [PreloadOptions](#PreloadOptions) |  | electron preload 进程选项 |
-| inspect | `boolean` | `true` | electron启动时使用`--inspect`参数 |
+| debug | `boolean` | `false` | electron调试模式，不启动electron |
 
 `recommended` 选项用于设置默认配置和行为，几乎可以达到零配置使用，默认为 `true` 。如果你要自定义配置，请设置它为`false`。以下默认的前提条件是使用推荐的 [项目结构](#目录结构)。
 
