@@ -1,7 +1,7 @@
 import type { Options } from 'tsup';
 
 /**
- * Electron main process options.
+ * Electron main process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://paka.dev/npm/tsup) for more information.
  * @see https://paka.dev/npm/tsup
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
@@ -27,7 +27,7 @@ export interface MainOptions
 }
 
 /**
- * Electron preload process options.
+ * Electron preload process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://paka.dev/npm/tsup) for more information.
  * @see https://paka.dev/npm/tsup
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */

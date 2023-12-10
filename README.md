@@ -6,7 +6,7 @@
 
 > A Simple [vite](https://vitejs.dev/) plugin for [electron](https://www.electronjs.org), supports `esm` and `cjs`.
 
-I learned [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-electron](https://github.com/electron-vite/vite-plugin-electron) and [Doubleshotjs](https://github.com/Doubleshotjs)'s [doubleshot](https://github.com/Doubleshotjs/doubleshot) These two excellent works, combined with some of my own ideas, developed this plugin. I hope that using it can simplify the development configuration and only focus on business development.
+Many thanks to [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-electron](https://github.com/electron-vite/vite-plugin-electron) and [Doubleshotjs](https://github.com/Doubleshotjs)'s [doubleshot](https://github.com/Doubleshotjs/doubleshot) These two excellent libraries inspired me. I hope to use it to simplify development configuration and focus only on business development.
 
 ## Features
 
@@ -15,25 +15,18 @@ I learned [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-electro
 - Support `main`'s `Hot Restart`
 - Support `preload`'s `Hot Reload`
 - Support `esm` and `cjs`, you can use `esm` in [electron v28+](https://www.electronjs.org/blog/electron-28-0)
-- Support `vue` and `react` and [other frameworks](https://vitejs.dev/guide/#trying-vite-online)
+- Support `vue` and `react` and other [frameworks](https://vitejs.dev/guide/#trying-vite-online) supported by `vite`
 
 ## Install
 
-With `pnpm`
-
 ```bash
+# pnpm
 pnpm add @tomjs/vite-plugin-electron -D
-```
 
-With `yarn`
-
-```bash
+# yarn
 yarn add @tomjs/vite-plugin-electron -D
-```
 
-With `npm`
-
-```bash
+# npm
 npm i @tomjs/vite-plugin-electron --save-dev
 ```
 

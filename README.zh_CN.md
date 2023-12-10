@@ -6,7 +6,7 @@
 
 > 一个简单的 [electron](https://www.electronjs.org/zh/) [vite](https://cn.vitejs.dev/) 插件，支持 `esm` 和 `cjs`
 
-学习了 [caoxiemeihao](https://github.com/caoxiemeihao) 的 [vite-plugin-electron](https://github.com/electron-vite/vite-plugin-electron) 和 [Doubleshotjs](https://github.com/Doubleshotjs) 的 [doubleshot](https://github.com/Doubleshotjs/doubleshot) 这两个优秀的作品，结合自己的一些想法，开发了该插件。希望使用它能简化开发配置，只关注业务开发。
+非常感谢 [caoxiemeihao](https://github.com/caoxiemeihao) 的 [vite-plugin-electron](https://github.com/electron-vite/vite-plugin-electron) 和 [Doubleshotjs](https://github.com/Doubleshotjs) 的 [doubleshot](https://github.com/Doubleshotjs/doubleshot) 这两个优秀库给了我启发。我希望使用它能简化开发配置，只关注业务开发。
 
 ## 特性
 
@@ -15,25 +15,18 @@
 - 支持 `main` 的 `热重启`
 - 支持 `preload` 的 `热重载`
 - 支持 `esm` 和 `cjs` ，你可以在 [electron v28+](https://www.electronjs.org/zh/blog/electron-28-0) 中使用 `esm`
-- 支持 `vue` 和 `react` 以及 [其他框架](https://cn.vitejs.dev/guide/#trying-vite-online)
+- 支持 `vue` 和 `react` 等其他 `vite` 支持的[框架](https://cn.vitejs.dev/guide/#trying-vite-online)
 
 ## 安装
 
-使用 `pnpm`
-
 ```bash
+# pnpm
 pnpm add @tomjs/vite-plugin-electron -D
-```
 
-使用 `yarn`
-
-```bash
+# yarn
 yarn add @tomjs/vite-plugin-electron -D
-```
 
-使用 `npm`
-
-```bash
+# npm
 npm i @tomjs/vite-plugin-electron --save-dev
 ```
 
