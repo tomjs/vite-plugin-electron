@@ -12,6 +12,8 @@ import { readJson } from './utils';
 
 export * from './types';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 function getPkg() {
   const pkgFile = path.resolve(process.cwd(), 'package.json');
   if (!fs.existsSync(pkgFile)) {
@@ -79,9 +81,20 @@ function preMergeOptions(options?: PluginOptions) {
   return opts;
 }
 
+function geNumberBooleanValue(value?: string) {
+  if (typeof value !== 'string') {
+    return;
+  }
+  if (['true', 'false'].includes(value)) {
+    return value === 'true';
+  }
+
+  const v = Number(value);
+  return Number.isNaN(v) ? undefined : v;
+}
+
 export function vitePluginElectron(options?: PluginOptions): Plugin {
   const opts = preMergeOptions(options);
-  const isDev = process.env.NODE_ENV === 'development';
   let isServer = false;
 
   return {
@@ -129,6 +142,9 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
     },
     configResolved(config) {
       opts.debug = config.env.APP_ELECTRON_DEBUG ? !!config.env.APP_ELECTRON_DEBUG : opts.debug;
+      opts.inspect = config.env.APP_ELECTRON_INSPECT
+        ? geNumberBooleanValue(config.env.APP_ELECTRON_INSPECT)
+        : opts.inspect;
     },
     configureServer(server) {
       if (!server || !server.httpServer) {

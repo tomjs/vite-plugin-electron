@@ -35,8 +35,17 @@ async function startup(options: PluginOptions) {
 
   await startup.exit();
 
+  const args = ['.'];
+  if (options.inspect) {
+    if (typeof options.inspect === 'number') {
+      args.push(`--inspect=${options.inspect}`);
+    } else {
+      args.push(`--inspect`);
+    }
+  }
+
   // start electron app
-  process.electronApp = spawn(electron as any, ['.'], {
+  process.electronApp = spawn(electron as any, args, {
     stdio: 'inherit',
   });
 

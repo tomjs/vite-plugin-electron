@@ -82,4 +82,12 @@ export interface PluginOptions {
    * @default false
    */
   debug?: boolean;
+  /**
+   * Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port.
+   * You can also use `process.env.APP_ELECTRON_INSPECT`. See [debugging-main-process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process) for more information.
+   * The default port is false.
+   * @see https://www.electronjs.org/docs/latest/tutorial/debugging-main-process
+   * @default false
+   */
+  inspect?: number | boolean;
 }
