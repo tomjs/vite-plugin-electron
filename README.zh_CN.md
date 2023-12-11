@@ -186,7 +186,8 @@ export default defineConfig({
 | external | `string[]` |  | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsup.egoist.dev/#excluding-packages) |
 | main | [MainOptions](#MainOptions) |  | electron main 进程选项 |
 | preload | [PreloadOptions](#PreloadOptions) |  | electron preload 进程选项 |
-| debug | `boolean` | `false` | electron调试模式，不启动electron |
+| debug | `boolean` | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.APP_ELECTRON_DEBUG` |
+| inspect | `boolean` | `false` | Electron 将监听指定 port 上的 V8 调试协议消息， 外部调试器需要连接到此端口上。您还可以使用 `process.env.APP_ELECTRON_INSPECT`。 有关更多信息，请参阅[debugging-main-process](https://www.electronjs.org/zh/docs/latest/tutorial/debugging-main-process)。 |
 
 `recommended` 选项用于设置默认配置和行为，几乎可以达到零配置使用，默认为 `true` 。如果你要自定义配置，请设置它为`false`。以下默认的前提条件是使用推荐的 [项目结构](#目录结构)。
 
@@ -290,4 +291,11 @@ app.whenReady().then(() => {
 
 **说明**
 
-`Electron v28` 虽然支持了 `esm`，但是 `VSCode Debug` sourcemap支持可能有问题，断点无法正常工作，这时可以考虑使用 `cjs` 模式
+`Electron v28` 虽然支持了 `esm`，但是 `VSCode Debug` sourcemap支持可能有问题，断点无法正常工作。这种情况可以使用 `cjs` 模式或关闭 `sourcemap`。
+
+```ts
+electron({
+  main: { sourcemap: false },
+  preload: { sourcemap: false },
+});
+```

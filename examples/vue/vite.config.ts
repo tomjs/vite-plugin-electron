@@ -4,5 +4,12 @@ import electron from '@tomjs/vite-plugin-electron';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  plugins: [vue(), electron(), renderer()],
+  plugins: [
+    vue(),
+    electron({
+      main: { sourcemap: false },
+      preload: { sourcemap: false },
+    }),
+    renderer(),
+  ],
 });

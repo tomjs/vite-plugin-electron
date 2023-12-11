@@ -185,7 +185,8 @@ export default defineConfig({
 | external | `string[]` |  | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsup.egoist.dev/#excluding-packages) |
 | main | [MainOptions](#MainOptions) |  | Configuration options for the electron main process. |
 | preload | [PreloadOptions](#PreloadOptions) |  | Configuration options for the electron preload process. |
-| debug | `boolean` | `false` | Electron debug mode, don't startup electron. |
+| debug | `boolean` | `false` | Electron debug mode, don't startup electron. You can also use `process.env.APP_ELECTRON_DEBUG`. Default is false. |
+| inspect | `boolean` | `false` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. You can also use `process.env.APP_ELECTRON_INSPECT`. See [debugging-main-process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process) for more information. |
 
 **Notice**
 
@@ -291,4 +292,11 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
 
 **Notice**
 
-Although `Electron v28` supports `esm`, there may be problems with `VSCode Debug` sourcemap support and breakpoints cannot work properly. In this case, you can consider using `cjs` mode.
+Although `Electron v28` supports `esm`, there may be problems with `VSCode Debug` sourcemap support and breakpoints cannot work properly. In this case, you can use `cjs` mode or turn off `sourcemap`
+
+```ts
+electron({
+  main: { sourcemap: false },
+  preload: { sourcemap: false },
+});
+```
