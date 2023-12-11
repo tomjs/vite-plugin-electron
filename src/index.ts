@@ -175,7 +175,6 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
           .join('\n');
         writeFileSync(path.join(DEBUG_PATH, '.env'), `NODE_ENV=development\n${env}`);
 
-        console.log('Server is running');
         await runServe(opts, server);
       });
     },
