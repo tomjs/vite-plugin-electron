@@ -260,7 +260,7 @@ app.whenReady().then(() => {
 
 通过如下配置或者 `ELECTRON_DEBUG=1 vite dev` 启动代码编译
 
-- 通过 `.env` 文件设置 `APP_ELECTRON_DEBUG=1` 开启
+- 通过 `.env.development` 文件设置 `APP_ELECTRON_DEBUG=1` 开启
 - `vite.config.js` 配置 `electron({ debug: true })` 开启
 
 #### VSCODE
@@ -287,15 +287,4 @@ app.whenReady().then(() => {
     }
   ]
 }
-```
-
-**说明**
-
-`Electron v28` 虽然支持了 `esm`，但是 `VSCode Debug` sourcemap支持可能有问题，断点无法正常工作。这种情况可以使用 `cjs` 模式或关闭 `sourcemap`。
-
-```ts
-electron({
-  main: { sourcemap: false },
-  preload: { sourcemap: false },
-});
 ```

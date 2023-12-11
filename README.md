@@ -261,7 +261,7 @@ app.whenReady().then(() => {
 
 Start code compilation through the following configuration or `ELECTRON_DEBUG=1 vite dev`
 
-- Enable by setting `APP_ELECTRON_DEBUG=1` in `.env` file
+- Enable by setting `APP_ELECTRON_DEBUG=1` in `.env.development` file
 - `vite.config.js` configures `electron({ debug: true })` to be turned on
 
 #### VSCODE
@@ -288,15 +288,4 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
     }
   ]
 }
-```
-
-**Notice**
-
-Although `Electron v28` supports `esm`, there may be problems with `VSCode Debug` sourcemap support and breakpoints cannot work properly. In this case, you can use `cjs` mode or turn off `sourcemap`
-
-```ts
-electron({
-  main: { sourcemap: false },
-  preload: { sourcemap: false },
-});
 ```
