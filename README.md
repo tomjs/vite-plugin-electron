@@ -31,6 +31,19 @@ yarn add @tomjs/vite-plugin-electron -D
 npm i @tomjs/vite-plugin-electron --save-dev
 ```
 
+If you use `builder` to package your application, please install `electron-builder`
+
+```bash
+# pnpm
+pnpm add electron-builder -D
+
+# yarn
+yarn add electron-builder -D
+
+# npm
+npm i electron-builder --save-dev
+```
+
 ## Usage
 
 ### Recommended Agreement

@@ -31,6 +31,19 @@ yarn add @tomjs/vite-plugin-electron -D
 npm i @tomjs/vite-plugin-electron --save-dev
 ```
 
+如果使用 `builder` 打包应用，请安装 `electron-builder`
+
+```bash
+# pnpm
+pnpm add electron-builder -D
+
+# yarn
+yarn add electron-builder -D
+
+# npm
+npm i electron-builder --save-dev
+```
+
 ## 使用说明
 
 ### 推荐约定
