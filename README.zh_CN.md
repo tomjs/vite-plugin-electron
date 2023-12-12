@@ -16,6 +16,7 @@
 - 支持 `preload` 的 `热重载`
 - 支持 `esm` 和 `cjs` ，你可以在 [electron v28+](https://www.electronjs.org/zh/blog/electron-28-0) 中使用 `esm`
 - 支持 `vue` 和 `react` 等其他 `vite` 支持的[框架](https://cn.vitejs.dev/guide/#trying-vite-online)
+- 可选 [electron-builder](https://www.electron.build/) 简单配置打包
 
 ## 安装
 
@@ -216,6 +217,63 @@ export default defineConfig({
 | format | `'cjs' \| 'esm'` | `-` | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
 | outDir | `string` | `"dist-electron/preload"` | preload 输出文件夹 |
 | onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined` | 构建成功后运行的回调函数 |
+
+### BuilderOptions
+
+当 `recommended` 和 `builder.enable` 都为 `true` 时，使用 [electron-builder](https://www.electron.build) 打包 Electron 应用程序。
+
+- 在vite中配置的`build.outDir`目录中，根据配置和package.json生成新的package.json，排除非依赖项。
+- 执行`npm install`然后打包。
+
+_不适合所有人使用。_
+
+使用该功能，需要额外安装 `electron-builder`
+
+| 参数名 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| enable | `boolean` | `false` | 是否启用 [electron-builder](https://www.electron.build) |
+| appId | `string` | `"com.electron.${name}"` | 应用程序 ID。[详细](https://www.electron.build/configuration/configuration#configuration) |
+| productName | `string` | `` | 应用程序名称。[详细](https://www.electron.build/configuration/configuration#configuration) |
+| builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined` | [electron-builder](https://www.electron.build) 的 [Configuration](https://www.electron.build/configuration/configuration#configuration) |
+
+默认配置如下
+
+```ts
+const config = {
+  directories: {
+    buildResources: 'electron/build',
+    app: path.dirname(resolvedConfig.build.outDir),
+    output: 'release/${version}',
+  },
+  files: ['main', 'preload', 'renderer'],
+  artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
+  electronDownload: {
+    // when npm registry mirror is 'registry.npmmirror.com'
+    mirror: 'https://npmmirror.com/mirrors/electron',
+  },
+  electronLanguages: ['zh-CN', 'en-US'],
+  win: {
+    target: [
+      {
+        target: 'nsis',
+        arch: ['x64'],
+      },
+    ],
+  },
+  mac: {
+    target: ['dmg'],
+  },
+  linux: {
+    target: ['zip'],
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+};
+```
 
 ### 补充说明
 

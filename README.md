@@ -16,6 +16,7 @@ Many thanks to [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-el
 - Support `preload`'s `Hot Reload`
 - Support `esm` and `cjs`, you can use `esm` in [electron v28+](https://www.electronjs.org/blog/electron-28-0)
 - Support `vue` and `react` and other [frameworks](https://vitejs.dev/guide/#trying-vite-online) supported by `vite`
+- Optional [electron-builder](https://www.electron.build/) Simple configuration
 
 ## Install
 
@@ -217,6 +218,63 @@ Based on [Options](https://paka.dev/npm/tsup) of [tsup](https://tsup.egoist.dev/
 | format | `'cjs' \| 'esm'` | `-` | The bundle format. If not specified, it will use the "type" field from package.json. |
 | outDir | `string` | "dist-electron/preload" | The output directory for the preload process files |
 | onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined` | A function that will be executed after the build succeeds. |
+
+# BuilderOptions
+
+When `recommended` and `builder.enable` are both `true`, use [electron-builder](https://www.electron.build) to package Electron applications.
+
+- In the `build.outDir` directory configured in vite, generate a new package.json based on the configuration and package.json, excluding non-dependencies.
+- Execute `npm install` and then package.
+
+_Not suitable for everyone._
+
+To use this function, you need to install additional `electron-builder`
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| enable | `boolean` | `false` | Whether to enable the [electron-builder](https://www.electron.build). |
+| appId | `string` | `"com.electron.${name}"` | The application id. [See More](https://www.electron.build/configuration/configuration#configuration) |
+| productName | `string` | `"com.electron.${name}"` | product name.[See More](https://www.electron.build/configuration/configuration#configuration) |
+| builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined` | [electron-builder](https://www.electron.build)'s [Configuration](https://www.electron.build/configuration/configuration#configuration) |
+
+The default configuration is as follows:
+
+```ts
+const config = {
+  directories: {
+    buildResources: 'electron/build',
+    app: path.dirname(resolvedConfig.build.outDir),
+    output: 'release/${version}',
+  },
+  files: ['main', 'preload', 'renderer'],
+  artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
+  electronDownload: {
+    // when npm registry mirror is 'registry.npmmirror.com'
+    mirror: 'https://npmmirror.com/mirrors/electron',
+  },
+  electronLanguages: ['zh-CN', 'en-US'],
+  win: {
+    target: [
+      {
+        target: 'nsis',
+        arch: ['x64'],
+      },
+    ],
+  },
+  mac: {
+    target: ['dmg'],
+  },
+  linux: {
+    target: ['zip'],
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+};
+```
 
 ### Additional Information
 

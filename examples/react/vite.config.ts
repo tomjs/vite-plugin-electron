@@ -4,5 +4,20 @@ import electron from '@tomjs/vite-plugin-electron';
 import react from '@vitejs/plugin-react-swc';
 
 export default defineConfig({
-  plugins: [react(), electron(), renderer()],
+  plugins: [
+    react(),
+    electron({
+      external: ['fs-extra', 'simple-git'],
+      main: {
+        minify: false,
+      },
+      preload: {
+        minify: false,
+      },
+      builder: {
+        enable: true,
+      },
+    }),
+    renderer(),
+  ],
 });

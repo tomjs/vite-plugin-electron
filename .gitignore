@@ -57,3 +57,5 @@ tsconfig.tsbuildinfo
 build
 dist
 debug
+examples/react/release
+examples/vue/release

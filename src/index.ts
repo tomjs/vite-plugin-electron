@@ -1,12 +1,13 @@
 import type { AddressInfo } from 'node:net';
-import type { Plugin } from 'vite';
+import type { Plugin, ResolvedConfig } from 'vite';
 import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import fs, { mkdirSync, writeFileSync } from 'node:fs';
 import { cwd } from 'node:process';
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 import path from 'path';
-import { PLUGIN_NAME } from './constants';
+import { runElectronBuilder } from './builder';
+import { PACKAGE_NAME, PLUGIN_NAME } from './constants';
 import { runBuild, runServe } from './main';
 import { readJson } from './utils';
 
@@ -94,9 +95,16 @@ function geNumberBooleanValue(value?: string) {
   return Number.isNaN(v) ? undefined : v;
 }
 
-export function vitePluginElectron(options?: PluginOptions): Plugin {
+/**
+ * A simple vite plugin for electron
+ * @param options
+ */
+
+export function useElectronPlugin(options?: PluginOptions): Plugin {
   const opts = preMergeOptions(options);
   let isServer = false;
+
+  let resolvedConfig: ResolvedConfig;
 
   return {
     name: PLUGIN_NAME,
@@ -146,6 +154,8 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
       opts.inspect = config.env.APP_ELECTRON_INSPECT
         ? geNumberBooleanValue(config.env.APP_ELECTRON_INSPECT)
         : opts.inspect;
+
+      resolvedConfig = config;
     },
     configureServer(server) {
       if (!server || !server.httpServer) {
@@ -159,13 +169,7 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
         const protocol = server.config.server.https ? 'https' : 'http';
         process.env.APP_DEV_SERVER_URL = `${protocol}://${hostname}:${port}`;
 
-        const DEBUG_PATH = path.resolve(
-          cwd(),
-          'node_modules',
-          '@tomjs',
-          'vite-plugin-electron',
-          'debug',
-        );
+        const DEBUG_PATH = path.resolve(cwd(), 'node_modules', PACKAGE_NAME, 'debug');
         if (!fs.existsSync(DEBUG_PATH)) {
           mkdirSync(DEBUG_PATH, { recursive: true });
         }
@@ -183,8 +187,12 @@ export function vitePluginElectron(options?: PluginOptions): Plugin {
         return;
       }
       await runBuild(opts);
+
+      if (opts.recommended && opts.builder?.enable) {
+        await runElectronBuilder(opts, resolvedConfig);
+      }
     },
   };
 }
 
-export default vitePluginElectron;
+export default useElectronPlugin;

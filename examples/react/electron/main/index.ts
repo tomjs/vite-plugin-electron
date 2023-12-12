@@ -1,8 +1,11 @@
-import { release } from 'node:os';
+import { homedir, release } from 'node:os';
 import { join } from 'node:path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import fs from 'fs-extra';
 
 console.log('Electron Main Process!');
+
+console.log(fs.pathExistsSync(homedir()));
 
 const isDev = process.env.NODE_ENV == 'development';
 process.env.DIST = join(__dirname, '../renderer');
