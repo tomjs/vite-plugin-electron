@@ -5,8 +5,10 @@ import os from 'node:os';
 import path from 'node:path';
 import { cwd } from 'node:process';
 import merge from 'lodash.merge';
-import shell from 'shelljs';
+import { createLogger } from './logger';
 import { exec, readJson, writeJson } from './utils';
+
+const logger = createLogger();
 
 function getMirror() {
   let mirror = process.env.ELECTRON_MIRROR;
@@ -92,15 +94,24 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
 
   const outDir = path.dirname(resolvedConfig.build.outDir);
 
+  let main = pkg.main;
+  if (main) {
+    main = main.replace('./', '');
+    main = main.substring(main.indexOf(outDir) + outDir.length);
+    if (main.startsWith('/')) {
+      main = main.substring(1);
+    }
+  } else {
+    main = `main/index.${options?.main?.format === 'esm' ? '' : 'm'}js`;
+  }
+
   const newPkg = {
     name: pkg.name,
     version: pkg.version,
     description: pkg.description,
     type: pkg.type || 'commonjs',
     author: getAuthor(pkg.author),
-    main: pkg.main
-      ? pkg.main.replace('./', '').substring(pkg.main.indexOf(outDir) + outDir.length - 1)
-      : `main/index.${options?.main?.format === 'esm' ? '' : 'm'}js`,
+    main,
     dependencies: getDeps(),
   };
 
@@ -147,10 +158,14 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
 }
 
 export async function runElectronBuilder(options: PluginOptions, resolvedConfig: ResolvedConfig) {
+  logger.info('building electron app...');
+
   const DIST_PATH = path.join(cwd(), path.dirname(resolvedConfig.build.outDir));
 
-  shell.exec(`cd ${DIST_PATH} && npm install`);
+  logger.info(`create package.json and exec "npm install"`);
+  exec(`cd ${DIST_PATH} && npm run build`);
 
+  logger.info(`run electron-builder to package app`);
   const config = getBuilderConfig(options, resolvedConfig);
   const { build } = await import('electron-builder');
   await build({

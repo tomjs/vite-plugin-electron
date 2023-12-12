@@ -25,7 +25,7 @@ export const getNodeExternal = (externals?: string[]) => {
 
 export function exec(
   command: string,
-  args: string[],
+  args?: string[],
   options?: SpawnSyncOptionsWithStringEncoding,
 ) {
   return spawnSync(command, args, Object.assign({ encoding: 'utf8' }, options));

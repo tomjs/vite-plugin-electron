@@ -55,7 +55,6 @@
     "kolorist": "^1.8.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.merge": "^4.6.2",
-    "shelljs": "^0.8.5",
     "tree-kill": "^1.2.2",
     "tsup": "7.2.0"
   },
@@ -69,7 +68,6 @@
     "@types/lodash.clonedeep": "^4.5.9",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^18.19.3",
-    "@types/shelljs": "^0.8.15",
     "eslint": "^8.55.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
