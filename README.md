@@ -314,9 +314,9 @@ const config = {
 
 Electron `main process` and `renderer process` use.
 
-| Variable           | Description                |
-| ------------------ | -------------------------- |
-| APP_DEV_SERVER_URL | The url of the dev server. |
+| Variable             | Description                |
+| -------------------- | -------------------------- |
+| `APP_DEV_SERVER_URL` | The url of the dev server. |
 
 ## Debug
 
