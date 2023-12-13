@@ -201,9 +201,9 @@ export default defineConfig({
 | external | `string[]` |  | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsup.egoist.dev/#excluding-packages) |
 | main | [MainOptions](#MainOptions) |  | Configuration options for the electron main process. |
 | preload | [PreloadOptions](#PreloadOptions) |  | Configuration options for the electron preload process. |
-| debug | `boolean` | `false` | Electron debug mode, don't startup electron. You can also use `process.env.APP_ELECTRON_DEBUG`. Default is false. |
-| builder | `boolean` \| [BuilderOptions](#BuilderOptions) | `false` | If it is a `boolean` type, whether to enable [electron-builder](https://www.electron.build). If it is an object, it is the [configuration](https://www.electron.build/configuration/configuration) of [electron-builder](https://www.electron.build). You can also turn it on using `process.env.APP_ELECTRON_DEBUG`. |
-| inspect | `boolean` | `false` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. You can also use `process.env.APP_ELECTRON_INSPECT`. See [debugging-main-process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process) for more information. |
+| debug | `boolean` | `false` | Electron debug mode, don't startup electron. You can also use `process.env.VITE_ELECTRON_DEBUG`. Default is false. |
+| builder | `boolean` \| [BuilderOptions](#BuilderOptions) | `false` | If it is a `boolean` type, whether to enable [electron-builder](https://www.electron.build). If it is an object, it is the [configuration](https://www.electron.build/configuration/configuration) of [electron-builder](https://www.electron.build). You can also turn it on using `process.env.VITE_ELECTRON_DEBUG`. |
+| inspect | `boolean` | `false` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. You can also use `process.env.VITE_ELECTRON_INSPECT`. See [debugging-main-process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process) for more information. |
 
 **Notice**
 
@@ -235,7 +235,7 @@ Based on [Options](https://paka.dev/npm/tsup) of [tsup](https://tsup.egoist.dev/
 | outDir | `string` | "dist-electron/preload" | The output directory for the preload process files |
 | onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined` | A function that will be executed after the build succeeds. |
 
-# BuilderOptions
+### BuilderOptions
 
 When `recommended` and `builder.enable` are both `true`, use [electron-builder](https://www.electron.build) to package Electron applications.
 
@@ -299,6 +299,24 @@ const config = {
 | --------- | ------------------------ | ----------------------- |
 | sourcemap | `true`                   | `false`                 |
 | minify    | `false`                  | `true`                  |
+
+## Environment Variables
+
+### Vite plugin variables
+
+| Variable | Description |
+| --- | --- |
+| `VITE_ELECTRON_DEBUG` | Electron main process debug, don't startup electron. When value is true or 1 to enable, false or 0 to disable.Default is undefined. |
+| `VITE_ELECTRON_INSPECT` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. When value is true, the default port is 5858. |
+| `VITE_ELECTRON_BUILDER` | Enable [electron-builder](https://www.electron.build) to package. When value is true or 1 to enable, false or 0 to disable. Default is undefined. |
+
+### Application variables
+
+Electron `main process` and `renderer process` use.
+
+| Variable           | Description                |
+| ------------------ | -------------------------- |
+| APP_DEV_SERVER_URL | The url of the dev server. |
 
 ## Debug
 
@@ -371,7 +389,7 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
       "label": "npm:debug",
       "type": "npm",
       "script": "debug",
-      "detail": "cross-env APP_ELECTRON_DEBUG=1 vite",
+      "detail": "cross-env VITE_ELECTRON_DEBUG=1 vite",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",

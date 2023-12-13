@@ -85,7 +85,7 @@ function preMergeOptions(options?: PluginOptions) {
 }
 
 function geNumberBooleanValue(value?: string) {
-  if (typeof value !== 'string') {
+  if (typeof value !== 'string' || value.trim() === '') {
     return;
   }
   if (['true', 'false'].includes(value)) {
@@ -94,6 +94,22 @@ function geNumberBooleanValue(value?: string) {
 
   const v = Number(value);
   return Number.isNaN(v) ? undefined : v;
+}
+
+function getBooleanValue(value?: string) {
+  if (typeof value !== 'string' || value.trim() === '') {
+    return;
+  }
+
+  if (['true', 'false'].includes(value)) {
+    return value === 'true';
+  }
+
+  if (['1', '0'].includes(value)) {
+    return value === '1';
+  }
+
+  return;
 }
 
 /**
@@ -151,10 +167,9 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
       };
     },
     configResolved(config) {
-      opts.debug = config.env.APP_ELECTRON_DEBUG ? !!config.env.APP_ELECTRON_DEBUG : opts.debug;
-      opts.inspect = config.env.APP_ELECTRON_INSPECT
-        ? geNumberBooleanValue(config.env.APP_ELECTRON_INSPECT)
-        : opts.inspect;
+      opts.debug = getBooleanValue(config.env.VITE_ELECTRON_DEBUG) ?? opts.debug;
+      opts.inspect = geNumberBooleanValue(config.env.VITE_ELECTRON_INSPECT) ?? opts.inspect;
+      opts.builder = getBooleanValue(config.env.VITE_ELECTRON_BUILDER) ?? opts.builder;
 
       resolvedConfig = config;
     },

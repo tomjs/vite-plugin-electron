@@ -7,7 +7,7 @@
       "label": "npm:debug",
       "type": "npm",
       "script": "debug",
-      "detail": "cross-env APP_ELECTRON_DEBUG=1 vite",
+      "detail": "cross-env VITE_ELECTRON_DEBUG=1 vite",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",

@@ -8,9 +8,6 @@ export default defineConfig({
     react(),
     electron({
       external: ['fs-extra', 'simple-git'],
-      builder: {
-        enable: true,
-      },
     }),
     renderer(),
   ],

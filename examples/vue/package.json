@@ -9,8 +9,9 @@
   "main": "./dist/main/index.mjs",
   "scripts": {
     "dev": "vite",
-    "debug": "cross-env APP_ELECTRON_DEBUG=1 vite",
+    "debug": "cross-env VITE_ELECTRON_DEBUG=1 vite",
     "build": "vue-tsc --noEmit && vite build",
+    "build:pack": "cross-env VITE_ELECTRON_BUILDER=1 vite build",
     "preview": "vite preview"
   },
   "dependencies": {

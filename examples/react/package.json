@@ -8,8 +8,9 @@
   "main": "./dist/main/index.js",
   "scripts": {
     "dev": "vite",
-    "debug": "cross-env APP_ELECTRON_DEBUG=1 vite",
+    "debug": "cross-env VITE_ELECTRON_DEBUG=1 vite",
     "build": "vite build",
+    "build:pack": "cross-env VITE_ELECTRON_BUILDER=1 vite build",
     "preview": "vite preview"
   },
   "dependencies": {

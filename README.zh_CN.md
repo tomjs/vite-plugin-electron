@@ -202,9 +202,9 @@ export default defineConfig({
 | external | `string[]` |  | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsup.egoist.dev/#excluding-packages) |
 | main | [MainOptions](#MainOptions) |  | electron main 进程选项 |
 | preload | [PreloadOptions](#PreloadOptions) |  | electron preload 进程选项 |
-| debug | `boolean` | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.APP_ELECTRON_DEBUG` |
-| builder | `boolean` | `false` | 如果是`boolean`类型，是否启用[electron-builder](https://www.electron.build)。如果是`Object`，则是[electron-builder](https://www.electron.build)的[配置](https://www.electron.build/configuration/configuration)。 您还可以使用 `process.env.APP_ELECTRON_DEBUG` 开启它。 |
-| inspect | `boolean` | `false` | Electron 将监听指定 port 上的 V8 调试协议消息， 外部调试器需要连接到此端口上。您还可以使用 `process.env.APP_ELECTRON_INSPECT`。 有关更多信息，请参阅[debugging-main-process](https://www.electronjs.org/zh/docs/latest/tutorial/debugging-main-process)。 |
+| debug | `boolean` | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG` |
+| builder | `boolean` | `false` | 如果是`boolean`类型，是否启用[electron-builder](https://www.electron.build)。如果是`Object`，则是[electron-builder](https://www.electron.build)的[配置](https://www.electron.build/configuration/configuration)。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG` 开启它。 |
+| inspect | `boolean` | `false` | Electron 将监听指定 port 上的 V8 调试协议消息， 外部调试器需要连接到此端口上。您还可以使用 `process.env.VITE_ELECTRON_INSPECT`。 有关更多信息，请参阅[debugging-main-process](https://www.electronjs.org/zh/docs/latest/tutorial/debugging-main-process)。 |
 
 `recommended` 选项用于设置默认配置和行为，几乎可以达到零配置使用，默认为 `true` 。如果你要自定义配置，请设置它为`false`。以下默认的前提条件是使用推荐的 [项目结构](#目录结构)。
 
@@ -299,6 +299,24 @@ const config = {
 | sourcemap | `true`         | `false`        |
 | minify    | `false`        | `true`         |
 
+## 环境变量
+
+### vite 插件变量
+
+| 变量 | 描述 |
+| --- | --- |
+| `VITE_ELECTRON_DEBUG` | Electron主进程调试，不要启动Electron。 当值为 true 或 1 时启用，为 false 或 0 时禁用。默认值未定义。 |
+| `VITE_ELECTRON_INSPECT` | Electron 将在指定端口上侦听 V8 检查器协议消息，外部调试器需要连接到该端口。 当值为 true 时，默认端口为 5858。 |
+| `VITE_ELECTRON_BUILDER` | 启用 [ Electron-builder ](https://www.electron.build) 进行打包。 当值为 true 或 1 时启用，为 false 或 0 时禁用。 默认值未定义。 |
+
+### 应用变量
+
+Electron `main process` 和 `renderer process` 使用。
+
+| 变量               | 描述                  |
+| ------------------ | --------------------- |
+| APP_DEV_SERVER_URL | Vite 开发服务器的 URL |
+
 ## 调试
 
 ### Web调试
@@ -370,7 +388,7 @@ app.whenReady().then(() => {
       "label": "npm:debug",
       "type": "npm",
       "script": "debug",
-      "detail": "cross-env APP_ELECTRON_DEBUG=1 vite",
+      "detail": "cross-env VITE_ELECTRON_DEBUG=1 vite",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
