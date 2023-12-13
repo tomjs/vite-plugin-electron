@@ -8,6 +8,7 @@
   "main": "./dist/main/index.js",
   "scripts": {
     "dev": "vite",
+    "debug": "cross-env APP_ELECTRON_DEBUG=1 vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -25,6 +26,7 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "cross-env": "^7.0.3",
     "electron": "^28.0.0",
     "typescript": "~5.2.2",
     "vite": "^5.0.7",

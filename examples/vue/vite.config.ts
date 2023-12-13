@@ -4,5 +4,5 @@ import electron from '@tomjs/vite-plugin-electron';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  plugins: [vue(), electron({ builder: false }), renderer()],
+  plugins: [vue(), electron({ builder: true }), renderer()],
 });

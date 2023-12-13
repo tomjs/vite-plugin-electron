@@ -6,6 +6,7 @@
   "configurations": [
     {
       "name": "Debug Main Process",
+      "preLaunchTask": "npm:debug",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
@@ -14,7 +15,13 @@
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       },
       "args": [
-        "."
+        ".",
+      ],
+      "outFiles": [
+        "${workspaceFolder}/**/*.js",
+        "${workspaceFolder}/**/*.cjs",
+        "${workspaceFolder}/**/*.mjs",
+        "!**/node_modules/**"
       ],
       "envFile": "${workspaceFolder}/node_modules/@tomjs/vite-plugin-electron/debug/.env"
     },

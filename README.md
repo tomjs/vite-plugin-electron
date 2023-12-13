@@ -126,14 +126,12 @@ Take using `esm` as an example, but it requires Electron>=28
 
 - `package.json`
 
-Electron `preload process` must use the `.mjs` suffix, otherwise an error will be reported, see [official documentation](https://www.electronjs.org/zh/docs/latest/tutorial/esm). So the default output of `esm` of `preload` uses the `.mjs` suffix.
-
-When the suffix of Electron `main process` is `.mjs` or `.cjs`, vscode breakpoint debugging cannot work, so the suffix defaults to `.js`.
+Electron `preload process` must use the `.mjs` suffix, otherwise an error will be reported, see [official documentation](https://www.electronjs.org/zh/docs/latest/tutorial/esm). So the default output of `esm` of `preload` uses the `.mjs` suffix. For consistency, `main process` also ends with `.mjs`
 
 ```json
 {
   "type": "module",
-  "main": "dist/main/index.js"
+  "main": "dist/main/index.mjs"
 }
 ```
 
@@ -330,16 +328,7 @@ app.whenReady().then(() => {
 });
 ```
 
-### Main thread debugging
-
-#### Turn on debugging
-
-Start code compilation through the following configuration or `ELECTRON_DEBUG=1 vite dev`
-
-- Enable by setting `APP_ELECTRON_DEBUG=1` in `.env.development` file
-- `vite.config.js` configures `electron({ debug: true })` to be turned on
-
-#### VSCODE
+### Main Process Debug
 
 Run `Debug Main Process` through `vscode` to debug the main thread. For debugging tools, refer to [Official Documentation](https://code.visualstudio.com/docs/editor/debugging)
 
@@ -351,6 +340,7 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
   "configurations": [
     {
       "name": "Debug Main Process",
+      "preLaunchTask": "npm:debug",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
@@ -359,8 +349,52 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       },
       "args": ["."],
+      "outFiles": [
+        "${workspaceFolder}/**/*.js",
+        "${workspaceFolder}/**/*.cjs",
+        "${workspaceFolder}/**/*.mjs",
+        "!**/node_modules/**"
+      ],
       "envFile": "${workspaceFolder}/node_modules/@tomjs/vite-plugin-electron/debug/.env"
     }
   ]
 }
 ```
+
+`tasks.json` is configured as follows:
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm:debug",
+      "type": "npm",
+      "script": "debug",
+      "detail": "cross-env APP_ELECTRON_DEBUG=1 vite",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "fileLocation": "relative",
+        "pattern": {
+          "regexp": "^([a-zA-Z]\\:/?([\\w\\-]/?)+\\.\\w+):(\\d+):(\\d+): (ERROR|WARNING)\\: (.*)$",
+          "file": 1,
+          "line": 3,
+          "column": 4,
+          "code": 5,
+          "message": 6
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*VITE v.*  ready in \\d* ms.*$",
+          "endsPattern": "^.*\\[@tomjs:electron\\] startup electron*$"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Preload process Debug
+
+Use `DevTools` to debug the `preload process`.

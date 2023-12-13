@@ -1,4 +1,3 @@
-import { spawnSync, type SpawnSyncOptionsWithStringEncoding } from 'node:child_process';
 import fs from 'node:fs';
 import { builtinModules } from 'node:module';
 
@@ -22,11 +21,3 @@ export const getNodeExternal = (externals?: string[]) => {
     ...new Set(modules.concat(modules.map(s => `node:${s}`)).concat(['electron', ...external])),
   ];
 };
-
-export function exec(
-  command: string,
-  args: string[] = [],
-  options?: SpawnSyncOptionsWithStringEncoding,
-) {
-  return spawnSync(command, args, Object.assign({ encoding: 'utf8' }, options));
-}

@@ -5,8 +5,9 @@ import os from 'node:os';
 import path from 'node:path';
 import { cwd } from 'node:process';
 import merge from 'lodash.merge';
+import shell from 'shelljs';
 import { createLogger } from './logger';
-import { exec, readJson, writeJson } from './utils';
+import { readJson, writeJson } from './utils';
 
 const logger = createLogger();
 
@@ -17,8 +18,8 @@ function getMirror() {
   }
 
   // check npm mirror
-  const res = exec(os.platform() === 'win32' ? 'npm.cmd' : 'npm', ['config', 'get', 'registry']);
-  if (res.status === 0) {
+  const res = shell.exec('npm config get registry', { silent: true });
+  if (res.code === 0) {
     let registry = res.stdout;
     if (!registry) {
       return;
@@ -170,7 +171,7 @@ export async function runElectronBuilder(options: PluginOptions, resolvedConfig:
   const DIST_PATH = path.join(cwd(), path.dirname(resolvedConfig.build.outDir));
 
   logger.info(`create package.json and exec "npm install"`);
-  exec(`cd ${DIST_PATH} && npm run build`);
+  shell.exec(`cd ${DIST_PATH} && npm i`);
 
   logger.info(`run electron-builder to package app`);
   const config = getBuilderConfig(options, resolvedConfig);

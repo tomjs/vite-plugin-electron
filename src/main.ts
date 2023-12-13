@@ -26,7 +26,7 @@ function getBuildOptions(options: PluginOptions) {
 }
 
 /**
- *
+ * startup electron app
  */
 async function startup(options: PluginOptions) {
   if (options.debug) {
@@ -95,22 +95,22 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
 
       if (buildCounts[i] <= 0) {
         buildCounts[i]++;
-        logger.info(`${name} build succeeded`);
+        logger.info(`${name} build success`);
 
         if (buildCounts[0] == 1 && buildCounts[1] == 1) {
-          logger.info('electron startup');
+          logger.info('startup electron');
           await startup(options);
         }
         return;
       }
 
-      logger.success(`${name} rebuild succeeded!`);
+      logger.success(`${name} rebuild success`);
 
       if (name === 'main') {
-        logger.info('electron restart');
+        logger.info('restart electron');
         await startup(options);
       } else {
-        logger.info('page reload');
+        logger.info('reload page');
         server.ws.send({
           type: 'full-reload',
         });

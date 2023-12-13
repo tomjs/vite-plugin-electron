@@ -126,14 +126,12 @@ app.whenReady().then(createWindow);
 
 - `package.json`
 
-Electron `preload process` 必须使用 `.mjs` 后缀，否则报错，查看[官方文档](https://www.electronjs.org/zh/docs/latest/tutorial/esm)。所以 `preload` 的 `esm` 默认输出使用 `mjs` 后缀。
-
-当 Electron `main process` 的后缀为 `.mjs`或`.cjs` 时， vscode 断点调试无法起到作用，所以后缀默认为`.js`。
+Electron `preload process` 必须使用 `.mjs` 后缀，否则报错，查看[官方文档](https://www.electronjs.org/zh/docs/latest/tutorial/esm)。所以 `preload` 的 `esm` 默认输出使用 `mjs` 后缀。为了保持一致性，`main process` 也以 `.mjs` 结尾。
 
 ```json
 {
   "type": "module",
-  "main": "dist/main/index.js"
+  "main": "dist/main/index.mjs"
 }
 ```
 
@@ -329,16 +327,7 @@ app.whenReady().then(() => {
 });
 ```
 
-### 主线程调试
-
-#### 开启调试
-
-通过如下配置或者 `ELECTRON_DEBUG=1 vite dev` 启动代码编译
-
-- 通过 `.env.development` 文件设置 `APP_ELECTRON_DEBUG=1` 开启
-- `vite.config.js` 配置 `electron({ debug: true })` 开启
-
-#### VSCODE
+### Main Process 调试
 
 通过 `vscode` 运行 `Debug Main Process` 调试主线程，调试工具参考 [官方文档](https://code.visualstudio.com/docs/editor/debugging)
 
@@ -350,6 +339,7 @@ app.whenReady().then(() => {
   "configurations": [
     {
       "name": "Debug Main Process",
+      "preLaunchTask": "npm:debug",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
@@ -358,8 +348,52 @@ app.whenReady().then(() => {
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       },
       "args": ["."],
+      "outFiles": [
+        "${workspaceFolder}/**/*.js",
+        "${workspaceFolder}/**/*.cjs",
+        "${workspaceFolder}/**/*.mjs",
+        "!**/node_modules/**"
+      ],
       "envFile": "${workspaceFolder}/node_modules/@tomjs/vite-plugin-electron/debug/.env"
     }
   ]
 }
 ```
+
+`tasks.json` 配置如下：
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm:debug",
+      "type": "npm",
+      "script": "debug",
+      "detail": "cross-env APP_ELECTRON_DEBUG=1 vite",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "fileLocation": "relative",
+        "pattern": {
+          "regexp": "^([a-zA-Z]\\:/?([\\w\\-]/?)+\\.\\w+):(\\d+):(\\d+): (ERROR|WARNING)\\: (.*)$",
+          "file": 1,
+          "line": 3,
+          "column": 4,
+          "code": 5,
+          "message": 6
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*VITE v.*  ready in \\d* ms.*$",
+          "endsPattern": "^.*\\[@tomjs:electron\\] startup electron*$"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Preload Process 调试
+
+使用 `DevTools` 调试 `preload process`.
