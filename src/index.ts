@@ -57,6 +57,7 @@ function preMergeOptions(options?: PluginOptions) {
           };
         },
       },
+      builder: false,
     } as PluginOptions,
     cloneDeep(options),
   );
@@ -188,7 +189,7 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
       }
       await runBuild(opts);
 
-      if (opts.recommended && opts.builder?.enable) {
+      if (opts.recommended && opts.builder) {
         await runElectronBuilder(opts, resolvedConfig);
       }
     },

@@ -205,6 +205,7 @@ export default defineConfig({
 | main | [MainOptions](#MainOptions) |  | electron main 进程选项 |
 | preload | [PreloadOptions](#PreloadOptions) |  | electron preload 进程选项 |
 | debug | `boolean` | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.APP_ELECTRON_DEBUG` |
+| builder | `boolean` | `false` | 如果是`boolean`类型，是否启用[electron-builder](https://www.electron.build)。如果是`Object`，则是[electron-builder](https://www.electron.build)的[配置](https://www.electron.build/configuration/configuration)。 您还可以使用 `process.env.APP_ELECTRON_DEBUG` 开启它。 |
 | inspect | `boolean` | `false` | Electron 将监听指定 port 上的 V8 调试协议消息， 外部调试器需要连接到此端口上。您还可以使用 `process.env.APP_ELECTRON_INSPECT`。 有关更多信息，请参阅[debugging-main-process](https://www.electronjs.org/zh/docs/latest/tutorial/debugging-main-process)。 |
 
 `recommended` 选项用于设置默认配置和行为，几乎可以达到零配置使用，默认为 `true` 。如果你要自定义配置，请设置它为`false`。以下默认的前提条件是使用推荐的 [项目结构](#目录结构)。
@@ -248,7 +249,6 @@ _不适合所有人使用。_
 
 | 参数名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| enable | `boolean` | `false` | 是否启用 [electron-builder](https://www.electron.build) |
 | appId | `string` | `"com.electron.${name}"` | 应用程序 ID。[详细](https://www.electron.build/configuration/configuration#configuration) |
 | productName | `string` | `` | 应用程序名称。[详细](https://www.electron.build/configuration/configuration#configuration) |
 | builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined` | [electron-builder](https://www.electron.build) 的 [Configuration](https://www.electron.build/configuration/configuration#configuration) |

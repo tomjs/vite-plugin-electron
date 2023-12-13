@@ -204,6 +204,7 @@ export default defineConfig({
 | main | [MainOptions](#MainOptions) |  | Configuration options for the electron main process. |
 | preload | [PreloadOptions](#PreloadOptions) |  | Configuration options for the electron preload process. |
 | debug | `boolean` | `false` | Electron debug mode, don't startup electron. You can also use `process.env.APP_ELECTRON_DEBUG`. Default is false. |
+| builder | `boolean` \| [BuilderOptions](#BuilderOptions) | `false` | If it is a `boolean` type, whether to enable [electron-builder](https://www.electron.build). If it is an object, it is the [configuration](https://www.electron.build/configuration/configuration) of [electron-builder](https://www.electron.build). You can also turn it on using `process.env.APP_ELECTRON_DEBUG`. |
 | inspect | `boolean` | `false` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. You can also use `process.env.APP_ELECTRON_INSPECT`. See [debugging-main-process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process) for more information. |
 
 **Notice**
@@ -249,7 +250,6 @@ To use this function, you need to install additional `electron-builder`
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| enable | `boolean` | `false` | Whether to enable the [electron-builder](https://www.electron.build). |
 | appId | `string` | `"com.electron.${name}"` | The application id. [See More](https://www.electron.build/configuration/configuration#configuration) |
 | productName | `string` | `"com.electron.${name}"` | product name.[See More](https://www.electron.build/configuration/configuration#configuration) |
 | builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined` | [electron-builder](https://www.electron.build)'s [Configuration](https://www.electron.build/configuration/configuration#configuration) |

@@ -62,7 +62,8 @@ export interface PreloadOptions
 export interface BuilderOptions {
   /**
    * Whether to enable the [electron-builder](https://www.electron.build), the default is false.
-   * @default false
+   * @default true
+   * @deprecated
    */
   enable?: boolean;
   /**
@@ -113,7 +114,7 @@ export interface PluginOptions {
    * * In the `build.outDir` directory configured in vite, generate a new package.json based on the configuration and package.json, excluding non-dependencies.
    * * Execute `npm install` and then package.
    */
-  builder?: BuilderOptions;
+  builder?: boolean | BuilderOptions;
   /**
    * electron debug mode, don't startup electron. You can also use `process.env.APP_ELECTRON_DEBUG`. Default is false.
    * @default false

@@ -73,8 +73,11 @@ function getBuilderConfig(options: PluginOptions, resolvedConfig: ResolvedConfig
     },
   };
 
-  const { appId, productName } = options.builder || {};
+  if (typeof options.builder == 'boolean') {
+    return config;
+  }
 
+  const { appId, productName } = options.builder || {};
   return merge(config, { appId, productName }, options.builder?.builderConfig);
 }
 
@@ -158,6 +161,10 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
 }
 
 export async function runElectronBuilder(options: PluginOptions, resolvedConfig: ResolvedConfig) {
+  if (typeof options.builder == 'boolean' && options.builder == false) {
+    return;
+  }
+
   logger.info('building electron app...');
 
   const DIST_PATH = path.join(cwd(), path.dirname(resolvedConfig.build.outDir));
