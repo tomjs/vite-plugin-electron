@@ -126,12 +126,14 @@ app.whenReady().then(createWindow);
 
 - `package.json`
 
-Electron preload 必须使用 `mjs` 后缀，否则报错。所以 `esm` 也默认输出使用 `mjs` 后缀。
+Electron `preload process` 必须使用 `.mjs` 后缀，否则报错，查看[官方文档](https://www.electronjs.org/zh/docs/latest/tutorial/esm)。所以 `preload` 的 `esm` 默认输出使用 `mjs` 后缀。
+
+当 Electron `main process` 的后缀为 `.mjs`或`.cjs` 时， vscode 断点调试无法起到作用，所以后缀默认为`.js`。
 
 ```json
 {
   "type": "module",
-  "main": "dist/main/index.mjs"
+  "main": "dist/main/index.js"
 }
 ```
 

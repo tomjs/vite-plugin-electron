@@ -126,12 +126,14 @@ Take using `esm` as an example, but it requires Electron>=28
 
 - `package.json`
 
-Electron preload must use the `mjs` suffix, otherwise an error will be reported. So `esm` also uses the `mjs` suffix for output by default.
+Electron `preload process` must use the `.mjs` suffix, otherwise an error will be reported, see [official documentation](https://www.electronjs.org/zh/docs/latest/tutorial/esm). So the default output of `esm` of `preload` uses the `.mjs` suffix.
+
+When the suffix of Electron `main process` is `.mjs` or `.cjs`, vscode breakpoint debugging cannot work, so the suffix defaults to `.js`.
 
 ```json
 {
   "type": "module",
-  "main": "dist/main/index.mjs"
+  "main": "dist/main/index.js"
 }
 ```
 

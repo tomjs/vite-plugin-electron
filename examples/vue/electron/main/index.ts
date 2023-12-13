@@ -4,6 +4,7 @@ import { join } from 'path';
 import '../polyfills';
 
 console.log('Electron Main Process!');
+console.log('Electron Main Process!');
 
 const isDev = process.env.NODE_ENV == 'development';
 process.env.DIST = join(__dirname, '../renderer');

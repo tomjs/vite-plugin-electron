@@ -39,11 +39,6 @@ function preMergeOptions(options?: PluginOptions) {
     clean: true,
     dts: false,
     treeshake: !!isDev,
-    outExtension({ format }) {
-      return {
-        js: format === 'esm' ? '.mjs' : `.js`,
-      };
-    },
   };
 
   const opts: PluginOptions = merge(
@@ -56,6 +51,11 @@ function preMergeOptions(options?: PluginOptions) {
       },
       preload: {
         ...electron,
+        outExtension({ format }) {
+          return {
+            js: format === 'esm' ? '.mjs' : `.js`,
+          };
+        },
       },
     } as PluginOptions,
     cloneDeep(options),
