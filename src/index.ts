@@ -75,6 +75,12 @@ function preMergeOptions(options?: PluginOptions) {
       opt.entry = [entry];
     }
 
+    if (isDev) {
+      opt.sourcemap ??= true;
+    } else {
+      opt.minify ??= true;
+    }
+
     const external = opt.external || opts.external || ['electron'];
     opt.external = [...new Set(['electron'].concat(external))];
   });
@@ -136,15 +142,6 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
       } else {
         opts.main.outDir ||= path.join('dist-electron', 'main');
         opts.preload.outDir ||= path.join('dist-electron', 'preload');
-      }
-
-      if (isDev) {
-        opts.main.sourcemap ??= true;
-        opts.preload.sourcemap ??= true;
-        // opts.inspect = opts.inspect ?? true;
-      } else {
-        opts.main.minify ??= true;
-        opts.preload.minify ??= true;
       }
 
       return {
