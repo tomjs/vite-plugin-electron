@@ -96,7 +96,7 @@ import { app, BrowserWindow } from 'electron';
 global.__dirname = dirname(fileURLToPath(import.meta.url));
 
 const preload = join(__dirname, '../preload/index.mjs');
-const url = process.env.APP_DEV_SERVER_URL;
+const url = process.env.VITE_DEV_SERVER_URL;
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -314,9 +314,9 @@ const config = {
 
 Electron `main process` and `renderer process` use.
 
-| Variable             | Description                |
-| -------------------- | -------------------------- |
-| `APP_DEV_SERVER_URL` | The url of the dev server. |
+| Variable              | Description                |
+| --------------------- | -------------------------- |
+| `VITE_DEV_SERVER_URL` | The url of the dev server. |
 
 ## Debug
 

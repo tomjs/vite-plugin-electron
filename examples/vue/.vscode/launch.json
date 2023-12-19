@@ -22,8 +22,7 @@
         "${workspaceFolder}/**/*.cjs",
         "${workspaceFolder}/**/*.mjs",
         "!**/node_modules/**"
-      ],
-      "envFile": "${workspaceFolder}/node_modules/@tomjs/vite-plugin-electron/debug/.env"
+      ]
     },
   ]
 }

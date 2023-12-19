@@ -96,7 +96,7 @@ import { app, BrowserWindow } from 'electron';
 global.__dirname = dirname(fileURLToPath(import.meta.url));
 
 const preload = join(__dirname, '../preload/index.mjs');
-const url = process.env.APP_DEV_SERVER_URL;
+const url = process.env.VITE_DEV_SERVER_URL;
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -313,9 +313,9 @@ const config = {
 
 Electron `main process` 和 `renderer process` 使用。
 
-| 变量                 | 描述                  |
-| -------------------- | --------------------- |
-| `APP_DEV_SERVER_URL` | Vite 开发服务器的 URL |
+| 变量                  | 描述                  |
+| --------------------- | --------------------- |
+| `VITE_DEV_SERVER_URL` | Vite 开发服务器的 URL |
 
 ## 调试
 

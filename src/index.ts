@@ -1,15 +1,13 @@
-import type { AddressInfo } from 'node:net';
 import type { Plugin, ResolvedConfig } from 'vite';
 import type { MainOptions, PluginOptions, PreloadOptions } from './types';
-import fs, { mkdirSync, writeFileSync } from 'node:fs';
-import { cwd } from 'node:process';
+import fs from 'node:fs';
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 import path from 'path';
 import { runElectronBuilder } from './builder';
-import { PACKAGE_NAME, PLUGIN_NAME } from './constants';
+import { PLUGIN_NAME } from './constants';
 import { runBuild, runServe } from './main';
-import { readJson } from './utils';
+import { readJson, resolveServerUrl } from './utils';
 
 export * from './types';
 
@@ -149,18 +147,7 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
         opts.preload.minify ??= true;
       }
 
-      let envPrefix = config.envPrefix;
-      if (!envPrefix) {
-        envPrefix = ['VITE_'];
-      } else if (typeof envPrefix === 'string') {
-        envPrefix = [envPrefix];
-      }
-      if (!envPrefix.includes('APP_')) {
-        envPrefix.push('APP_');
-      }
-
       return {
-        envPrefix: [...new Set(envPrefix)],
         build: {
           outDir,
         },
@@ -179,21 +166,14 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
       }
 
       server.httpServer.on('listening', async () => {
-        const serve = server.httpServer?.address() as AddressInfo;
-        const { address, port, family } = serve;
-        const hostname = family === 'IPv6' ? `[${address}]` : address;
-        const protocol = server.config.server.https ? 'https' : 'http';
-        process.env.APP_DEV_SERVER_URL = `${protocol}://${hostname}:${port}`;
+        const env = {
+          NODE_ENV: server.config.mode || 'development',
+          VITE_DEV_SERVER_URL: resolveServerUrl(server),
+        };
 
-        const DEBUG_PATH = path.resolve(cwd(), 'node_modules', PACKAGE_NAME, 'debug');
-        if (!fs.existsSync(DEBUG_PATH)) {
-          mkdirSync(DEBUG_PATH, { recursive: true });
-        }
-        const env = Object.keys(process.env)
-          .filter(s => s.startsWith('APP_') || s.startsWith('VITE_'))
-          .map(s => `${s}=${process.env[s]}`)
-          .join('\n');
-        writeFileSync(path.join(DEBUG_PATH, '.env'), `NODE_ENV=development\n${env}`);
+        ['main', 'preload'].forEach(prop => {
+          opts[prop].env = env;
+        });
 
         await runServe(opts, server);
       });

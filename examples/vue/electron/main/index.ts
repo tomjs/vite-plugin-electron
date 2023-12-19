@@ -27,7 +27,7 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null;
 // Here, you can also use other preload
 const preload = join(__dirname, '../preload/index.mjs');
-const url = process.env.APP_DEV_SERVER_URL as string;
+const url = process.env.VITE_DEV_SERVER_URL as string;
 const indexHtml = join(process.env.DIST, 'index.html');
 
 async function createWindow() {
@@ -113,7 +113,7 @@ ipcMain.handle('open-win', (_, arg) => {
     },
   });
 
-  if (process.env.APP_DEV_SERVER_URL) {
+  if (process.env.VITE_DEV_SERVER_URL) {
     childWindow.loadURL(`${url}#${arg}`);
   } else {
     childWindow.loadFile(indexHtml, { hash: arg });

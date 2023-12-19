@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV == 'development';
 process.env.DIST = join(__dirname, '../renderer');
 
 console.log('process.env.DIST', process.env.DIST);
-console.log('process.env.APP_DEV_SERVER_URL', process.env.APP_DEV_SERVER_URL);
+console.log('process.env.VITE_DEV_SERVER_URL', process.env.VITE_DEV_SERVER_URL);
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration();
@@ -30,7 +30,7 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null;
 // Here, you can also use other preload
 const preload = join(__dirname, '../preload/index.js');
-const url = process.env.APP_DEV_SERVER_URL as string;
+const url = process.env.VITE_DEV_SERVER_URL as string;
 const indexHtml = join(process.env.DIST, 'index.html');
 
 function createWindow() {
@@ -125,7 +125,7 @@ ipcMain.handle('open-win', (_, arg) => {
     },
   });
 
-  if (process.env.APP_DEV_SERVER_URL) {
+  if (process.env.VITE_DEV_SERVER_URL) {
     childWindow.loadURL(`${url}#${arg}`);
   } else {
     childWindow.loadFile(indexHtml, { hash: arg });
