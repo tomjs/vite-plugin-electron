@@ -416,3 +416,17 @@ Run `Debug Main Process` through `vscode` to debug the main thread. For debuggin
 ### Preload process Debug
 
 Use `DevTools` to debug the `preload process`.
+
+## Examples
+
+First execute the following command to install dependencies and generate library files:
+
+```bash
+pnpm install
+pnpm build
+```
+
+Open the [examples](./examples) directory, there are `vue` and `react` examples.
+
+- [react](./examples/react)
+- [vue](./examples/vue)

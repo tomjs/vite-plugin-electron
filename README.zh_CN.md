@@ -415,3 +415,17 @@ app.whenReady().then(() => {
 ### Preload Process 调试
 
 使用 `DevTools` 调试 `preload process`.
+
+## 示例
+
+先执行以下命令安装依赖，并生成库文件：
+
+```bash
+pnpm install
+pnpm build
+```
+
+打开 [examples](./examples) 目录，有 `vue` 和 `react` 示例。
+
+- [react](./examples/react)
+- [vue](./examples/vue)
