@@ -8,7 +8,7 @@ declare namespace NodeJS {
     /**
      * Node.js environment
      */
-    NODE_ENV: UnionType<'development' | 'test' | 'production'>;
+    NODE_ENV: UnionType<'development' | 'production' | 'test'>;
     /**
      * The url of the dev server.
      */

@@ -4,11 +4,8 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "npm:debug",
       "type": "npm",
       "script": "debug",
-      "detail": "cross-env VITE_ELECTRON_DEBUG=1 vite",
-      "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
         "fileLocation": "relative",
@@ -25,6 +22,14 @@
           "beginsPattern": "^.*VITE v.*  ready in \\d* ms.*$",
           "endsPattern": "^.*\\[@tomjs:electron\\] startup electron*$"
         }
+      },
+      "isBackground": true,
+      "presentation": {
+        "reveal": "never"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
       }
     }
   ]

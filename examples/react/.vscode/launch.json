@@ -6,7 +6,6 @@
   "configurations": [
     {
       "name": "Debug Main Process",
-      "preLaunchTask": "npm:debug",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
@@ -23,6 +22,7 @@
         "${workspaceFolder}/**/*.mjs",
         "!**/node_modules/**"
       ],
+      "preLaunchTask": "${defaultBuildTask}"
     },
   ]
 }

@@ -34,6 +34,7 @@ function preMergeOptions(options?: PluginOptions) {
   const electron: MainOptions | PreloadOptions = {
     target: ['es2021', 'node16'],
     format,
+    shims: true,
     clean: true,
     dts: false,
     treeshake: !!isDev,
