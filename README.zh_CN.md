@@ -404,7 +404,7 @@ app.whenReady().then(() => {
         "background": {
           "activeOnStart": true,
           "beginsPattern": "^.*VITE v.*  ready in \\d* ms.*$",
-          "endsPattern": "^.*\\[@tomjs:electron\\] startup electron*$"
+          "endsPattern": "^.*\\[tomjs:electron\\] startup electron*$"
         }
       }
     }
