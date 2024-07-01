@@ -20,9 +20,14 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "require": {
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "import": {
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.mts"
+      }
     }
   },
   "files": [
@@ -90,5 +95,6 @@
     "electron-builder": {
       "optional": true
     }
-  }
+  },
+  "packageManager": "pnpm@8.15.8"
 }

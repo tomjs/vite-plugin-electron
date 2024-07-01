@@ -1,6 +1,6 @@
 # @tomjs/vite-plugin-electron
 
-[![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![Docs](https://www.paka.dev/badges/v0/cute.svg)](https://www.paka.dev/npm/@tomjs/vite-plugin-electron)
+[![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![Docs](https://img.shields.io/badge/API-unpkg-orange)](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.ts)
 
 **English** | [中文](./README.zh_CN.md)
 
@@ -188,7 +188,6 @@ export default defineConfig({
 
 ## Documentation
 
-- [API Documentation](https://paka.dev/npm/@tomjs/vite-plugin-electron) provided by [paka.dev](https://paka.dev).
 - [index.d.ts](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.ts) provided by [unpkg.com](https://www.unpkg.com).
 
 ## Parameters
