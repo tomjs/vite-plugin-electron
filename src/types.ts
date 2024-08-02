@@ -2,8 +2,8 @@ import type { Configuration } from 'electron-builder';
 import type { Options } from 'tsup';
 
 /**
- * Electron main process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://paka.dev/npm/tsup) for more information.
- * @see https://paka.dev/npm/tsup
+ * Electron main process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://www.jsdocs.io/package/tsup) for more information.
+ * @see https://www.jsdocs.io/package/tsup
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface MainOptions
@@ -28,8 +28,8 @@ export interface MainOptions
 }
 
 /**
- * Electron preload process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://paka.dev/npm/tsup) for more information.
- * @see https://paka.dev/npm/tsup
+ * Electron preload process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://www.jsdocs.io/package/tsup) for more information.
+ * @see https://www.jsdocs.io/package/tsup
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface PreloadOptions
@@ -62,7 +62,7 @@ export interface PreloadOptions
 export interface BuilderOptions {
   /**
    * Whether to enable the [electron-builder](https://www.electron.build), the default is false.
-   * @default true
+   * @default false
    * @deprecated
    */
   enable?: boolean;

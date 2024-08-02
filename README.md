@@ -1,6 +1,6 @@
 # @tomjs/vite-plugin-electron
 
-[![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![Docs](https://img.shields.io/badge/API-unpkg-orange)](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.ts)
+[![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![jsDocs.io](https://img.shields.io/badge/jsDocs.io-reference-blue)](https://www.jsdocs.io/package/@tomjs/vite-plugin-electron)
 
 **English** | [中文](./README.zh_CN.md)
 
@@ -214,7 +214,7 @@ The `recommended` option is used to set the default configuration and behavior, 
 
 ### MainOptions
 
-Based on [Options](https://paka.dev/npm/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
+Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -225,7 +225,7 @@ Based on [Options](https://paka.dev/npm/tsup) of [tsup](https://tsup.egoist.dev/
 
 ### PreloadOptions
 
-Based on [Options](https://paka.dev/npm/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
+Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |

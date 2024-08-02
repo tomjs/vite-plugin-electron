@@ -14,23 +14,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tomjs/electron-devtools-installer": "^2.0.5",
+    "@tomjs/electron-devtools-installer": "^2.3.2",
     "fs-extra": "^11.2.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "simple-git": "^3.21.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@tomjs/vite-plugin-electron": "workspace:^",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^18.19.3",
+    "@types/node": "^18.19.42",
     "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
-    "@vitejs/plugin-react-swc": "^3.5.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "cross-env": "^7.0.3",
-    "electron": "^28.0.0",
-    "typescript": "~5.3.3",
-    "vite": "^5.0.10",
+    "electron": "^31.3.1",
+    "typescript": "~5.5.4",
+    "vite": "^5.3.5",
     "vite-plugin-electron-renderer": "^0.14.5"
   }
 }

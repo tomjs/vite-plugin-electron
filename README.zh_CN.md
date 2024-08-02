@@ -1,6 +1,6 @@
 # @tomjs/vite-plugin-electron
 
-[![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![Docs](https://img.shields.io/badge/API-unpkg-orange)](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.ts)
+[![npm](https://img.shields.io/npm/v/@tomjs/vite-plugin-electron)](https://www.npmjs.com/package/@tomjs/vite-plugin-electron) ![node-current (scoped)](https://img.shields.io/node/v/@tomjs/vite-plugin-electron) ![NPM](https://img.shields.io/npm/l/@tomjs/vite-plugin-electron) [![jsDocs.io](https://img.shields.io/badge/jsDocs.io-reference-blue)](https://www.jsdocs.io/package/@tomjs/vite-plugin-electron)
 
 [English](./README.md) | **中文**
 
@@ -213,7 +213,7 @@ export default defineConfig({
 
 ### MainOptions
 
-继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://paka.dev/npm/tsup)，添加了一些默认值，方便使用。
+继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://www.jsdocs.io/package/tsup)，添加了一些默认值，方便使用。
 
 | 参数名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -224,7 +224,7 @@ export default defineConfig({
 
 ### PreloadOptions
 
-继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://paka.dev/npm/tsup)，添加了一些默认值，方便使用。
+继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://www.jsdocs.io/package/tsup)，添加了一些默认值，方便使用。
 
 | 参数名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |

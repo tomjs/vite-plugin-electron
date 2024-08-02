@@ -3,5 +3,5 @@ module.exports = {
     node: true,
     es6: true,
   },
-  extends: [require.resolve('@tomjs/eslint/react/typescript')],
+  extends: [require.resolve('@tomjs/eslint/react')],
 };
