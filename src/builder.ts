@@ -1,12 +1,12 @@
-import type { Configuration } from 'electron-builder';
-import type { ResolvedConfig } from 'vite';
-import type { PluginOptions } from './types';
 import os from 'node:os';
 import path from 'node:path';
 import { cwd } from 'node:process';
+import type { Configuration } from 'electron-builder';
 import merge from 'lodash.merge';
 import shell from 'shelljs';
+import type { ResolvedConfig } from 'vite';
 import { createLogger } from './logger';
+import type { PluginOptions } from './types';
 import { readJson, writeJson } from './utils';
 
 const logger = createLogger();
@@ -38,8 +38,6 @@ function getMirror() {
 }
 
 function getBuilderConfig(options: PluginOptions, resolvedConfig: ResolvedConfig) {
-  createPkg(options, resolvedConfig);
-
   const config: Configuration = {
     directories: {
       buildResources: 'electron/build',
@@ -170,8 +168,10 @@ export async function runElectronBuilder(options: PluginOptions, resolvedConfig:
 
   const DIST_PATH = path.join(cwd(), path.dirname(resolvedConfig.build.outDir));
 
+  createPkg(options, resolvedConfig);
+
   logger.info(`create package.json and exec "npm install"`);
-  shell.exec(`cd ${DIST_PATH} && npm i`);
+  shell.exec(`cd ${DIST_PATH} && npm install --emit=dev`);
 
   logger.info(`run electron-builder to package app`);
   const config = getBuilderConfig(options, resolvedConfig);
