@@ -1,12 +1,12 @@
-import type { Plugin, ResolvedConfig } from 'vite';
-import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import fs from 'node:fs';
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 import path from 'path';
+import type { Plugin, ResolvedConfig } from 'vite';
 import { runElectronBuilder } from './builder';
 import { PLUGIN_NAME } from './constants';
 import { runBuild, runServe } from './main';
+import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import { readJson, resolveServerUrl } from './utils';
 
 export * from './types';

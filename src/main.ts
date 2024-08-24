@@ -1,11 +1,11 @@
-import type { Options as TsupOptions } from 'tsup';
-import type { ViteDevServer } from 'vite';
-import type { PluginOptions } from './types';
 import { spawn } from 'node:child_process';
 import electron from 'electron';
 import treeKill from 'tree-kill';
+import type { Options as TsupOptions } from 'tsup';
 import { build as tsupBuild } from 'tsup';
+import type { ViteDevServer } from 'vite';
 import { createLogger } from './logger';
+import type { PluginOptions } from './types';
 
 const logger = createLogger();
 

@@ -1,7 +1,7 @@
-import type { AddressInfo } from 'node:net';
-import type { ViteDevServer } from 'vite';
 import fs from 'node:fs';
 import { builtinModules } from 'node:module';
+import type { AddressInfo } from 'node:net';
+import type { ViteDevServer } from 'vite';
 
 export function readJson(path: string) {
   if (fs.existsSync(path)) {
