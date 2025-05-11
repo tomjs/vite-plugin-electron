@@ -32,7 +32,7 @@ function preMergeOptions(options?: PluginOptions) {
   const format = pkg.type === 'module' ? 'esm' : 'cjs';
 
   const electron: MainOptions | PreloadOptions = {
-    target: ['es2021', 'node16'],
+    target: format === 'esm' ? 'node18.18' : 'node16',
     format,
     shims: true,
     clean: true,
