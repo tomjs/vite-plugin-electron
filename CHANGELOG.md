@@ -1,3 +1,7 @@
+## [1.11.0](https://github.com/tomjs/vite-plugin-electron/compare/v1.10.0...v1.11.0) (2025-05-11)
+
+- feat: esm type will target to node18.18  [2fd2f14](https://github.com/tomjs/vite-plugin-electron/commit/2fd2f14)
+
 ## [1.10.0](https://github.com/tomjs/vite-plugin-electron/compare/v1.9.3...v1.10.0) (2025-05-11)
 
 - chore: remove husky  [0fe4daa](https://github.com/tomjs/vite-plugin-electron/commit/0fe4daa)
