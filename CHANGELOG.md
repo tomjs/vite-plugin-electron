@@ -1,3 +1,8 @@
+## [1.10.0](https://github.com/tomjs/vite-plugin-electron/compare/v1.9.3...v1.10.0) (2025-05-11)
+
+- chore: remove husky  [0fe4daa](https://github.com/tomjs/vite-plugin-electron/commit/0fe4daa)
+- chore: update lint and format code  [0aeea5f](https://github.com/tomjs/vite-plugin-electron/commit/0aeea5f)
+
 ## [1.9.3](https://github.com/tomjs/vite-plugin-electron/compare/v1.9.2...v1.9.3) (2024-08-24)
 
 - style: format code [6029647](https://github.com/tomjs/vite-plugin-electron/commit/6029647)

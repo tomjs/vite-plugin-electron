@@ -1,6 +1,6 @@
 {
   "name": "@tomjs/vite-plugin-electron",
-  "version": "1.9.3",
+  "version": "1.10.0",
   "packageManager": "pnpm@8.15.8",
   "description": "A simple vite plugin for electron, supports esm/cjs, support esm in electron v28+",
   "author": {
