@@ -93,7 +93,7 @@ import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow } from 'electron';
 
 // when package.json "type": module"
-global.__dirname = dirname(fileURLToPath(import.meta.url));
+globalThis.__dirname = dirname(fileURLToPath(import.meta.url));
 
 const preload = join(__dirname, '../preload/index.mjs');
 const url = process.env.VITE_DEV_SERVER_URL;
@@ -112,7 +112,8 @@ async function createWindow() {
 
   if (isDev) {
     win.loadURL(url);
-  } else {
+  }
+  else {
     win.loadFile(indexHtml);
   }
 }
@@ -138,10 +139,10 @@ Electron `preload process` 必须使用 `.mjs` 后缀，否则报错，查看[�
 - `vite.config.ts`
 
 ```ts
-import { defineConfig } from 'vite';
 // import renderer from 'vite-plugin-electron-renderer'; // 启用 nodeIntegration
 import electron from '@tomjs/vite-plugin-electron';
 import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [
@@ -178,9 +179,9 @@ export default defineConfig({
 - `vite.config.ts`
 
 ```ts
-import { defineConfig } from 'vite';
 import electron from '@tomjs/vite-plugin-electron';
 import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), electron()],
@@ -195,15 +196,15 @@ export default defineConfig({
 
 ### PluginOptions
 
-| 参数名 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| recommended | `boolean` | `true` | 这个选项是为了提供推荐的默认参数和行为 |
-| external | `string[]` |  | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsup.egoist.dev/#excluding-packages) |
-| main | [MainOptions](#MainOptions) |  | electron main 进程选项 |
-| preload | [PreloadOptions](#PreloadOptions) |  | electron preload 进程选项 |
-| debug | `boolean` | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG` |
-| builder | `boolean` | `false` | 如果是`boolean`类型，是否启用[electron-builder](https://www.electron.build)。如果是`Object`，则是[electron-builder](https://www.electron.build)的[配置](https://www.electron.build/configuration/configuration)。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG` 开启它。 |
-| inspect | `boolean` | `false` | Electron 将监听指定 port 上的 V8 调试协议消息， 外部调试器需要连接到此端口上。您还可以使用 `process.env.VITE_ELECTRON_INSPECT`。 有关更多信息，请参阅[debugging-main-process](https://www.electronjs.org/zh/docs/latest/tutorial/debugging-main-process)。 |
+| 参数名      | 类型                              | 默认值  | 说明                                                                                                                                                                                                                                                                      |
+| ----------- | --------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| recommended | `boolean`                         | `true`  | 这个选项是为了提供推荐的默认参数和行为                                                                                                                                                                                                                                    |
+| external    | `string[]`                        |         | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsup.egoist.dev/#excluding-packages)                                                                                                                                                  |
+| main        | [MainOptions](#MainOptions)       |         | electron main 进程选项                                                                                                                                                                                                                                                    |
+| preload     | [PreloadOptions](#PreloadOptions) |         | electron preload 进程选项                                                                                                                                                                                                                                                 |
+| debug       | `boolean`                         | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG`                                                                                                                                                                                         |
+| builder     | `boolean`                         | `false` | 如果是`boolean`类型，是否启用[electron-builder](https://www.electron.build)。如果是`Object`，则是[electron-builder](https://www.electron.build)的[配置](https://www.electron.build/configuration/configuration)。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG` 开启它。 |
+| inspect     | `boolean`                         | `false` | Electron 将监听指定 port 上的 V8 调试协议消息， 外部调试器需要连接到此端口上。您还可以使用 `process.env.VITE_ELECTRON_INSPECT`。 有关更多信息，请参阅[debugging-main-process](https://www.electronjs.org/zh/docs/latest/tutorial/debugging-main-process)。                |
 
 `recommended` 选项用于设置默认配置和行为，几乎可以达到零配置使用，默认为 `true` 。如果你要自定义配置，请设置它为`false`。以下默认的前提条件是使用推荐的 [项目结构](#目录结构)。
 
@@ -215,23 +216,23 @@ export default defineConfig({
 
 继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://www.jsdocs.io/package/tsup)，添加了一些默认值，方便使用。
 
-| 参数名 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| **entry** | `string` | `-` | main 入口文件 |
-| format | `'cjs' \| 'esm'` | `-` | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
-| outDir | `string` | `"dist-electron/main"` | main 输出文件夹 |
-| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined` | 构建成功后运行的回调函数 |
+| 参数名    | 类型                                                                | 默认值                 | 说明                                                       |
+| --------- | ------------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------- |
+| **entry** | `string`                                                            | `-`                    | main 入口文件                                              |
+| format    | `'cjs' \| 'esm'`                                                    | `-`                    | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
+| outDir    | `string`                                                            | `"dist-electron/main"` | main 输出文件夹                                            |
+| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined`            | 构建成功后运行的回调函数                                   |
 
 ### PreloadOptions
 
 继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://www.jsdocs.io/package/tsup)，添加了一些默认值，方便使用。
 
-| 参数名 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| **entry** | `string` | `-` | preload 入口文件 |
-| format | `'cjs' \| 'esm'` | `-` | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
-| outDir | `string` | `"dist-electron/preload"` | preload 输出文件夹 |
-| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined` | 构建成功后运行的回调函数 |
+| 参数名    | 类型                                                                | 默认值                    | 说明                                                       |
+| --------- | ------------------------------------------------------------------- | ------------------------- | ---------------------------------------------------------- |
+| **entry** | `string`                                                            | `-`                       | preload 入口文件                                           |
+| format    | `'cjs' \| 'esm'`                                                    | `-`                       | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
+| outDir    | `string`                                                            | `"dist-electron/preload"` | preload 输出文件夹                                         |
+| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined`               | 构建成功后运行的回调函数                                   |
 
 ### BuilderOptions
 
@@ -244,11 +245,11 @@ _不适合所有人使用。_
 
 使用该功能，需要额外安装 `electron-builder`
 
-| 参数名 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| appId | `string` | `"com.electron.${name}"` | 应用程序 ID。[详细](https://www.electron.build/configuration/configuration#configuration) |
-| productName | `string` | `` | 应用程序名称。[详细](https://www.electron.build/configuration/configuration#configuration) |
-| builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined` | [electron-builder](https://www.electron.build) 的 [Configuration](https://www.electron.build/configuration/configuration#configuration) |
+| 参数名        | 类型                                                                                   | 默认值                   | 说明                                                                                                                                    |
+| ------------- | -------------------------------------------------------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | `string`                                                                               | `"com.electron.${name}"` | 应用程序 ID。[详细](https://www.electron.build/configuration/configuration#configuration)                                               |
+| productName   | `string`                                                                               | ``                       | 应用程序名称。[详细](https://www.electron.build/configuration/configuration#configuration)                                              |
+| builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined`              | [electron-builder](https://www.electron.build) 的 [Configuration](https://www.electron.build/configuration/configuration#configuration) |
 
 默认配置如下
 
@@ -302,10 +303,10 @@ const config = {
 
 ### vite 插件变量
 
-| 变量 | 描述 |
-| --- | --- |
-| `VITE_ELECTRON_DEBUG` | Electron主进程调试，不要启动Electron。 当值为 true 或 1 时启用，为 false 或 0 时禁用。默认值未定义。 |
-| `VITE_ELECTRON_INSPECT` | Electron 将在指定端口上侦听 V8 检查器协议消息，外部调试器需要连接到该端口。 当值为 true 时，默认端口为 5858。 |
+| 变量                    | 描述                                                                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_ELECTRON_DEBUG`   | Electron主进程调试，不要启动Electron。 当值为 true 或 1 时启用，为 false 或 0 时禁用。默认值未定义。                            |
+| `VITE_ELECTRON_INSPECT` | Electron 将在指定端口上侦听 V8 检查器协议消息，外部调试器需要连接到该端口。 当值为 true 时，默认端口为 5858。                   |
 | `VITE_ELECTRON_BUILDER` | 启用 [ Electron-builder ](https://www.electron.build) 进行打包。 当值为 true 或 1 时启用，为 false 或 0 时禁用。 默认值未定义。 |
 
 ### 应用变量
@@ -331,13 +332,13 @@ app.whenReady().then(() => {
   );
 
   installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-    .then(exts => {
+    .then((exts) => {
       console.log(
         'Added Extension: ',
         exts.map(s => s.name),
       );
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('Failed to install extensions');
       console.error(err);
     });

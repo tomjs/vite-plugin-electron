@@ -1,22 +1,22 @@
+import type { Options as TsupOptions } from 'tsup';
+import type { ViteDevServer } from 'vite';
+import type { PluginOptions } from './types';
 import { spawn } from 'node:child_process';
 import electron from 'electron';
 import treeKill from 'tree-kill';
-import type { Options as TsupOptions } from 'tsup';
 import { build as tsupBuild } from 'tsup';
-import type { ViteDevServer } from 'vite';
 import { createLogger } from './logger';
-import type { PluginOptions } from './types';
 
 const logger = createLogger();
 
 function getBuildOptions(options: PluginOptions) {
   return ['main', 'preload']
     .filter(s => options[s] && options[s].entry)
-    .map(s => {
+    .map((s) => {
       options[s].__NAME__ = s;
       return options[s];
     })
-    .map(cfg => {
+    .map((cfg) => {
       return {
         ...cfg,
         splitting: false,
@@ -39,7 +39,8 @@ async function startup(options: PluginOptions) {
   if (options.inspect) {
     if (typeof options.inspect === 'number') {
       args.push(`--inspect=${options.inspect}`);
-    } else {
+    }
+    else {
       args.push(`--inspect`);
     }
   }
@@ -66,10 +67,11 @@ startup.exit = async () => {
   process.electronApp.removeAllListeners();
 
   return new Promise((resolve, reject) => {
-    treeKill(process.electronApp.pid!, err => {
+    treeKill(process.electronApp.pid!, (err) => {
       if (err) {
         reject(err);
-      } else {
+      }
+      else {
         resolve(true);
       }
     });
@@ -97,7 +99,7 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
         buildCounts[i]++;
         logger.info(`${name} build success`);
 
-        if (buildCounts[0] == 1 && buildCounts[1] == 1) {
+        if (buildCounts[0] === 1 && buildCounts[1] === 1) {
           logger.info('startup electron');
           await startup(options);
         }
@@ -109,7 +111,8 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
       if (name === 'main') {
         logger.info('restart electron');
         await startup(options);
-      } else {
+      }
+      else {
         logger.info('reload page');
         server.ws.send({
           type: 'full-reload',

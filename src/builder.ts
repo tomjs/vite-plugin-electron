@@ -1,12 +1,12 @@
+import type { Configuration } from 'electron-builder';
+import type { ResolvedConfig } from 'vite';
+import type { PluginOptions } from './types';
 import os from 'node:os';
 import path from 'node:path';
 import { cwd } from 'node:process';
-import type { Configuration } from 'electron-builder';
 import merge from 'lodash.merge';
 import shell from 'shelljs';
-import type { ResolvedConfig } from 'vite';
 import { createLogger } from './logger';
-import type { PluginOptions } from './types';
 import { readJson, writeJson } from './utils';
 
 const logger = createLogger();
@@ -27,8 +27,8 @@ function getMirror() {
 
     registry = registry.trim();
     if (
-      registry &&
-      ['registry.npmmirror.com', 'registry.npm.taobao.org'].find(s => registry.includes(s))
+      registry
+      && ['registry.npmmirror.com', 'registry.npm.taobao.org'].find(s => registry.includes(s))
     ) {
       mirror = 'https://npmmirror.com/mirrors/electron';
     }
@@ -42,9 +42,11 @@ function getBuilderConfig(options: PluginOptions, resolvedConfig: ResolvedConfig
     directories: {
       buildResources: 'electron/build',
       app: path.dirname(resolvedConfig.build.outDir),
+
       output: 'release/${version}',
     },
     files: ['main', 'preload', 'renderer'],
+
     artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
     electronDownload: {
       mirror: getMirror(),
@@ -85,7 +87,8 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
   const viteExternals = resolvedConfig.build.rollupOptions?.external;
   if (Array.isArray(viteExternals)) {
     externals.push(...viteExternals);
-  } else if (typeof viteExternals === 'string') {
+  }
+  else if (typeof viteExternals === 'string') {
     externals.push(viteExternals);
   }
 
@@ -103,7 +106,8 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
     if (main.startsWith('/')) {
       main = main.substring(1);
     }
-  } else {
+  }
+  else {
     main = `main/index.${options?.main?.format === 'esm' ? '' : 'm'}js`;
   }
 
@@ -123,9 +127,11 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
     const uname = os.userInfo().username;
     if (!author) {
       return uname;
-    } else if (typeof author === 'string') {
+    }
+    else if (typeof author === 'string') {
       return author;
-    } else if (typeof author === 'object') {
+    }
+    else if (typeof author === 'object') {
       if (!author.name) {
         return uname;
       }
@@ -136,10 +142,11 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
   }
 
   function checkDepName(rules: (string | RegExp)[], name: string) {
-    return !!rules.find(s => {
+    return !!rules.find((s) => {
       if (typeof s === 'string') {
         return s.includes(name);
-      } else {
+      }
+      else {
         return s.test(name);
       }
     });
@@ -148,7 +155,7 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
   function getDeps() {
     const deps = pkg.dependencies || {};
     const newDeps = {};
-    Object.keys(deps).forEach(name => {
+    Object.keys(deps).forEach((name) => {
       if (checkDepName(externals, name)) {
         newDeps[name] = deps[name];
       }
@@ -160,7 +167,7 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
 }
 
 export async function runElectronBuilder(options: PluginOptions, resolvedConfig: ResolvedConfig) {
-  if (typeof options.builder == 'boolean' && options.builder == false) {
+  if (typeof options.builder == 'boolean' && options.builder === false) {
     return;
   }
 

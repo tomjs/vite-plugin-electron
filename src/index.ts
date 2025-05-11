@@ -1,12 +1,12 @@
+import type { Plugin, ResolvedConfig } from 'vite';
+import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import fs from 'node:fs';
+import path from 'node:path';
 import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
-import path from 'path';
-import type { Plugin, ResolvedConfig } from 'vite';
 import { runElectronBuilder } from './builder';
 import { PLUGIN_NAME } from './constants';
 import { runBuild, runServe } from './main';
-import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import { readJson, resolveServerUrl } from './utils';
 
 export * from './types';
@@ -61,24 +61,26 @@ function preMergeOptions(options?: PluginOptions) {
     cloneDeep(options),
   );
 
-  ['main', 'preload'].forEach(prop => {
+  ['main', 'preload'].forEach((prop) => {
     const opt = opts[prop];
     const fmt = opt.format;
     opt.format = ['cjs', 'esm'].includes(fmt) ? [fmt] : [format];
 
     const entry = opt.entry;
-    if (entry == undefined) {
+    if (entry === undefined) {
       const filePath = `electron/${prop}/index.ts`;
       if (fs.existsSync(path.join(process.cwd(), filePath))) {
         opt.entry = [filePath];
       }
-    } else if (typeof entry === 'string') {
+    }
+    else if (typeof entry === 'string') {
       opt.entry = [entry];
     }
 
     if (isDev) {
       opt.sourcemap ??= true;
-    } else {
+    }
+    else {
       opt.minify ??= true;
     }
 
@@ -113,8 +115,6 @@ function getBooleanValue(value?: string) {
   if (['1', '0'].includes(value)) {
     return value === '1';
   }
-
-  return;
 }
 
 /**
@@ -140,7 +140,8 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
         opts.main.outDir = path.join(outDir, 'main');
         opts.preload.outDir = path.join(outDir, 'preload');
         outDir = path.join(outDir, 'renderer');
-      } else {
+      }
+      else {
         opts.main.outDir ||= path.join('dist-electron', 'main');
         opts.preload.outDir ||= path.join('dist-electron', 'preload');
       }
@@ -169,7 +170,7 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
           VITE_DEV_SERVER_URL: resolveServerUrl(server),
         };
 
-        ['main', 'preload'].forEach(prop => {
+        ['main', 'preload'].forEach((prop) => {
           opts[prop].env = env;
         });
 

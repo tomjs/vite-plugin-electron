@@ -14,7 +14,7 @@
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       },
       "args": [
-        ".",
+        "."
       ],
       "outFiles": [
         "${workspaceFolder}/**/*.js",
@@ -23,6 +23,6 @@
         "!**/node_modules/**"
       ],
       "preLaunchTask": "${defaultBuildTask}"
-    },
+    }
   ]
 }

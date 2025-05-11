@@ -1,2 +1,2 @@
 console.log('Electron Preload Process!');
-console.log(Date().toString());
+console.log(String(new Date()).toString());

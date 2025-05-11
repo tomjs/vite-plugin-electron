@@ -93,7 +93,7 @@ import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow } from 'electron';
 
 // when package.json "type": module"
-global.__dirname = dirname(fileURLToPath(import.meta.url));
+globalThis.__dirname = dirname(fileURLToPath(import.meta.url));
 
 const preload = join(__dirname, '../preload/index.mjs');
 const url = process.env.VITE_DEV_SERVER_URL;
@@ -112,7 +112,8 @@ async function createWindow() {
 
   if (isDev) {
     win.loadURL(url);
-  } else {
+  }
+  else {
     win.loadFile(indexHtml);
   }
 }
@@ -138,10 +139,10 @@ Electron `preload process` must use the `.mjs` suffix, otherwise an error will b
 - `vite.config.ts`
 
 ```ts
-import { defineConfig } from 'vite';
 // import renderer from 'vite-plugin-electron-renderer'; // Enable nodeIntegration
 import electron from '@tomjs/vite-plugin-electron';
 import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [
     vue(),
@@ -177,9 +178,9 @@ Take using `cjs` as an example
 - `vite.config.ts`
 
 ```ts
-import { defineConfig } from 'vite';
 import electron from '@tomjs/vite-plugin-electron';
 import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), electron()],
@@ -194,15 +195,15 @@ export default defineConfig({
 
 ### PluginOptions
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| recommended | `boolean` | `true` | This option is intended to provide recommended default parameters and behavior. |
-| external | `string[]` |  | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsup.egoist.dev/#excluding-packages) |
-| main | [MainOptions](#MainOptions) |  | Configuration options for the electron main process. |
-| preload | [PreloadOptions](#PreloadOptions) |  | Configuration options for the electron preload process. |
-| debug | `boolean` | `false` | Electron debug mode, don't startup electron. You can also use `process.env.VITE_ELECTRON_DEBUG`. Default is false. |
-| builder | `boolean` \| [BuilderOptions](#BuilderOptions) | `false` | If it is a `boolean` type, whether to enable [electron-builder](https://www.electron.build). If it is an object, it is the [configuration](https://www.electron.build/configuration/configuration) of [electron-builder](https://www.electron.build). You can also turn it on using `process.env.VITE_ELECTRON_DEBUG`. |
-| inspect | `boolean` | `false` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. You can also use `process.env.VITE_ELECTRON_INSPECT`. See [debugging-main-process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process) for more information. |
+| Property    | Type                                           | Default | Description                                                                                                                                                                                                                                                                                                             |
+| ----------- | ---------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| recommended | `boolean`                                      | `true`  | This option is intended to provide recommended default parameters and behavior.                                                                                                                                                                                                                                         |
+| external    | `string[]`                                     |         | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsup.egoist.dev/#excluding-packages)                                                                                                                                                      |
+| main        | [MainOptions](#MainOptions)                    |         | Configuration options for the electron main process.                                                                                                                                                                                                                                                                    |
+| preload     | [PreloadOptions](#PreloadOptions)              |         | Configuration options for the electron preload process.                                                                                                                                                                                                                                                                 |
+| debug       | `boolean`                                      | `false` | Electron debug mode, don't startup electron. You can also use `process.env.VITE_ELECTRON_DEBUG`. Default is false.                                                                                                                                                                                                      |
+| builder     | `boolean` \| [BuilderOptions](#BuilderOptions) | `false` | If it is a `boolean` type, whether to enable [electron-builder](https://www.electron.build). If it is an object, it is the [configuration](https://www.electron.build/configuration/configuration) of [electron-builder](https://www.electron.build). You can also turn it on using `process.env.VITE_ELECTRON_DEBUG`.  |
+| inspect     | `boolean`                                      | `false` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. You can also use `process.env.VITE_ELECTRON_INSPECT`. See [debugging-main-process](https://www.electronjs.org/docs/latest/tutorial/debugging-main-process) for more information. |
 
 **Notice**
 
@@ -216,23 +217,23 @@ The `recommended` option is used to set the default configuration and behavior, 
 
 Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| entry | `string` | `-` | The main process entry file. |
-| format | `'cjs' \| 'esm'` | `-` | The bundle format. If not specified, it will use the "type" field from package.json. |
-| outDir | `string` | "dist-electron/main" | The output directory for the main process files |
-| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined` | A function that will be executed after the build succeeds. |
+| Property  | Type                                                                | Default              | Description                                                                          |
+| --------- | ------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------ |
+| entry     | `string`                                                            | `-`                  | The main process entry file.                                                         |
+| format    | `'cjs' \| 'esm'`                                                    | `-`                  | The bundle format. If not specified, it will use the "type" field from package.json. |
+| outDir    | `string`                                                            | "dist-electron/main" | The output directory for the main process files                                      |
+| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined`          | A function that will be executed after the build succeeds.                           |
 
 ### PreloadOptions
 
 Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| entry | `string` | `-` | The preload process entry file. |
-| format | `'cjs' \| 'esm'` | `-` | The bundle format. If not specified, it will use the "type" field from package.json. |
-| outDir | `string` | "dist-electron/preload" | The output directory for the preload process files |
-| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined` | A function that will be executed after the build succeeds. |
+| Property  | Type                                                                | Default                 | Description                                                                          |
+| --------- | ------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------ |
+| entry     | `string`                                                            | `-`                     | The preload process entry file.                                                      |
+| format    | `'cjs' \| 'esm'`                                                    | `-`                     | The bundle format. If not specified, it will use the "type" field from package.json. |
+| outDir    | `string`                                                            | "dist-electron/preload" | The output directory for the preload process files                                   |
+| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined`             | A function that will be executed after the build succeeds.                           |
 
 ### BuilderOptions
 
@@ -245,11 +246,11 @@ _Not suitable for everyone._
 
 To use this function, you need to install additional `electron-builder`
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| appId | `string` | `"com.electron.${name}"` | The application id. [See More](https://www.electron.build/configuration/configuration#configuration) |
-| productName | `string` | `"com.electron.${name}"` | product name.[See More](https://www.electron.build/configuration/configuration#configuration) |
-| builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined` | [electron-builder](https://www.electron.build)'s [Configuration](https://www.electron.build/configuration/configuration#configuration) |
+| Property      | Type                                                                                   | Default                  | Description                                                                                                                            |
+| ------------- | -------------------------------------------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | `string`                                                                               | `"com.electron.${name}"` | The application id. [See More](https://www.electron.build/configuration/configuration#configuration)                                   |
+| productName   | `string`                                                                               | `"com.electron.${name}"` | product name.[See More](https://www.electron.build/configuration/configuration#configuration)                                          |
+| builderConfig | [Configuration](https://www.electron.build/configuration/configuration#configurationF) | `undefined`              | [electron-builder](https://www.electron.build)'s [Configuration](https://www.electron.build/configuration/configuration#configuration) |
 
 The default configuration is as follows:
 
@@ -303,11 +304,11 @@ const config = {
 
 ### Vite plugin variables
 
-| Variable | Description |
-| --- | --- |
-| `VITE_ELECTRON_DEBUG` | Electron main process debug, don't startup electron. When value is true or 1 to enable, false or 0 to disable.Default is undefined. |
+| Variable                | Description                                                                                                                                                                          |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `VITE_ELECTRON_DEBUG`   | Electron main process debug, don't startup electron. When value is true or 1 to enable, false or 0 to disable.Default is undefined.                                                  |
 | `VITE_ELECTRON_INSPECT` | Electron will listen for V8 inspector protocol messages on the specified port, an external debugger will need to connect on this port. When value is true, the default port is 5858. |
-| `VITE_ELECTRON_BUILDER` | Enable [electron-builder](https://www.electron.build) to package. When value is true or 1 to enable, false or 0 to disable. Default is undefined. |
+| `VITE_ELECTRON_BUILDER` | Enable [electron-builder](https://www.electron.build) to package. When value is true or 1 to enable, false or 0 to disable. Default is undefined.                                    |
 
 ### Application variables
 
@@ -332,13 +333,13 @@ app.whenReady().then(() => {
   );
 
   installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-    .then(exts => {
+    .then((exts) => {
       console.log(
         'Added Extension: ',
         exts.map(s => s.name),
       );
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('Failed to install extensions');
       console.error(err);
     });

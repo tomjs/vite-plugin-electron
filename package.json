@@ -1,7 +1,17 @@
 {
   "name": "@tomjs/vite-plugin-electron",
   "version": "1.9.3",
+  "packageManager": "pnpm@8.15.8",
   "description": "A simple vite plugin for electron, supports esm/cjs, support esm in electron v28+",
+  "author": {
+    "name": "Tom Gao",
+    "email": "tom@tomgao.cc"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomjs/vite-plugin-electron.git"
+  },
   "keywords": [
     "vite",
     "plugin",
@@ -10,26 +20,21 @@
     "esm",
     "cjs"
   ],
-  "author": {
-    "name": "Tom Gao",
-    "email": "tom@tomgao.cc"
-  },
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": {
-        "default": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
       "import": {
-        "default": "./dist/index.mjs",
-        "types": "./dist/index.d.mts"
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "env.d.ts"
@@ -41,50 +46,14 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tomjs/vite-plugin-electron.git"
-  },
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "lint": "run-s lint:eslint lint:stylelint lint:prettier",
-    "lint:eslint": "eslint \"{src,examples}/**/*.{js,cjs,ts,tsx,vue}\" *.{js,cjs,ts} --fix --cache",
+    "lint": "run-s lint:stylelint lint:eslint",
     "lint:stylelint": "stylelint \"examples/**/*.{css,scss,less,vue,html}\" --fix --cache",
-    "lint:prettier": "prettier --write .",
-    "prepare": "husky",
+    "lint:eslint": "eslint --fix",
+    "prepare": "simple-git-hooks",
     "prepublishOnly": "pnpm build"
-  },
-  "dependencies": {
-    "dayjs": "^1.11.12",
-    "kolorist": "^1.8.0",
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.merge": "^4.6.2",
-    "shelljs": "^0.8.5",
-    "tree-kill": "^1.2.2",
-    "tsup": "7.2.0"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.3.0",
-    "@tomjs/commitlint": "^3.3.0",
-    "@tomjs/eslint": "^3.3.0",
-    "@tomjs/prettier": "^1.4.1",
-    "@tomjs/stylelint": "^2.6.1",
-    "@tomjs/tsconfig": "^1.7.1",
-    "@types/lodash.clonedeep": "^4.5.9",
-    "@types/lodash.merge": "^4.6.9",
-    "@types/node": "^18.19.42",
-    "@types/shelljs": "^0.8.15",
-    "eslint": "^8.57.0",
-    "husky": "^9.1.4",
-    "lint-staged": "^15.2.7",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.3.3",
-    "rimraf": "^6.0.1",
-    "stylelint": "^16.8.1",
-    "vite": "^5.3.5",
-    "tsx": "^4.16.5",
-    "typescript": "~5.5.4"
   },
   "peerDependencies": {
     "electron": ">=12.0.0",
@@ -96,5 +65,33 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@8.15.8"
+  "dependencies": {
+    "dayjs": "^1.11.13",
+    "kolorist": "^1.8.0",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.merge": "^4.6.2",
+    "shelljs": "^0.10.0",
+    "tree-kill": "^1.2.2",
+    "tsup": "^8.4.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@tomjs/commitlint": "^4.0.0",
+    "@tomjs/eslint": "^5.0.0",
+    "@tomjs/stylelint": "^6.0.0",
+    "@tomjs/tsconfig": "^1.7.2",
+    "@types/lodash.clonedeep": "^4.5.9",
+    "@types/lodash.merge": "^4.6.9",
+    "@types/node": "^18.19.100",
+    "@types/shelljs": "^0.8.16",
+    "eslint": "^9.26.0",
+    "lint-staged": "^15.5.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^6.0.1",
+    "simple-git-hooks": "^2.13.0",
+    "stylelint": "^16.19.1",
+    "tsx": "^4.19.4",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
 }

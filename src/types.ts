@@ -56,8 +56,8 @@ export interface PreloadOptions
 /**
  * When `recommended` and `builder.enable` are both `true`, use [electron-builder](https://www.electron.build) to package Electron applications.
  *
- * * In the `build.outDir` directory configured in vite, generate a new package.json based on the configuration and package.json, excluding non-dependencies.
- * * Execute `npm install` and then package.
+ * In the `build.outDir` directory configured in vite, generate a new package.json based on the configuration and package.json, excluding non-dependencies.
+ * Execute `npm install` and then package.
  */
 export interface BuilderOptions {
   /**
@@ -90,7 +90,7 @@ export interface PluginOptions {
   /**
    * Recommended switch. Default is true.
    * if true, will have the following default behavior:
-   * * will change the main/preload/renderer outDir to be parallel outDir;
+   * will change the main/preload/renderer outDir to be parallel outDir;
    * eg. if vite build.outDir is 'dist', will change main/preload/render to 'dist/main' and 'dist/preload' and 'dist/renderer'
    * @default true
    */
@@ -111,8 +111,8 @@ export interface PluginOptions {
   /**
    * When `recommended` and `builder.enable` are both `true`, use [electron-builder](https://www.electron.build) to package Electron applications.
    *
-   * * In the `build.outDir` directory configured in vite, generate a new package.json based on the configuration and package.json, excluding non-dependencies.
-   * * Execute `npm install` and then package.
+   * In the `build.outDir` directory configured in vite, generate a new package.json based on the configuration and package.json, excluding non-dependencies.
+   * Execute `npm install` and then package.
    */
   builder?: boolean | BuilderOptions;
   /**

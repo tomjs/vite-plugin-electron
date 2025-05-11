@@ -1,7 +1,7 @@
-import fs from 'node:fs';
-import { builtinModules } from 'node:module';
 import type { AddressInfo } from 'node:net';
 import type { ViteDevServer } from 'vite';
+import fs from 'node:fs';
+import { builtinModules } from 'node:module';
 
 export function readJson(path: string) {
   if (fs.existsSync(path)) {
@@ -12,9 +12,9 @@ export function writeJson(path: string, data: any) {
   fs.writeFileSync(path, JSON.stringify(data, null, 2), 'utf8');
 }
 
-export const getNodeExternal = (externals?: string[]) => {
+export function getNodeExternal(externals?: string[]) {
   const modules = builtinModules.filter(
-    x => !/^_|^(internal|v8|node-inspect|fsevents)\/|\//.test(x),
+    x => !/^_|^(?:internal|v8|node-inspect|fsevents)\/|\//.test(x),
   );
 
   const external = Array.isArray(externals) ? externals : [];
@@ -22,7 +22,7 @@ export const getNodeExternal = (externals?: string[]) => {
   return [
     ...new Set(modules.concat(modules.map(s => `node:${s}`)).concat(['electron', ...external])),
   ];
-};
+}
 
 /**
  * @see https://github.com/vitejs/vite/blob/v4.0.1/packages/vite/src/node/constants.ts#L137-L147
