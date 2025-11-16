@@ -1,3 +1,9 @@
+## [2.0.1](https://github.com/tomjs/vite-plugin-electron/compare/v2.0.0...v2.0.1) (2025-11-16)
+
+- fix: readme.md  [965a480](https://github.com/tomjs/vite-plugin-electron/commit/965a480)
+- docs: update notes  [887a63b](https://github.com/tomjs/vite-plugin-electron/commit/887a63b)
+- docs: update readme  [d44d9f3](https://github.com/tomjs/vite-plugin-electron/commit/d44d9f3)    [12c7af3](https://github.com/tomjs/vite-plugin-electron/commit/12c7af3)
+
 ## [2.0.0](https://github.com/tomjs/vite-plugin-electron/compare/v1.11.0...v2.0.0) (2025-11-16)
 
 - feat: change tsup to tsdown  [83e81e8](https://github.com/tomjs/vite-plugin-electron/commit/83e81e8)
