@@ -201,7 +201,7 @@ export default defineConfig({
 
 ## 文档
 
-- [unpkg.com](https://www.unpkg.com/) 提供的 [index.d.ts](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.ts).
+- [unpkg.com](https://www.unpkg.com/) 提供的 [index.d.mts](https://app.unpkg.com/@tomjs/vite-plugin-electron@2.0.0/files/dist/index.d.mts).
 
 ## 参数
 
@@ -227,24 +227,27 @@ export default defineConfig({
 
 继承自 [tsdown](https://tsdown.dev/) 的 [Options](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)，添加了一些默认值，方便使用。
 
-| 参数名      | 类型                          | 默认值                                          | 说明                                                                                                                                                                                   |
-| ----------- | ----------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **entry**   | `string`                      | `-`                                             | main 入口文件                                                                                                                                                                          |
-| format      | `'cjs' \| 'esm'`              | `-`                                             | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                                                                                                             |
-| outDir      | `string`                      | `"dist-electron/main"`                          | main 输出文件夹                                                                                                                                                                        |
-| watchFiles  | `string \| string[]`          | `undefined`                                     | 监听 electron 相关文件或文件夹，如果 `recommended:true`，则监听 `electron/main`、`electron/preload` 目录，否则需要指定 electron 代码对应目录，如果没有指定可能会造成 electron 无限重启 |
-| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | 忽略监听的文件或文件夹                                                                                                                                                                 |
+| 参数名      | 类型                          | 默认值                                          | 说明                                                                                                                                                               |
+| ----------- | ----------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **entry**   | `string`                      | `-`                                             | main 入口文件                                                                                                                                                      |
+| format      | `'cjs' \| 'esm'`              | `-`                                             | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                                                                                         |
+| outDir      | `string`                      | `"dist-electron/main"`                          | main 输出文件夹                                                                                                                                                    |
+| watchFiles  | `string \| string[]`          | `undefined`                                     | 监听 electron 相关文件或文件夹。如果 `recommended:true`，则监听 `electron/main` 目录，否则需要指定 electron 代码对应目录，如果没有指定可能会造成 electron 无限重启 |
+| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | 忽略监听的文件或文件夹                                                                                                                                             |
 
 ### PreloadOptions
 
 继承自 [tsdown](https://tsdown.dev) 的 [Options](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)，添加了一些默认值，方便使用。
 
-| 参数名    | 类型                                                                | 默认值                    | 说明                                                       |
-| --------- | ------------------------------------------------------------------- | ------------------------- | ---------------------------------------------------------- |
-| **entry** | `string`                                                            | `-`                       | preload 入口文件                                           |
-| format    | `'cjs' \| 'esm'`                                                    | `-`                       | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
-| outDir    | `string`                                                            | `"dist-electron/preload"` | preload 输出文件夹                                         |
-| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined`               | 构建成功后运行的回调函数                                   |
+| 参数名      | 类型                          | 默认值                                          | 说明                                                                                                                                                                  |
+| ----------- | ----------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **entry**   | `string`                      | `-`                                             | preload 入口文件                                                                                                                                                      |
+| format      | `'cjs' \| 'esm'`              | `-`                                             | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                                                                                            |
+| outDir      | `string`                      | `"dist-electron/preload"`                       | preload 输出文件夹                                                                                                                                                    |
+| watchFiles  | `string \| string[]`          | `undefined`                                     | 监听 electron 相关文件或文件夹。如果 `recommended:true`，则监听 `electron/preload` 目录，否则需要指定 electron 代码对应目录，如果没有指定可能会造成 electron 无限重启 |
+| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | 忽略监听的文件或文件夹                                                                                                                                                |
+
+- watchFiles: 如果 `recommended:true`，则监听 `electron/preload` 目录，否则需要指定 electron preload 代码对应目录，如果没有指定可能会造成 electron 无限重启
 
 ### BuilderOptions
 
