@@ -433,3 +433,12 @@ Open the [examples](./examples) directory, there are `vue` and `react` examples.
 
 - [react](./examples/react)
 - [vue](./examples/vue)
+
+## Important Notes
+
+### v2.0.0
+
+**Breaking Updates:**
+
+- Using [tsdown](https://tsdown.dev/zh-CN) instead of [tsup](https://tsup.egoist.dev/), the main/preload configuration is changed to inherit [tsdown](https://tsdown.dev/zh-CN).
+- If `recommended:true` is not used, `watchFiles` needs to be configured. See [MainOptions](#mainoptions) and [PreloadOptions](#preloadoptions) for details.

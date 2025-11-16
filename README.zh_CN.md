@@ -445,3 +445,12 @@ pnpm build
 
 - [react](./examples/react)
 - [vue](./examples/vue)
+
+## 重要说明
+
+### v2.0.0
+
+**破坏性更新：**
+
+- 使用 [tsdown](https://tsdown.dev/zh-CN) 替代 [tsup](https://tsup.egoist.dev/)，main/preload 配置改为继承 [tsdown](https://tsdown.dev/zh-CN).
+- 如果没有使用 `recommended:true`，需要配置 `watchFiles`，详见 [MainOptions](#mainoptions)和 [PreloadOptions](#preloadoptions)
