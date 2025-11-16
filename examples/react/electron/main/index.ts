@@ -1,5 +1,6 @@
 import { release } from 'node:os';
 import { join } from 'node:path';
+import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 
 console.log('Electron Main Process!');
@@ -54,7 +55,6 @@ function createWindow() {
     // electron-vite-vue#298
     win.loadURL(url);
     // Open devTool if the app is not packaged
-    // win.webContents.openDevTools();
   }
   else {
     win.loadFile(indexHtml);
@@ -78,22 +78,34 @@ app.whenReady().then(async () => {
   createWindow();
 
   if (isDev) {
-    const { installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
-      '@tomjs/electron-devtools-installer'
-    );
+    try {
+      const { installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
+        '@tomjs/electron-devtools-installer'
+      );
 
-    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-      .then((exts) => {
-        // console.log('Added Extension: ', exts.name);
-        console.log(
-          'Added Extension: ',
-          exts.map(s => s.name),
-        );
-      })
-      .catch((err) => {
-        console.log('Failed to install extensions');
-        console.error(err);
-      });
+      installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+        .then((exts) => {
+          // console.log('Added Extension: ', exts.name);
+          // console.log('Added Extension: ', exts.name);
+
+          // Open devTool if the app is not packaged
+          if (win) {
+            win.webContents.openDevTools();
+          }
+
+          console.log(
+            'Added Extension: ',
+            exts.map(s => s.name),
+          );
+        })
+        .catch((err) => {
+          console.log('Failed to install extensions');
+          console.error(err);
+        });
+    }
+    catch (e) {
+      console.error(e);
+    }
   }
 });
 
@@ -137,5 +149,14 @@ ipcMain.handle('open-win', (_, arg) => {
   }
   else {
     childWindow.loadFile(indexHtml, { hash: arg });
+  }
+});
+
+process.on('message', (data) => {
+  // electron exit message
+  if (data === ELECTRON_EXIT) {
+    if (isDev && win) {
+      win.webContents.closeDevTools();
+    }
   }
 });

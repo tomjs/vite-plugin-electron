@@ -10,7 +10,7 @@ Many thanks to [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-el
 
 ## Features
 
-- Fast build `main` and `preload` with [tsup](https://github.com/egoist/tsup)
+- Fast build `main` and `preload` with [tsdwon](https://tsdown.dev/)
 - Little configuration, focus on business
 - Support `main`'s `Hot Restart`
 - Support `preload`'s `Hot Reload`
@@ -90,6 +90,7 @@ See [PluginOptions](#pluginoptions) and `recommended` parameter descriptions in 
 ```ts
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow } from 'electron';
 
 // when package.json "type": module"
@@ -119,6 +120,15 @@ async function createWindow() {
 }
 
 app.whenReady().then(createWindow);
+
+process.on('message', (data) => {
+  // When restarting the electron, if devTools is turned on, the electron may not be able to shut down normally.
+  if (data === ELECTRON_EXIT) {
+    if (win) {
+      win.webContents.closeDevTools();
+    }
+  }
+});
 ```
 
 ### vue
@@ -143,6 +153,7 @@ Electron `preload process` must use the `.mjs` suffix, otherwise an error will b
 import electron from '@tomjs/vite-plugin-electron';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
+
 export default defineConfig({
   plugins: [
     vue(),
@@ -198,7 +209,7 @@ export default defineConfig({
 | Property    | Type                                           | Default | Description                                                                                                                                                                                                                                                                                                             |
 | ----------- | ---------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | recommended | `boolean`                                      | `true`  | This option is intended to provide recommended default parameters and behavior.                                                                                                                                                                                                                                         |
-| external    | `string[]`                                     |         | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsup.egoist.dev/#excluding-packages)                                                                                                                                                      |
+| external    | `string[]`                                     |         | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsdown.dev/reference/api/Interface.UserConfig#external)                                                                                                                                   |
 | main        | [MainOptions](#MainOptions)                    |         | Configuration options for the electron main process.                                                                                                                                                                                                                                                                    |
 | preload     | [PreloadOptions](#PreloadOptions)              |         | Configuration options for the electron preload process.                                                                                                                                                                                                                                                                 |
 | debug       | `boolean`                                      | `false` | Electron debug mode, don't startup electron. You can also use `process.env.VITE_ELECTRON_DEBUG`. Default is false.                                                                                                                                                                                                      |
@@ -215,18 +226,19 @@ The `recommended` option is used to set the default configuration and behavior, 
 
 ### MainOptions
 
-Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
+Based on [Options](https://tsdown.dev/reference/api/Interface.UserConfig) of [tsdown](https://tsdown.dev), some default values are added for ease of use.
 
-| Property  | Type                                                                | Default              | Description                                                                          |
-| --------- | ------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------ |
-| entry     | `string`                                                            | `-`                  | The main process entry file.                                                         |
-| format    | `'cjs' \| 'esm'`                                                    | `-`                  | The bundle format. If not specified, it will use the "type" field from package.json. |
-| outDir    | `string`                                                            | "dist-electron/main" | The output directory for the main process files                                      |
-| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined`          | A function that will be executed after the build succeeds.                           |
+| Property    | Type                          | Default                                         | Description                                                                                                                                                                                                                                                    |
+| ----------- | ----------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| entry       | `string`                      | `-`                                             | The main process entry file.                                                                                                                                                                                                                                   |
+| format      | `'cjs' \| 'esm'`              | `-`                                             | The bundle format. If not specified, it will use the "type" field from package.json.                                                                                                                                                                           |
+| outDir      | `string`                      | "dist-electron/main"                            | The output directory for the main process files                                                                                                                                                                                                                |
+| watchFiles  | `string \| string[]`          | `undefined`                                     | Monitor Electron-related files or folders. If `recommended:true`, monitor the `electron/main` and `electron/preload` directories; otherwise, specify the corresponding Electron code directory. Failure to specify may cause Electron to restart indefinitely. |     |
+| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | Ignore files or folders being watched                                                                                                                                                                                                                          |
 
 ### PreloadOptions
 
-Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
+Based on [Options](https://tsdown.dev/reference/api/Interface.UserConfig) of [tsdown](https://tsdown.dev), some default values are added for ease of use.
 
 | Property  | Type                                                                | Default                 | Description                                                                          |
 | --------- | ------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------ |
@@ -334,6 +346,9 @@ app.whenReady().then(() => {
 
   installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
     .then((exts) => {
+      // Install the extension before enabling the developer tools; otherwise, the extension may fail to load.
+      // win.webContents.openDevTools();
+
       console.log(
         'Added Extension: ',
         exts.map(s => s.name),

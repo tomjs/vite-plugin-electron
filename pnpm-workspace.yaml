@@ -1,2 +1,8 @@
 packages:
-  - 'examples/*'
+  - examples/*
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - electron
+  - esbuild
+  - simple-git-hooks

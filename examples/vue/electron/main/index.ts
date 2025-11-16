@@ -1,5 +1,6 @@
 import { release } from 'node:os';
 import { join } from 'node:path';
+import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 
 console.log('Electron Main Process!');
@@ -34,7 +35,7 @@ const indexHtml = join(process.env.DIST, 'index.html');
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
-    width: 800,
+    width: 1000,
     height: 700,
     webPreferences: {
       preload,
@@ -48,8 +49,6 @@ async function createWindow() {
 
   if (isDev) {
     win.loadURL(url);
-    // Open devTool if the app is not packaged
-    // win.webContents.openDevTools();
   }
   else {
     win.loadFile(indexHtml);
@@ -77,8 +76,13 @@ app.whenReady().then(async () => {
     installExtension(VUEJS_DEVTOOLS)
       .then((ext) => {
         console.log('Added Extension: ', ext.name);
+        // Open devTool if the app is not packaged
+        if (win) {
+          win.webContents.openDevTools();
+        }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         console.log('Failed to install extensions');
       });
   }
@@ -124,5 +128,14 @@ ipcMain.handle('open-win', (_, arg) => {
   }
   else {
     childWindow.loadFile(indexHtml, { hash: arg });
+  }
+});
+
+process.on('message', (data) => {
+  // Reload Electron
+  if (data === ELECTRON_EXIT) {
+    if (isDev && win) {
+      win.webContents.closeDevTools();
+    }
   }
 });

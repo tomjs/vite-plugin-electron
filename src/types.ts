@@ -1,5 +1,5 @@
 import type { Configuration } from 'electron-builder';
-import type { Options } from 'tsup';
+import type { UserConfig as Options } from 'tsdown';
 
 /**
  * Electron main process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://www.jsdocs.io/package/tsup) for more information.
@@ -7,7 +7,7 @@ import type { Options } from 'tsup';
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface MainOptions
-  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
+  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch'> {
   /**
    * The main process entry file.
    */
@@ -22,9 +22,11 @@ export interface MainOptions
    */
   outDir?: string;
   /**
-   * A function that will be executed after the build succeeds.
+   * `tsdown` watches the current working directory by default. You can set files that need to be watched, which may improve performance.
+   *
+   * If no value is specified, the default value of the "recommended" parameter is ["dist-electron"] when it is true, otherwise 'watch' defaults to "true"
    */
-  onSuccess?: () => Promise<void | undefined | (() => void | Promise<void>)>;
+  watchFiles?: string | string[];
 }
 
 /**
@@ -33,7 +35,7 @@ export interface MainOptions
  * @see https://unpkg.com/browse/tsup/dist/index.d.ts
  */
 export interface PreloadOptions
-  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch' | 'onSuccess'> {
+  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch'> {
   /**
    * The preload process entry file
    */
@@ -48,9 +50,11 @@ export interface PreloadOptions
    */
   outDir?: string;
   /**
-   * A function that will be executed after the build succeeds.
+   * `tsdown` watches the current working directory by default. You can set files that need to be watched, which may improve performance.
+   *
+   * If no value is specified, the default value of the "recommended" parameter is ["dist-electron"] when it is true, otherwise 'watch' defaults to "true"
    */
-  onSuccess?: () => Promise<void | undefined | (() => void | Promise<void>)>;
+  watchFiles?: string | string[];
 }
 
 /**
@@ -60,12 +64,6 @@ export interface PreloadOptions
  * Execute `npm install` and then package.
  */
 export interface BuilderOptions {
-  /**
-   * Whether to enable the [electron-builder](https://www.electron.build), the default is false.
-   * @default false
-   * @deprecated
-   */
-  enable?: boolean;
   /**
    * The application id. Used as [CFBundleIdentifier](https://developer.apple.com/library/ios/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/20001431-102070) for MacOS and as
    * [Application User Model ID](https://msdn.microsoft.com/en-us/library/windows/desktop/dd378459(v=vs.85).aspx) for Windows (NSIS target only, Squirrel.Windows not supported). It is strongly recommended that an explicit ID is set.

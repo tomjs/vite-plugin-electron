@@ -5,7 +5,7 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "debug",
+      "script": "dev",
       "problemMatcher": {
         "owner": "typescript",
         "fileLocation": "relative",

@@ -1,5 +1,6 @@
 import type { AddressInfo } from 'node:net';
 import type { ViteDevServer } from 'vite';
+import cp from 'node:child_process';
 import fs from 'node:fs';
 import { builtinModules } from 'node:module';
 
@@ -56,4 +57,57 @@ export function resolveServerUrl(server: ViteDevServer) {
 
     return url;
   }
+}
+
+// copy from https://github.com/electron-vite/vite-plugin-electron/blob/64feff264bea1ae8ce1cfd1a6f445e2416e7474d/src/utils.ts#L207-L244
+/**
+ * Inspired `tree-kill`, implemented based on sync-api. #168
+ * @see https://github.com/pkrumins/node-tree-kill/blob/v1.2.2/index.js
+ */
+export function treeKillSync(pid: number) {
+  if (process.platform === 'win32') {
+    cp.execSync(`taskkill /pid ${pid} /T /F`);
+  }
+  else {
+    killTree(pidTree({ pid, ppid: process.pid }));
+  }
+}
+
+export interface PidTree {
+  pid: number;
+  ppid: number;
+  children?: PidTree[];
+}
+
+function pidTree(tree: PidTree) {
+  const command = process.platform === 'darwin'
+    ? `pgrep -P ${tree.pid}` // Mac
+    : `ps -o pid --no-headers --ppid ${tree.ppid}`; // Linux
+
+  try {
+    const childs = cp
+      .execSync(command, { encoding: 'utf8' })
+      .match(/\d+/g)
+      ?.map(id => +id);
+
+    if (childs) {
+      tree.children = childs.map(cid => pidTree({ pid: cid, ppid: tree.pid }));
+    }
+  }
+  catch { }
+
+  return tree;
+}
+
+function killTree(tree: PidTree) {
+  if (tree.children) {
+    for (const child of tree.children) {
+      killTree(child);
+    }
+  }
+
+  try {
+    process.kill(tree.pid); // #214
+  }
+  catch { /* empty */ }
 }

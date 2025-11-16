@@ -1,11 +1,13 @@
-import type { Options as TsupOptions } from 'tsup';
+import type { UserConfig as TsdownOptions } from 'tsdown';
 import type { ViteDevServer } from 'vite';
-import type { PluginOptions } from './types';
+import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import { spawn } from 'node:child_process';
 import electron from 'electron';
-import treeKill from 'tree-kill';
-import { build as tsupBuild } from 'tsup';
+import { execa } from 'execa';
+import { build as tsdownBuild } from 'tsdown';
+import { ELECTRON_EXIT } from './electron';
 import { createLogger } from './logger';
+import { treeKillSync } from './utils';
 
 const logger = createLogger();
 
@@ -19,9 +21,8 @@ function getBuildOptions(options: PluginOptions) {
     .map((cfg) => {
       return {
         ...cfg,
-        splitting: false,
-        silent: true,
-      } as TsupOptions & { __NAME__: string };
+        logLevel: 'silent',
+      } as (MainOptions | PreloadOptions) & { __NAME__: string };
     });
 }
 
@@ -29,13 +30,14 @@ function getBuildOptions(options: PluginOptions) {
  * startup electron app
  */
 async function startup(options: PluginOptions) {
+  console.log('startup electron debug mode:', options.debug);
   if (options.debug) {
     return;
   }
 
   await startup.exit();
 
-  const args = ['.'];
+  const args = ['.', '--no-sandbox'];
   if (options.inspect) {
     if (typeof options.inspect === 'number') {
       args.push(`--inspect=${options.inspect}`);
@@ -47,34 +49,36 @@ async function startup(options: PluginOptions) {
 
   // start electron app
   process.electronApp = spawn(electron as any, args, {
-    stdio: 'inherit',
+    stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
   });
 
   // exit process after electron app exit
   process.electronApp.once('exit', process.exit);
 
-  process.once('exit', () => {
-    startup.exit();
-    process.electronApp.kill();
-  });
+  if (!startup.hookedProcessExit) {
+    startup.hookedProcessExit = true;
+    process.once('exit', startup.exit);
+  }
 }
 
+startup.send = (message: string) => {
+  if (process.electronApp) {
+    // Based on { stdio: [,,, 'ipc'] }
+    process.electronApp.send?.(message);
+  }
+};
+
+startup.hookedProcessExit = false;
 startup.exit = async () => {
   if (!process.electronApp) {
     return;
   }
 
-  process.electronApp.removeAllListeners();
-
-  return new Promise((resolve, reject) => {
-    treeKill(process.electronApp.pid!, (err) => {
-      if (err) {
-        reject(err);
-      }
-      else {
-        resolve(true);
-      }
-    });
+  await new Promise((resolve) => {
+    startup.send(ELECTRON_EXIT);
+    process.electronApp.removeAllListeners();
+    process.electronApp.once('exit', resolve);
+    treeKillSync(process.electronApp.pid!);
   });
 };
 
@@ -86,13 +90,18 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
   const buildCounts = [0, buildOptions.length > 1 ? 0 : 1];
   for (let i = 0; i < buildOptions.length; i++) {
     const tsOpts = buildOptions[i];
-    const { __NAME__: name, onSuccess: _onSuccess, watch, ...tsupOptions } = tsOpts;
+    const { __NAME__: name, ignoreWatch, onSuccess: _onSuccess, watchFiles, ...tsupOptions } = tsOpts;
 
     logger.info(`${name} build`);
 
-    const onSuccess: TsupOptions['onSuccess'] = async () => {
-      if (typeof _onSuccess === 'function') {
-        await _onSuccess();
+    const onSuccess: TsdownOptions['onSuccess'] = async (config, signal) => {
+      if (_onSuccess) {
+        if (typeof _onSuccess === 'string') {
+          await execa(_onSuccess);
+        }
+        else if (typeof _onSuccess === 'function') {
+          await _onSuccess(config, signal);
+        }
       }
 
       if (buildCounts[i] <= 0) {
@@ -120,13 +129,18 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
       }
     };
 
-    await tsupBuild({ onSuccess, watch: true, ...tsupOptions });
+    await tsdownBuild({
+      onSuccess,
+      ...tsupOptions,
+      watch: watchFiles ?? (options.recommended ? [`electron/${name}`] : true),
+      ignoreWatch: (Array.isArray(ignoreWatch) ? ignoreWatch : []).concat(['.history', '.temp', '.tmp', '.cache', 'dist']),
+    });
   }
 }
 
 export async function runBuild(options: PluginOptions) {
   const buildOptions = getBuildOptions(options);
   for (let i = 0; i < buildOptions.length; i++) {
-    await tsupBuild(buildOptions[i]);
+    await tsdownBuild(buildOptions[i]);
   }
 }

@@ -38,9 +38,9 @@ function preMergeOptions(options?: PluginOptions) {
     clean: true,
     dts: false,
     treeshake: !!isDev,
-    outExtension({ format }) {
+    outExtensions({ format }) {
       return {
-        js: format === 'esm' ? '.mjs' : `.js`,
+        js: format === 'es' ? '.mjs' : '.js',
       };
     },
   };

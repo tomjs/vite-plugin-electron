@@ -1,7 +1,8 @@
 {
   "name": "@tomjs/vite-plugin-electron",
+  "type": "module",
   "version": "1.11.0",
-  "packageManager": "pnpm@8.15.8",
+  "packageManager": "pnpm@10.22.0",
   "description": "A simple vite plugin for electron, supports esm/cjs, support esm in electron v28+",
   "author": {
     "name": "Tom Gao",
@@ -21,34 +22,25 @@
     "cjs"
   ],
   "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
-    }
+    ".": "./dist/index.mjs",
+    "./electron": "./dist/electron.mjs"
   },
-  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist",
     "env.d.ts"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=20.19.0"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "dev": "tsdown --watch",
+    "build": "tsdown",
     "lint": "run-s lint:stylelint lint:eslint",
     "lint:stylelint": "stylelint \"examples/**/*.{css,scss,less,vue,html}\" --fix --cache",
     "lint:eslint": "eslint --fix",
@@ -66,32 +58,33 @@
     }
   },
   "dependencies": {
-    "dayjs": "^1.11.13",
+    "dayjs": "^1.11.18",
+    "execa": "^8.0.1",
     "kolorist": "^1.8.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.merge": "^4.6.2",
     "shelljs": "^0.10.0",
-    "tree-kill": "^1.2.2",
-    "tsup": "^8.4.0"
+    "tsdown": "~0.16.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@tomjs/commitlint": "^4.0.0",
-    "@tomjs/eslint": "^5.0.0",
+    "@tomjs/eslint": "^5.2.0",
     "@tomjs/stylelint": "^6.0.0",
-    "@tomjs/tsconfig": "^1.7.2",
+    "@tomjs/tsconfig": "^2.0.0",
     "@types/lodash.clonedeep": "^4.5.9",
     "@types/lodash.merge": "^4.6.9",
-    "@types/node": "^18.19.100",
-    "@types/shelljs": "^0.8.16",
-    "eslint": "^9.26.0",
-    "lint-staged": "^15.5.2",
+    "@types/node": "^20.19.25",
+    "@types/shelljs": "^0.8.17",
+    "eslint": "^9.35.0",
+    "lint-staged": "^16.1.6",
     "npm-run-all": "^4.1.5",
+    "publint": "^0.3.15",
     "rimraf": "^6.0.1",
-    "simple-git-hooks": "^2.13.0",
-    "stylelint": "^16.19.1",
-    "tsx": "^4.19.4",
-    "typescript": "~5.8.3",
-    "vite": "^6.3.5"
+    "simple-git-hooks": "^2.13.1",
+    "stylelint": "^16.24.0",
+    "tsx": "^4.20.5",
+    "typescript": "~5.9.2",
+    "vite": "^6.3.6"
   }
 }

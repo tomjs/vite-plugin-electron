@@ -10,7 +10,7 @@
 
 ## 特性
 
-- 使用 [tsup](https://github.com/egoist/tsup) 快速构建 `main` 和 `preload`
+- 使用 [tsdown](https://tsdown.dev) 快速构建 `main` 和 `preload`
 - 配置简单，专注业务
 - 支持 `main` 的 `热重启`
 - 支持 `preload` 的 `热重载`
@@ -90,6 +90,7 @@ npm i electron-builder --save-dev
 ```ts
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow } from 'electron';
 
 // when package.json "type": module"
@@ -97,6 +98,7 @@ globalThis.__dirname = dirname(fileURLToPath(import.meta.url));
 
 const preload = join(__dirname, '../preload/index.mjs');
 const url = process.env.VITE_DEV_SERVER_URL;
+let win: BrowserWindow | null = null;
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -119,6 +121,15 @@ async function createWindow() {
 }
 
 app.whenReady().then(createWindow);
+
+process.on('message', (data) => {
+  // 重启 electron 时，如果 devTools 打开可能会造成 electron 无法正常关闭
+  if (data === ELECTRON_EXIT) {
+    if (win) {
+      win.webContents.closeDevTools();
+    }
+  }
+});
 ```
 
 ### vue
@@ -199,7 +210,7 @@ export default defineConfig({
 | 参数名      | 类型                              | 默认值  | 说明                                                                                                                                                                                                                                                                      |
 | ----------- | --------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | recommended | `boolean`                         | `true`  | 这个选项是为了提供推荐的默认参数和行为                                                                                                                                                                                                                                    |
-| external    | `string[]`                        |         | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsup.egoist.dev/#excluding-packages)                                                                                                                                                  |
+| external    | `string[]`                        |         | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)                                                                                                                                  |
 | main        | [MainOptions](#MainOptions)       |         | electron main 进程选项                                                                                                                                                                                                                                                    |
 | preload     | [PreloadOptions](#PreloadOptions) |         | electron preload 进程选项                                                                                                                                                                                                                                                 |
 | debug       | `boolean`                         | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG`                                                                                                                                                                                         |
@@ -214,18 +225,19 @@ export default defineConfig({
 
 ### MainOptions
 
-继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://www.jsdocs.io/package/tsup)，添加了一些默认值，方便使用。
+继承自 [tsdown](https://tsdown.dev/) 的 [Options](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)，添加了一些默认值，方便使用。
 
-| 参数名    | 类型                                                                | 默认值                 | 说明                                                       |
-| --------- | ------------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------- |
-| **entry** | `string`                                                            | `-`                    | main 入口文件                                              |
-| format    | `'cjs' \| 'esm'`                                                    | `-`                    | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段 |
-| outDir    | `string`                                                            | `"dist-electron/main"` | main 输出文件夹                                            |
-| onSuccess | `() => Promise<void \| undefined \| (() => void \| Promise<void>)>` | `undefined`            | 构建成功后运行的回调函数                                   |
+| 参数名      | 类型                          | 默认值                                          | 说明                                                                                                                                                                                   |
+| ----------- | ----------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **entry**   | `string`                      | `-`                                             | main 入口文件                                                                                                                                                                          |
+| format      | `'cjs' \| 'esm'`              | `-`                                             | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                                                                                                             |
+| outDir      | `string`                      | `"dist-electron/main"`                          | main 输出文件夹                                                                                                                                                                        |
+| watchFiles  | `string \| string[]`          | `undefined`                                     | 监听 electron 相关文件或文件夹，如果 `recommended:true`，则监听 `electron/main`、`electron/preload` 目录，否则需要指定 electron 代码对应目录，如果没有指定可能会造成 electron 无限重启 |
+| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | 忽略监听的文件或文件夹                                                                                                                                                                 |
 
 ### PreloadOptions
 
-继承自 [tsup](https://tsup.egoist.dev/) 的 [Options](https://www.jsdocs.io/package/tsup)，添加了一些默认值，方便使用。
+继承自 [tsdown](https://tsdown.dev) 的 [Options](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)，添加了一些默认值，方便使用。
 
 | 参数名    | 类型                                                                | 默认值                    | 说明                                                       |
 | --------- | ------------------------------------------------------------------- | ------------------------- | ---------------------------------------------------------- |
@@ -305,7 +317,7 @@ const config = {
 
 | 变量                    | 描述                                                                                                                            |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `VITE_ELECTRON_DEBUG`   | Electron主进程调试，不要启动Electron。 当值为 true 或 1 时启用，为 false 或 0 时禁用。默认值未定义。                            |
+| `VITE_ELECTRON_DEBUG`   | Electron主进程调试，不启动Electron。 当值为 true 或 1 时启用，为 false 或 0 时禁用。默认值未定义。                              |
 | `VITE_ELECTRON_INSPECT` | Electron 将在指定端口上侦听 V8 检查器协议消息，外部调试器需要连接到该端口。 当值为 true 时，默认端口为 5858。                   |
 | `VITE_ELECTRON_BUILDER` | 启用 [ Electron-builder ](https://www.electron.build) 进行打包。 当值为 true 或 1 时启用，为 false 或 0 时禁用。 默认值未定义。 |
 
@@ -333,6 +345,9 @@ app.whenReady().then(() => {
 
   installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
     .then((exts) => {
+      // 安装扩展后再开启开发者工具，否则可能会出现扩展加载失败问题
+      // win.webContents.openDevTools();
+
       console.log(
         'Added Extension: ',
         exts.map(s => s.name),
