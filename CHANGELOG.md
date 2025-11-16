@@ -1,3 +1,7 @@
+## [2.0.0](https://github.com/tomjs/vite-plugin-electron/compare/v1.11.0...v2.0.0) (2025-11-16)
+
+- feat: change tsup to tsdown  [83e81e8](https://github.com/tomjs/vite-plugin-electron/commit/83e81e8)
+
 ## [1.11.0](https://github.com/tomjs/vite-plugin-electron/compare/v1.10.0...v1.11.0) (2025-05-11)
 
 - feat: esm type will target to node18.18  [2fd2f14](https://github.com/tomjs/vite-plugin-electron/commit/2fd2f14)
