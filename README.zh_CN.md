@@ -247,8 +247,6 @@ export default defineConfig({
 | watchFiles  | `string \| string[]`          | `undefined`                                     | 监听 electron 相关文件或文件夹。如果 `recommended:true`，则监听 `electron/preload` 目录，否则需要指定 electron 代码对应目录，如果没有指定可能会造成 electron 无限重启 |
 | ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | 忽略监听的文件或文件夹                                                                                                                                                |
 
-- watchFiles: 如果 `recommended:true`，则监听 `electron/preload` 目录，否则需要指定 electron preload 代码对应目录，如果没有指定可能会造成 electron 无限重启
-
 ### BuilderOptions
 
 当 `recommended` 和 `builder.enable` 都为 `true` 时，使用 [electron-builder](https://www.electron.build) 打包 Electron 应用程序。
