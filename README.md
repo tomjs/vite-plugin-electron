@@ -10,7 +10,7 @@ Many thanks to [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-el
 
 ## Features
 
-- Fast build `main` and `preload` with [tsup](https://github.com/egoist/tsup)
+- Fast build `main` and `preload` with [tsdwon](https://tsdown.dev/)
 - Little configuration, focus on business
 - Support `main`'s `Hot Restart`
 - Support `preload`'s `Hot Reload`
@@ -90,6 +90,7 @@ See [PluginOptions](#pluginoptions) and `recommended` parameter descriptions in 
 ```ts
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow } from 'electron';
 
 // when package.json "type": module"
@@ -119,6 +120,15 @@ async function createWindow() {
 }
 
 app.whenReady().then(createWindow);
+
+process.on('message', (data) => {
+  // When restarting the electron, if devTools is turned on, the electron may not be able to shut down normally.
+  if (data === ELECTRON_EXIT) {
+    if (win) {
+      win.webContents.closeDevTools();
+    }
+  }
+});
 ```
 
 ### vue
@@ -190,7 +200,7 @@ export default defineConfig({
 
 ## Documentation
 
-- [index.d.mts](https://app.unpkg.com/@tomjs/vite-plugin-electron@2.0.0/files/dist/index.d.mts) provided by [unpkg.com](https://www.unpkg.com).
+- [index.d.mts](https://www.unpkg.com/browse/@tomjs/vite-plugin-electron/dist/index.d.mts) provided by [unpkg.com](https://www.unpkg.com).
 
 ## Parameters
 
@@ -199,7 +209,7 @@ export default defineConfig({
 | Property    | Type                                           | Default | Description                                                                                                                                                                                                                                                                                                             |
 | ----------- | ---------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | recommended | `boolean`                                      | `true`  | This option is intended to provide recommended default parameters and behavior.                                                                                                                                                                                                                                         |
-| external    | `string[]`                                     |         | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsup.egoist.dev/#excluding-packages)                                                                                                                                                      |
+| external    | `string[]`                                     |         | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsdown.dev/reference/api/Interface.UserConfig#external)                                                                                                                                   |
 | main        | [MainOptions](#MainOptions)                    |         | Configuration options for the electron main process.                                                                                                                                                                                                                                                                    |
 | preload     | [PreloadOptions](#PreloadOptions)              |         | Configuration options for the electron preload process.                                                                                                                                                                                                                                                                 |
 | debug       | `boolean`                                      | `false` | Electron debug mode, don't startup electron. You can also use `process.env.VITE_ELECTRON_DEBUG`. Default is false.                                                                                                                                                                                                      |
@@ -216,7 +226,7 @@ The `recommended` option is used to set the default configuration and behavior, 
 
 ### MainOptions
 
-Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
+Based on [Options](https://tsdown.dev/reference/api/Interface.UserConfig) of [tsdown](https://tsdown.dev), some default values are added for ease of use.
 
 | Property    | Type                          | Default                                         | Description                                                                                                                                                                                                                                                   |
 | ----------- | ----------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -228,7 +238,7 @@ Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.eg
 
 ### PreloadOptions
 
-Based on [Options](https://www.jsdocs.io/package/tsup) of [tsup](https://tsup.egoist.dev/), some default values are added for ease of use.
+Based on [Options](https://tsdown.dev/reference/api/Interface.UserConfig) of [tsdown](https://tsdown.dev), some default values are added for ease of use.
 
 | Property    | Type                          | Default                                         | Description                                                                                                                                                                                                                                                      |
 | ----------- | ----------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -337,6 +347,9 @@ app.whenReady().then(() => {
 
   installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
     .then((exts) => {
+      // Install the extension before enabling the developer tools; otherwise, the extension may fail to load.
+      // win.webContents.openDevTools();
+
       console.log(
         'Added Extension: ',
         exts.map(s => s.name),
