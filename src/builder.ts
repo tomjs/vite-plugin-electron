@@ -42,11 +42,9 @@ function getBuilderConfig(options: PluginOptions, resolvedConfig: ResolvedConfig
     directories: {
       buildResources: 'electron/build',
       app: path.dirname(resolvedConfig.build.outDir),
-
       output: 'release/${version}',
     },
     files: ['main', 'preload', 'renderer'],
-
     artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
     electronDownload: {
       mirror: getMirror(),
@@ -61,7 +59,8 @@ function getBuilderConfig(options: PluginOptions, resolvedConfig: ResolvedConfig
       ],
     },
     mac: {
-      target: ['dmg'],
+      target: ['zip'],
+      sign: async () => {},
     },
     linux: {
       target: ['zip'],
