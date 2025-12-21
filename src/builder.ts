@@ -4,8 +4,8 @@ import type { PluginOptions } from './types';
 import os from 'node:os';
 import path from 'node:path';
 import { cwd } from 'node:process';
+import { execaSync } from 'execa';
 import merge from 'lodash.merge';
-import shell from 'shelljs';
 import { createLogger } from './logger';
 import { readJson, writeJson } from './utils';
 
@@ -18,8 +18,8 @@ function getMirror() {
   }
 
   // check npm mirror
-  const res = shell.exec('npm config get registry', { silent: true });
-  if (res.code === 0) {
+  const res = execaSync('npm config get registry', { shell: true });
+  if (res.exitCode === 0) {
     let registry = res.stdout;
     if (!registry) {
       return;
@@ -171,13 +171,12 @@ export async function runElectronBuilder(options: PluginOptions, resolvedConfig:
   }
 
   logger.info('building electron app...');
-
   const DIST_PATH = path.join(cwd(), path.dirname(resolvedConfig.build.outDir));
 
   createPkg(options, resolvedConfig);
 
   logger.info(`create package.json and exec "npm install"`);
-  shell.exec(`cd ${DIST_PATH} && npm install --emit=dev`);
+  execaSync(`npm install --emit=dev`, { cwd: DIST_PATH, shell: true });
 
   logger.info(`run electron-builder to package app`);
   const config = getBuilderConfig(options, resolvedConfig);
