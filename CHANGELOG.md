@@ -1,3 +1,7 @@
+## [2.1.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.0.2...v2.1.0) (2025-12-21)
+
+- feat: chore: update  [67476a6](https://github.com/tomjs/vite-plugin-electron/commit/67476a6)
+
 ## [2.0.2](https://github.com/tomjs/vite-plugin-electron/compare/v2.0.1...v2.0.2) (2025-11-30)
 
 - fix: mac sign error  [932f8e6](https://github.com/tomjs/vite-plugin-electron/commit/932f8e6)
