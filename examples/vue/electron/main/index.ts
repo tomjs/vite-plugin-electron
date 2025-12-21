@@ -69,23 +69,6 @@ async function createWindow() {
 
 app.whenReady().then(async () => {
   createWindow();
-
-  if (isDev) {
-    const { installExtension, VUEJS_DEVTOOLS } = await import('@tomjs/electron-devtools-installer');
-
-    installExtension(VUEJS_DEVTOOLS)
-      .then((ext) => {
-        console.log('Added Extension: ', ext.name);
-        // Open devTool if the app is not packaged
-        if (win) {
-          win.webContents.openDevTools();
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        console.log('Failed to install extensions');
-      });
-  }
 });
 
 app.on('window-all-closed', () => {
