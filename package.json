@@ -23,7 +23,8 @@
   ],
   "exports": {
     ".": "./dist/index.mjs",
-    "./electron": "./dist/electron.mjs"
+    "./electron": "./dist/electron.mjs",
+    "./env": "./env.d.ts"
   },
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
