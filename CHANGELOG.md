@@ -1,3 +1,8 @@
+## [2.2.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.1.0...v2.2.0) (2026-01-02)
+
+- fix: exports env file  [f38e9e9](https://github.com/tomjs/vite-plugin-electron/commit/f38e9e9)
+- feat: vue demo use vite-plugin-vue-devtools  [d90e148](https://github.com/tomjs/vite-plugin-electron/commit/d90e148)
+
 ## [2.1.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.0.2...v2.1.0) (2025-12-21)
 
 - feat: chore: update  [67476a6](https://github.com/tomjs/vite-plugin-electron/commit/67476a6)
