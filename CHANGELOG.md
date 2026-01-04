@@ -1,3 +1,7 @@
+## [2.3.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.2.0...v2.3.0) (2026-01-04)
+
+- feat: use @tomjs/logger  [e178bab](https://github.com/tomjs/vite-plugin-electron/commit/e178bab)
+
 ## [2.2.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.1.0...v2.2.0) (2026-01-02)
 
 - fix: exports env file  [f38e9e9](https://github.com/tomjs/vite-plugin-electron/commit/f38e9e9)
