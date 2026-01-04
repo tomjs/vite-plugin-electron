@@ -63,9 +63,10 @@
     "execa": "^9.6.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.merge": "^4.6.2",
-    "tsdown": "~0.18.1"
+    "tsdown": "~0.18.4"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^6.7.3",
     "@commitlint/cli": "^20.2.0",
     "@tomjs/commitlint": "^5.0.0",
     "@tomjs/eslint": "^6.4.0",

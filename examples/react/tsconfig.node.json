@@ -1,7 +1,8 @@
 {
   "extends": "@tomjs/tsconfig/node.json",
   "compilerOptions": {
-    "composite": true
+    "composite": true,
+    "noEmit": true
   },
   "include": ["electron", "vite.config.ts"]
 }

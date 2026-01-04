@@ -1,5 +1,5 @@
 {
-  "extends": "@tomjs/tsconfig/react-dom.json",
+  "extends": "@tomjs/tsconfig/react.json",
   "references": [
     {
       "path": "./tsconfig.node.json"

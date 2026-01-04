@@ -80,7 +80,7 @@ app.whenReady().then(async () => {
   if (isDev) {
     try {
       const { installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
-        '@tomjs/electron-devtools-installer'
+        '@tomjs/electron-devtools-installer',
       );
 
       installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
