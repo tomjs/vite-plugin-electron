@@ -1,3 +1,7 @@
+## [2.4.1](https://github.com/tomjs/vite-plugin-electron/compare/v2.4.0...v2.4.1) (2026-01-11)
+
+- docs: change readme  [d5401b5](https://github.com/tomjs/vite-plugin-electron/commit/d5401b5)
+
 ## [2.4.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.3.0...v2.4.0) (2026-01-11)
 
 - feat: change log info and add devtools options  [de5fbee](https://github.com/tomjs/vite-plugin-electron/commit/de5fbee)
