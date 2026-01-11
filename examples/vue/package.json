@@ -24,10 +24,10 @@
     "@vitejs/plugin-vue": "^6.0.3",
     "cross-env": "^10.1.0",
     "electron": "^39.2.7",
-    "electron-builder": "^26.0.12",
+    "electron-builder": "^26.4.0",
     "typescript": "~5.9.3",
     "vite-plugin-electron-renderer": "^0.14.6",
     "vite-plugin-vue-devtools": "^8.0.5",
-    "vue-tsc": "^3.2.1"
+    "vue-tsc": "^3.2.2"
   }
 }

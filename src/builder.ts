@@ -6,10 +6,8 @@ import path from 'node:path';
 import { cwd } from 'node:process';
 import { execaSync } from 'execa';
 import merge from 'lodash.merge';
-import { createLogger } from './logger';
+import { logger } from './logger';
 import { readJson, writeJson } from './utils';
-
-const logger = createLogger();
 
 function getMirror() {
   let mirror = process.env.ELECTRON_MIRROR;

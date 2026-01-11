@@ -4,12 +4,11 @@ import type { MainOptions, PluginOptions, PreloadOptions } from './types';
 import { spawn } from 'node:child_process';
 import electron from 'electron';
 import { execa } from 'execa';
+import colors from 'picocolors';
 import { build as tsdownBuild } from 'tsdown';
 import { ELECTRON_EXIT } from './electron';
-import { createLogger } from './logger';
+import { logger } from './logger';
 import { treeKillSync } from './utils';
-
-const logger = createLogger();
 
 function getBuildOptions(options: PluginOptions) {
   return ['main', 'preload']
@@ -30,7 +29,6 @@ function getBuildOptions(options: PluginOptions) {
  * startup electron app
  */
 async function startup(options: PluginOptions) {
-  console.log('startup electron debug mode:', options.debug);
   if (options.debug) {
     return;
   }
@@ -90,9 +88,9 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
   const buildCounts = [0, buildOptions.length > 1 ? 0 : 1];
   for (let i = 0; i < buildOptions.length; i++) {
     const tsOpts = buildOptions[i];
-    const { __NAME__: name, ignoreWatch, onSuccess: _onSuccess, watchFiles, ...tsupOptions } = tsOpts;
+    const { __NAME__: name, ignoreWatch, onSuccess: _onSuccess, watchFiles, ...tsdownOptions } = tsOpts;
 
-    logger.info(`${name} build`);
+    logger.info(`${colors.dim(name)} build start`);
 
     const onSuccess: TsdownOptions['onSuccess'] = async (config, signal) => {
       if (_onSuccess) {
@@ -106,7 +104,7 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
 
       if (buildCounts[i] <= 0) {
         buildCounts[i]++;
-        logger.info(`${name} build success`);
+        logger.info(`${colors.dim(name)} build success`);
 
         if (buildCounts[0] === 1 && buildCounts[1] === 1) {
           logger.info('startup electron');
@@ -115,7 +113,7 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
         return;
       }
 
-      logger.success(`${name} rebuild success`);
+      logger.info(`${colors.dim(name)} rebuild success`);
 
       if (name === 'main') {
         logger.info('restart electron');
@@ -131,9 +129,10 @@ export async function runServe(options: PluginOptions, server: ViteDevServer) {
 
     await tsdownBuild({
       onSuccess,
-      ...tsupOptions,
+      ...tsdownOptions,
       watch: watchFiles ?? (options.recommended ? [`electron/${name}`] : true),
       ignoreWatch: (Array.isArray(ignoreWatch) ? ignoreWatch : []).concat(['.history', '.temp', '.tmp', '.cache', 'dist']),
+      logLevel: tsOpts.logLevel ?? 'silent',
     });
   }
 }

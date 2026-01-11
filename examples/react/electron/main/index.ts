@@ -4,7 +4,6 @@ import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 
 console.log('Electron Main Process!');
-console.log('Electron Main Process!');
 
 const isDev = process.env.NODE_ENV === 'development';
 process.env.DIST = join(__dirname, '../renderer');
@@ -76,37 +75,6 @@ function createWindow() {
 
 app.whenReady().then(async () => {
   createWindow();
-
-  if (isDev) {
-    try {
-      const { installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
-        '@tomjs/electron-devtools-installer',
-      );
-
-      installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-        .then((exts) => {
-          // console.log('Added Extension: ', exts.name);
-          // console.log('Added Extension: ', exts.name);
-
-          // Open devTool if the app is not packaged
-          if (win) {
-            win.webContents.openDevTools();
-          }
-
-          console.log(
-            'Added Extension: ',
-            exts.map(s => s.name),
-          );
-        })
-        .catch((err) => {
-          console.log('Failed to install extensions');
-          console.error(err);
-        });
-    }
-    catch (e) {
-      console.error(e);
-    }
-  }
 });
 
 app.on('window-all-closed', () => {

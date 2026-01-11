@@ -177,6 +177,27 @@ export function useElectronPlugin(options?: PluginOptions): Plugin {
         await runServe(opts, server);
       });
     },
+    transformIndexHtml(html) {
+      const { devtools } = opts;
+      let port: number | undefined;
+      if (typeof devtools === 'number') {
+        port = devtools;
+      }
+      else if (devtools === true) {
+        if (resolvedConfig.plugins.find(s => ['vite:vue', 'vite:vue2'].includes(s.name))) {
+          port = 8098;
+        }
+        else if (resolvedConfig.plugins.find(s => ['vite:react-refresh', 'vite:react-swc'].includes(s.name))) {
+          port = 8097;
+        }
+      }
+
+      if (port) {
+        html = html.replace('</head>', `<script src="http://localhost:${port}"></script></head>`);
+      }
+
+      return html;
+    },
     async closeBundle() {
       if (isServer) {
         return;

@@ -126,4 +126,13 @@ export interface PluginOptions {
    * @default false
    */
   inspect?: number | boolean;
+  /**
+   * Whether to enable devtools. Inject `<script src="http://localhost:<devtools-port>"></script>` into webview client . Default is true.
+   *  - true:
+   *    - react: inject `<script src="http://localhost:8097"></script>`
+   *    - vue: inject `<script src="http://localhost:8098"></script>`
+   *  - `number`: custom port
+   * @default false
+   */
+  devtools?: boolean | number;
 }
