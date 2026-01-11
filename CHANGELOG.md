@@ -1,3 +1,7 @@
+## [2.4.2](https://github.com/tomjs/vite-plugin-electron/compare/v2.4.1...v2.4.2) (2026-01-11)
+
+- docs: fix devtools desc  [31cc1e4](https://github.com/tomjs/vite-plugin-electron/commit/31cc1e4)
+
 ## [2.4.1](https://github.com/tomjs/vite-plugin-electron/compare/v2.4.0...v2.4.1) (2026-01-11)
 
 - docs: change readme  [d5401b5](https://github.com/tomjs/vite-plugin-electron/commit/d5401b5)
