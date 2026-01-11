@@ -1,3 +1,8 @@
+## [2.4.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.3.0...v2.4.0) (2026-01-11)
+
+- feat: change log info and add devtools options  [de5fbee](https://github.com/tomjs/vite-plugin-electron/commit/de5fbee)
+- chore: update deps  [4634194](https://github.com/tomjs/vite-plugin-electron/commit/4634194)
+
 ## [2.3.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.2.0...v2.3.0) (2026-01-04)
 
 - feat: use @tomjs/logger  [e178bab](https://github.com/tomjs/vite-plugin-electron/commit/e178bab)
