@@ -1,3 +1,7 @@
+## [2.5.1](https://github.com/tomjs/vite-plugin-electron/compare/v2.5.0...v2.5.1) (2026-02-01)
+
+- fix: mirror url  [08d5fb8](https://github.com/tomjs/vite-plugin-electron/commit/08d5fb8)
+
 ## [2.5.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.4.2...v2.5.0) (2026-02-01)
 
 - feat: rm external option  [b8d1ed9](https://github.com/tomjs/vite-plugin-electron/commit/b8d1ed9)
