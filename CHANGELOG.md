@@ -1,3 +1,7 @@
+## [2.5.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.4.2...v2.5.0) (2026-02-01)
+
+- feat: rm external option  [b8d1ed9](https://github.com/tomjs/vite-plugin-electron/commit/b8d1ed9)
+
 ## [2.4.2](https://github.com/tomjs/vite-plugin-electron/compare/v2.4.1...v2.4.2) (2026-01-11)
 
 - docs: fix devtools desc  [31cc1e4](https://github.com/tomjs/vite-plugin-electron/commit/31cc1e4)
