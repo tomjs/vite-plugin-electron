@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [
     react(),
     electron({
-      external: ['fs-extra'],
     }),
     renderer(),
   ],

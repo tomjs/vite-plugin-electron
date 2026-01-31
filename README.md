@@ -256,6 +256,8 @@ When `recommended` and `builder.enable` are both `true`, use [electron-builder](
 - In the `build.outDir` directory configured in vite, generate a new package.json based on the configuration and package.json, excluding non-dependencies.
 - Execute `npm install` and then package.
 
+Reference [vite-plugin-electron-renderer](https://github.com/electron-vite/vite-plugin-electron-renderer) and [Two package.json Structure](https://www.electron.build/tutorials/two-package-structure)
+
 _Not suitable for everyone._
 
 To use this function, you need to install additional `electron-builder`

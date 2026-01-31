@@ -1,0 +1,4 @@
+{
+  "extends": "@tomjs/tsconfig/vue-dom.json",
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+}

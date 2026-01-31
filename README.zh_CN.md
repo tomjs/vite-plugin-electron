@@ -252,8 +252,9 @@ export default defineConfig({
 
 当 `recommended` 和 `builder.enable` 都为 `true` 时，使用 [electron-builder](https://www.electron.build) 打包 Electron 应用程序。
 
-- 在vite中配置的`build.outDir`目录中，根据配置和package.json生成新的package.json，排除非依赖项。
-- 执行`npm install`然后打包。
+- 在vite中配置的`build.outDir`目录中，根据配置和package.json生成新的package.json。
+
+参考 [vite-plugin-electron-renderer](https://github.com/electron-vite/vite-plugin-electron-renderer) 和 [Two package.json Structure](https://www.electron.build/tutorials/two-package-structure)
 
 _不适合所有人使用。_
 

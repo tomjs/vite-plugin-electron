@@ -3,7 +3,6 @@ import type { ResolvedConfig } from 'vite';
 import type { PluginOptions } from './types';
 import os from 'node:os';
 import path from 'node:path';
-import { cwd } from 'node:process';
 import { execaSync } from 'execa';
 import merge from 'lodash.merge';
 import { logger } from './logger';
@@ -110,12 +109,12 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
 
   const newPkg = {
     name: pkg.name,
+    productName: pkg.productName,
     version: pkg.version,
     description: pkg.description,
     type: pkg.type || 'commonjs',
-    author: getAuthor(pkg.author),
+    author: pkg.author || getAuthor(pkg.author),
     main,
-    dependencies: getDeps(),
   };
 
   writeJson(path.join(outDir, 'package.json'), newPkg);
@@ -138,28 +137,6 @@ function createPkg(options: PluginOptions, resolvedConfig: ResolvedConfig) {
     return uname;
   }
 
-  function checkDepName(rules: (string | RegExp)[], name: string) {
-    return !!rules.find((s) => {
-      if (typeof s === 'string') {
-        return s.includes(name);
-      }
-      else {
-        return s.test(name);
-      }
-    });
-  }
-
-  function getDeps() {
-    const deps = pkg.dependencies || {};
-    const newDeps = {};
-    Object.keys(deps).forEach((name) => {
-      if (checkDepName(externals, name)) {
-        newDeps[name] = deps[name];
-      }
-    });
-    return newDeps;
-  }
-
   return newPkg;
 }
 
@@ -168,16 +145,10 @@ export async function runElectronBuilder(options: PluginOptions, resolvedConfig:
     return;
   }
 
-  logger.info('building electron app...');
-  const DIST_PATH = path.join(cwd(), path.dirname(resolvedConfig.build.outDir));
-
   createPkg(options, resolvedConfig);
-
-  logger.info(`create package.json and exec "npm install"`);
-  execaSync(`npm install --emit=dev`, { cwd: DIST_PATH, shell: true });
-
-  logger.info(`run electron-builder to package app`);
+  logger.info(`created package.json`);
   const config = getBuilderConfig(options, resolvedConfig);
+
   const { build } = await import('electron-builder');
   await build({
     config,
