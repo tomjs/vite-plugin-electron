@@ -1,61 +1,99 @@
 import type { Configuration } from 'electron-builder';
-import type { UserConfig as Options } from 'tsdown';
+import type { UserConfig as ViteOptions } from 'vite';
+
+type Arrayable<T> = T | T[];
 
 /**
- * Electron main process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://www.jsdocs.io/package/tsup) for more information.
- * @see https://www.jsdocs.io/package/tsup
- * @see https://unpkg.com/browse/tsup/dist/index.d.ts
+ * Common options shared by the Electron `main` and `preload` process builds.
+ *
+ * The processes are now compiled with [Vite](https://vite.dev/) itself (the plugin
+ * invokes Vite's `build()` API, replacing the previous tsdown/tsup pipeline), so this
+ * interface inherits every top-level [Vite UserConfig](https://vite.dev/config/) option.
+ *
+ * The following fields are managed by the plugin and therefore omitted from the
+ * inheritance: `configFile`, `base`, `root` and `build`.
  */
-export interface MainOptions
-  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch'> {
+export interface ElectronProcessOptions
+  extends Omit<ViteOptions, 'configFile' | 'base' | 'root' | 'build'> {
   /**
-   * The main process entry file.
-   */
-  entry?: string;
-  /**
-   * The bundle format. If not specified, it will use the "type" field from package.json.
-   */
-  format?: 'cjs' | 'esm';
-  /**
-   * The output directory for the main process files. Defaults to `"dist-electron/main"`.
-   * @default "dist-electron/main"
-   */
-  outDir?: string;
-  /**
-   * `tsdown` watches the current working directory by default. You can set files that need to be watched, which may improve performance.
+   * The process entry file(s).
    *
-   * If no value is specified, the default value of the "recommended" parameter is ["dist-electron"] when it is true, otherwise 'watch' defaults to "true"
-   */
-  watchFiles?: string | string[];
-}
-
-/**
- * Electron preload process options. See [tsup](https://tsup.egoist.dev/) and [API Doc](https://www.jsdocs.io/package/tsup) for more information.
- * @see https://www.jsdocs.io/package/tsup
- * @see https://unpkg.com/browse/tsup/dist/index.d.ts
- */
-export interface PreloadOptions
-  extends Omit<Options, 'entry' | 'format' | 'outDir' | 'watch'> {
-  /**
-   * The preload process entry file
+   * When `recommended` is enabled and no entry is given, the plugin looks for
+   * `electron/main/index.ts` / `electron/preload/index.ts` automatically.
    */
   entry?: string | string[] | Record<string, string>;
   /**
-   * The bundle format. If not specified, it will use the "type" field from package.json.
+   * The bundle format. If not specified, it will use the `type` field from `package.json`.
    */
   format?: 'cjs' | 'esm';
   /**
-   * The output directory for the preload process files. Defaults is `"dist-electron/preload"`.
-   * @default "dist-electron/preload"
+   * The output directory for the process files.
+   *
+   * @default 'dist/main' (or 'dist/preload') when `recommended: true`,
+   * otherwise 'dist-electron/main' (or 'dist-electron/preload')
    */
   outDir?: string;
   /**
-   * `tsdown` watches the current working directory by default. You can set files that need to be watched, which may improve performance.
+   * Don't bundle these modules. Node.js built-ins and `electron` are always excluded.
+   */
+  external?: string[];
+  /**
+   * Empty the output directory before building.
+   * @default true
+   */
+  clean?: boolean;
+  /**
+   * Enable/disable tree-shaking.
+   * @default true in development, false in production
+   */
+  treeshake?: boolean;
+  /**
+   * The Node.js build target, passed to Vite's `build.target`.
+   * @default 'node18.18' for `esm`, 'node16' for `cjs`
+   */
+  target?: string | false;
+  /**
+   * Whether to generate sourcemaps.
+   * @default true in development, false in production
+   */
+  sourcemap?: boolean | 'inline' | 'hidden';
+  /**
+   * Minify the output. `true` is an alias for `'oxc'`.
+   * @default false in development, true in production
+   */
+  minify?: boolean | 'oxc' | 'terser' | 'esbuild';
+  /**
+   * Additional files or folders to watch for rebuilding (dev mode).
    *
-   * If no value is specified, the default value of the "recommended" parameter is ["dist-electron"] when it is true, otherwise 'watch' defaults to "true"
+   * Note: with Vite the full module dependency graph is always watched, so this is
+   * only needed to force rebuilds for files that are not part of the graph.
    */
   watchFiles?: string | string[];
+  /**
+   * Files or folders to ignore while watching.
+   * @default ['.history', '.temp', '.tmp', '.cache', 'dist']
+   */
+  ignoreWatch?: Arrayable<string | RegExp>;
+  /**
+   * A shell command or callback to run after every successful build (dev mode).
+   */
+  onSuccess?: string | ((config?: unknown, signal?: unknown) => void | Promise<void>);
+  /**
+   * Environment variables inlined into the bundle via Vite's `define`.
+   * @internal
+   */
+  env?: Record<string, string>;
 }
+
+/**
+ * Configuration options for the Electron `main` process build.
+ */
+export interface MainOptions extends ElectronProcessOptions {}
+
+/**
+ * Configuration options for the Electron `preload` process build.
+ */
+export interface PreloadOptions extends ElectronProcessOptions {}
 
 /**
  * When `recommended` and `builder.enable` are both `true`, use [electron-builder](https://www.electron.build) to package Electron applications.

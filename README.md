@@ -10,7 +10,7 @@ Many thanks to [caoxiemeihao](https://github.com/caoxiemeihao)'s [vite-plugin-el
 
 ## Features
 
-- Fast build `main` and `preload` with [tsdwon](https://tsdown.dev/)
+- Fast build `main` and `preload` with [vite](https://vite.dev/)
 - Little configuration, focus on business
 - Support `main`'s `Hot Restart`
 - Support `preload`'s `Hot Reload`
@@ -88,13 +88,11 @@ See [PluginOptions](#pluginoptions) and `recommended` parameter descriptions in 
 `electron/main/index.ts`
 
 ```ts
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow } from 'electron';
 
-// when package.json "type": module"
-globalThis.__dirname = dirname(fileURLToPath(import.meta.url));
+// `__dirname` and `__filename` are provided automatically for `esm` output.
 
 const preload = join(__dirname, '../preload/index.mjs');
 const url = process.env.VITE_DEV_SERVER_URL;
@@ -209,7 +207,7 @@ export default defineConfig({
 | Property    | Type                                           | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | ----------- | ---------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | recommended | `boolean`                                      | `true`  | This option is intended to provide recommended default parameters and behavior.                                                                                                                                                                                                                                                                                                                                                     |
-| external    | `string[]`                                     |         | Don't bundle these modules, but dependencies and peerDependencies in your package.json are always excluded.[See more](https://tsdown.dev/reference/api/Interface.UserConfig#external)                                                                                                                                                                                                                                               |
+| external    | `string[]`                                     |         | Don't bundle these modules. Node.js built-ins and `electron` are always excluded.                                                                                                                                                                                                                                                                                                                                                   |
 | main        | [MainOptions](#MainOptions)                    |         | Configuration options for the electron main process.                                                                                                                                                                                                                                                                                                                                                                                |
 | preload     | [PreloadOptions](#PreloadOptions)              |         | Configuration options for the electron preload process.                                                                                                                                                                                                                                                                                                                                                                             |
 | debug       | `boolean`                                      | `false` | Electron debug mode, don't startup electron. You can also use `process.env.VITE_ELECTRON_DEBUG`. Default is false.                                                                                                                                                                                                                                                                                                                  |
@@ -227,27 +225,45 @@ The `recommended` option is used to set the default configuration and behavior, 
 
 ### MainOptions
 
-Based on [Options](https://tsdown.dev/reference/api/Interface.UserConfig) of [tsdown](https://tsdown.dev), some default values are added for ease of use.
+Based on [UserConfig](https://vite.dev/config/) of [vite](https://vite.dev), some default values are added for ease of use.
 
-| Property    | Type                          | Default                                         | Description                                                                                                                                                                                                                                                   |
-| ----------- | ----------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| entry       | `string`                      | `-`                                             | The main process entry file.                                                                                                                                                                                                                                  |
-| format      | `'cjs' \| 'esm'`              | `-`                                             | The bundle format. If not specified, it will use the "type" field from package.json.                                                                                                                                                                          |
-| outDir      | `string`                      | "dist-electron/main"                            | The output directory for the main process files                                                                                                                                                                                                               |
-| watchFiles  | `string \| string[]`          | `undefined`                                     | Watch Electron related files or folders.If `recommended:true`, it will monitor the `electron/main` directory; otherwise, you need to specify the directory corresponding to the Electron code. Failure to specify may cause Electron to restart indefinitely. |
-| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | Ignore files or folders being watched                                                                                                                                                                                                                         |
+| Property    | Type                                        | Default                                          | Description                                                                                                                                      |
+| ----------- | ------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| entry       | `string \| string[] \| Record`              | `-`                                              | The main process entry file. When `recommended: true`, defaults to `electron/main/index.ts` if it exists.                                        |
+| format      | `'cjs' \| 'esm'`                            | `-`                                              | The bundle format. If not specified, it will use the "type" field from package.json.                                                             |
+| outDir      | `string`                                    | "dist/main" (recommended) / "dist-electron/main" | The output directory for the main process files                                                                                                  |
+| target      | `string \| false`                           | `'node18.18'` (esm) / `'node16'` (cjs)           | The Node.js build target, passed to Vite's `build.target`.                                                                                       |
+| sourcemap   | `boolean \| 'inline' \| 'hidden'`           | `true` (dev) / `false` (prod)                    | Whether to generate sourcemaps.                                                                                                                  |
+| minify      | `boolean \| 'oxc' \| 'terser' \| 'esbuild'` | `false` (dev) / `true` (prod)                    | Minify the output.                                                                                                                               |
+| clean       | `boolean`                                   | `true`                                           | Empty the output directory before building.                                                                                                      |
+| treeshake   | `boolean`                                   | `true` (dev) / `false` (prod)                    | Enable/disable tree-shaking.                                                                                                                     |
+| external    | `string[]`                                  | `[]`                                             | Don't bundle these modules. Node.js built-ins and `electron` are always excluded.                                                                |
+| watchFiles  | `string \| string[]`                        | `undefined`                                      | Additional files or folders to watch. Note: Vite always watches the module dependency graph, so this is only needed for files outside the graph. |
+| ignoreWatch | `Arrayable<string \| RegExp>`               | `'.history', '.temp', '.tmp', '.cache', 'dist'`  | Ignore files or folders being watched                                                                                                            |
+| onSuccess   | `string \| function`                        | `undefined`                                      | A shell command or callback to run after every successful build (dev mode).                                                                      |
+
+Any other top-level [Vite UserConfig](https://vite.dev/config/) option (`resolve`, `define`, `plugins`, ...) can also be passed directly.
 
 ### PreloadOptions
 
-Based on [Options](https://tsdown.dev/reference/api/Interface.UserConfig) of [tsdown](https://tsdown.dev), some default values are added for ease of use.
+Based on [UserConfig](https://vite.dev/config/) of [vite](https://vite.dev), some default values are added for ease of use.
 
-| Property    | Type                          | Default                                         | Description                                                                                                                                                                                                                                                      |
-| ----------- | ----------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| entry       | `string`                      | `-`                                             | The preload process entry file.                                                                                                                                                                                                                                  |
-| format      | `'cjs' \| 'esm'`              | `-`                                             | The bundle format. If not specified, it will use the "type" field from package.json.                                                                                                                                                                             |
-| outDir      | `string`                      | "dist-electron/preload"                         | The output directory for the preload process files                                                                                                                                                                                                               |
-| watchFiles  | `string \| string[]`          | `undefined`                                     | Watch Electron related files or folders.If `recommended:true`, it will monitor the `electron/preload` directory; otherwise, you need to specify the directory corresponding to the Electron code. Failure to specify may cause Electron to restart indefinitely. |
-| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | Ignore files or folders being watched                                                                                                                                                                                                                            |
+| Property    | Type                                        | Default                                                | Description                                                                                                                                      |
+| ----------- | ------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| entry       | `string \| string[] \| Record`              | `-`                                                    | The preload process entry file. When `recommended: true`, defaults to `electron/preload/index.ts` if it exists.                                  |
+| format      | `'cjs' \| 'esm'`                            | `-`                                                    | The bundle format. If not specified, it will use the "type" field from package.json.                                                             |
+| outDir      | `string`                                    | "dist/preload" (recommended) / "dist-electron/preload" | The output directory for the preload process files                                                                                               |
+| target      | `string \| false`                           | `'node18.18'` (esm) / `'node16'` (cjs)                 | The Node.js build target, passed to Vite's `build.target`.                                                                                       |
+| sourcemap   | `boolean \| 'inline' \| 'hidden'`           | `true` (dev) / `false` (prod)                          | Whether to generate sourcemaps.                                                                                                                  |
+| minify      | `boolean \| 'oxc' \| 'terser' \| 'esbuild'` | `false` (dev) / `true` (prod)                          | Minify the output.                                                                                                                               |
+| clean       | `boolean`                                   | `true`                                                 | Empty the output directory before building.                                                                                                      |
+| treeshake   | `boolean`                                   | `true` (dev) / `false` (prod)                          | Enable/disable tree-shaking.                                                                                                                     |
+| external    | `string[]`                                  | `[]`                                                   | Don't bundle these modules. Node.js built-ins and `electron` are always excluded.                                                                |
+| watchFiles  | `string \| string[]`                        | `undefined`                                            | Additional files or folders to watch. Note: Vite always watches the module dependency graph, so this is only needed for files outside the graph. |
+| ignoreWatch | `Arrayable<string \| RegExp>`               | `'.history', '.temp', '.tmp', '.cache', 'dist'`        | Ignore files or folders being watched                                                                                                            |
+| onSuccess   | `string \| function`                        | `undefined`                                            | A shell command or callback to run after every successful build (dev mode).                                                                      |
+
+Any other top-level [Vite UserConfig](https://vite.dev/config/) option (`resolve`, `define`, `plugins`, ...) can also be passed directly.
 
 ### BuilderOptions
 
@@ -451,6 +467,15 @@ Open the [examples](./examples) directory, there are `vue` and `react` examples.
 - [vue](./examples/vue)
 
 ## Important Notes
+
+### v3.0.0
+
+**Breaking Updates:**
+
+- Requires **Vite `^8.0.0`** (the `main`/`preload` processes are now compiled with Vite itself using [Rolldown](https://rolldown.rs/), instead of `tsdown`).
+- `MainOptions` / `PreloadOptions` are now based on Vite's [UserConfig](https://vite.dev/config/) instead of tsdown's options. Any top-level Vite option (`resolve`, `define`, `plugins`, ...) can be passed directly.
+- The module dependency graph of `main`/`preload` is always watched in dev mode; `watchFiles` is only needed for files outside the graph.
+- `__dirname` / `__filename` are now injected automatically for `esm` output (like the previous `shims` behavior), so you can keep using `__dirname` in the main process without any manual setup.
 
 ### v2.0.0
 

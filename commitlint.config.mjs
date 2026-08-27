@@ -1,3 +1,3 @@
 export default {
-  extends: ['@tomjs/commitlint'],
+  extends: ['@tomjs/commitlint-config'],
 };

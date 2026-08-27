@@ -1,8 +1,11 @@
 packages:
   - examples/*
 
+patchedDependencies:
+  vite-plugin-electron-renderer@1.0.0: patches/vite-plugin-electron-renderer@1.0.0.patch
 onlyBuiltDependencies:
   - '@swc/core'
   - electron
+  - electron-winstaller
   - esbuild
   - simple-git-hooks

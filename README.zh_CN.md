@@ -10,7 +10,7 @@
 
 ## 特性
 
-- 使用 [tsdown](https://tsdown.dev) 快速构建 `main` 和 `preload`
+- 使用 [vite](https://cn.vitejs.dev/) 快速构建 `main` 和 `preload`
 - 配置简单，专注业务
 - 支持 `main` 的 `热重启`
 - 支持 `preload` 的 `热重载`
@@ -88,13 +88,11 @@ npm i electron-builder --save-dev
 `electron/main/index.ts`
 
 ```ts
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { ELECTRON_EXIT } from '@tomjs/vite-plugin-electron/electron';
 import { app, BrowserWindow } from 'electron';
 
-// when package.json "type": module"
-globalThis.__dirname = dirname(fileURLToPath(import.meta.url));
+// `esm` 输出会自动注入 `__dirname` 和 `__filename`，无需手动设置。
 
 const preload = join(__dirname, '../preload/index.mjs');
 const url = process.env.VITE_DEV_SERVER_URL;
@@ -210,7 +208,7 @@ export default defineConfig({
 | 参数名      | 类型                              | 默认值  | 说明                                                                                                                                                                                                                                                                                                                                                                                  |
 | ----------- | --------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | recommended | `boolean`                         | `true`  | 这个选项是为了提供推荐的默认参数和行为                                                                                                                                                                                                                                                                                                                                                |
-| external    | `string[]`                        |         | 不打包这些模块，但是 `dependencies` and `peerDependencies` 默认排除，[详见](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)                                                                                                                                                                                                                                              |
+| external    | `string[]`                        |         | 不打包这些模块。Node.js 内置模块和 `electron` 始终会被排除                                                                                                                                                                                                                                                                                                                            |
 | main        | [MainOptions](#MainOptions)       |         | electron main 进程选项                                                                                                                                                                                                                                                                                                                                                                |
 | preload     | [PreloadOptions](#PreloadOptions) |         | electron preload 进程选项                                                                                                                                                                                                                                                                                                                                                             |
 | debug       | `boolean`                         | `false` | Electron调试模式，不启动Electron。 您还可以使用 `process.env.VITE_ELECTRON_DEBUG`                                                                                                                                                                                                                                                                                                     |
@@ -226,27 +224,45 @@ export default defineConfig({
 
 ### MainOptions
 
-继承自 [tsdown](https://tsdown.dev/) 的 [Options](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)，添加了一些默认值，方便使用。
+继承自 [vite](https://cn.vitejs.dev/) 的 [UserConfig](https://cn.vitejs.dev/config/)，添加了一些默认值，方便使用。
 
-| 参数名      | 类型                          | 默认值                                          | 说明                                                                                                                                                               |
-| ----------- | ----------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **entry**   | `string`                      | `-`                                             | main 入口文件                                                                                                                                                      |
-| format      | `'cjs' \| 'esm'`              | `-`                                             | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                                                                                         |
-| outDir      | `string`                      | `"dist-electron/main"`                          | main 输出文件夹                                                                                                                                                    |
-| watchFiles  | `string \| string[]`          | `undefined`                                     | 监听 electron 相关文件或文件夹。如果 `recommended:true`，则监听 `electron/main` 目录，否则需要指定 electron 代码对应目录，如果没有指定可能会造成 electron 无限重启 |
-| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | 忽略监听的文件或文件夹                                                                                                                                             |
+| 参数名      | 类型                                        | 默认值                                               | 说明                                                                                                  |
+| ----------- | ------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **entry**   | `string \| string[] \| Record`              | `-`                                                  | main 入口文件。当 `recommended: true` 且存在 `electron/main/index.ts` 时自动使用                      |
+| format      | `'cjs' \| 'esm'`                            | `-`                                                  | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                            |
+| outDir      | `string`                                    | `"dist/main"`（recommended）/ `"dist-electron/main"` | main 输出文件夹                                                                                       |
+| target      | `string \| false`                           | `'node18.18'`（esm）/ `'node16'`（cjs）              | Node.js 构建目标，传递给 Vite 的 `build.target`                                                       |
+| sourcemap   | `boolean \| 'inline' \| 'hidden'`           | `true`（dev）/ `false`（prod）                       | 是否生成 sourcemap                                                                                    |
+| minify      | `boolean \| 'oxc' \| 'terser' \| 'esbuild'` | `false`（dev）/ `true`（prod）                       | 压缩输出                                                                                              |
+| clean       | `boolean`                                   | `true`                                               | 构建前清空输出目录                                                                                    |
+| treeshake   | `boolean`                                   | `true`（dev）/ `false`（prod）                       | 是否启用 tree-shaking                                                                                 |
+| external    | `string[]`                                  | `[]`                                                 | 不打包这些模块。Node.js 内置模块和 `electron` 始终会被排除                                            |
+| watchFiles  | `string \| string[]`                        | `undefined`                                          | 额外监听的文件夹或文件。注意：Vite 始终会监听模块依赖图，因此仅当需要监听依赖图之外的文件时才需要配置 |
+| ignoreWatch | `Arrayable<string \| RegExp>`               | `'.history', '.temp', '.tmp', '.cache', 'dist'`      | 忽略监听的文件或文件夹                                                                                |
+| onSuccess   | `string \| function`                        | `undefined`                                          | 每次构建成功（dev 模式）后执行的 shell 命令或回调                                                     |
+
+也可以直接传递 [Vite UserConfig](https://cn.vitejs.dev/config/) 的其他顶层选项（`resolve`、`define`、`plugins` 等）。
 
 ### PreloadOptions
 
-继承自 [tsdown](https://tsdown.dev) 的 [Options](https://tsdown.dev/zh-CN/reference/api/Interface.UserConfig)，添加了一些默认值，方便使用。
+继承自 [vite](https://cn.vitejs.dev/) 的 [UserConfig](https://cn.vitejs.dev/config/)，添加了一些默认值，方便使用。
 
-| 参数名      | 类型                          | 默认值                                          | 说明                                                                                                                                                                  |
-| ----------- | ----------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **entry**   | `string`                      | `-`                                             | preload 入口文件                                                                                                                                                      |
-| format      | `'cjs' \| 'esm'`              | `-`                                             | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                                                                                            |
-| outDir      | `string`                      | `"dist-electron/preload"`                       | preload 输出文件夹                                                                                                                                                    |
-| watchFiles  | `string \| string[]`          | `undefined`                                     | 监听 electron 相关文件或文件夹。如果 `recommended:true`，则监听 `electron/preload` 目录，否则需要指定 electron 代码对应目录，如果没有指定可能会造成 electron 无限重启 |
-| ignoreWatch | `Arrayable<string \| RegExp>` | `'.history', '.temp', '.tmp', '.cache', 'dist'` | 忽略监听的文件或文件夹                                                                                                                                                |
+| 参数名      | 类型                                        | 默认值                                                     | 说明                                                                                                  |
+| ----------- | ------------------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **entry**   | `string \| string[] \| Record`              | `-`                                                        | preload 入口文件。当 `recommended: true` 且存在 `electron/preload/index.ts` 时自动使用                |
+| format      | `'cjs' \| 'esm'`                            | `-`                                                        | 打包格式。如果未指定，将使用 package.json 中的 "type" 字段                                            |
+| outDir      | `string`                                    | `"dist/preload"`（recommended）/ `"dist-electron/preload"` | preload 输出文件夹                                                                                    |
+| target      | `string \| false`                           | `'node18.18'`（esm）/ `'node16'`（cjs）                    | Node.js 构建目标，传递给 Vite 的 `build.target`                                                       |
+| sourcemap   | `boolean \| 'inline' \| 'hidden'`           | `true`（dev）/ `false`（prod）                             | 是否生成 sourcemap                                                                                    |
+| minify      | `boolean \| 'oxc' \| 'terser' \| 'esbuild'` | `false`（dev）/ `true`（prod）                             | 压缩输出                                                                                              |
+| clean       | `boolean`                                   | `true`                                                     | 构建前清空输出目录                                                                                    |
+| treeshake   | `boolean`                                   | `true`（dev）/ `false`（prod）                             | 是否启用 tree-shaking                                                                                 |
+| external    | `string[]`                                  | `[]`                                                       | 不打包这些模块。Node.js 内置模块和 `electron` 始终会被排除                                            |
+| watchFiles  | `string \| string[]`                        | `undefined`                                                | 额外监听的文件夹或文件。注意：Vite 始终会监听模块依赖图，因此仅当需要监听依赖图之外的文件时才需要配置 |
+| ignoreWatch | `Arrayable<string \| RegExp>`               | `'.history', '.temp', '.tmp', '.cache', 'dist'`            | 忽略监听的文件或文件夹                                                                                |
+| onSuccess   | `string \| function`                        | `undefined`                                                | 每次构建成功（dev 模式）后执行的 shell 命令或回调                                                     |
+
+也可以直接传递 [Vite UserConfig](https://cn.vitejs.dev/config/) 的其他顶层选项（`resolve`、`define`、`plugins` 等）。
 
 ### BuilderOptions
 
@@ -449,6 +465,15 @@ pnpm build
 - [vue](./examples/vue)
 
 ## 重要说明
+
+### v3.0.0
+
+**破坏性更新：**
+
+- 需要 **Vite `^8.0.0`**（`main`/`preload` 现在由 Vite 自身基于 [Rolldown](https://rolldown.rs/) 编译，不再使用 `tsdown`）。
+- `MainOptions` / `PreloadOptions` 现在继承自 Vite 的 [UserConfig](https://cn.vitejs.dev/config/) 而非 tsdown 的选项。可以直接传递任意 Vite 顶层选项（`resolve`、`define`、`plugins` 等）。
+- dev 模式下始终监听 `main`/`preload` 的模块依赖图；`watchFiles` 仅用于监听依赖图之外的文件。
+- `esm` 输出会自动注入 `__dirname` / `__filename`（等价于之前的 `shims` 行为），主进程中可以继续直接使用 `__dirname`。
 
 ### v2.0.0
 

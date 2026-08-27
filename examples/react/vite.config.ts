@@ -6,8 +6,7 @@ import renderer from 'vite-plugin-electron-renderer';
 export default defineConfig({
   plugins: [
     react(),
-    electron({
-    }),
+    electron({ builder: true }),
     renderer(),
   ],
 });

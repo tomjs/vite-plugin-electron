@@ -25,7 +25,7 @@ function getMirror() {
     registry = registry.trim();
     if (
       registry
-      && ['registry.npmmirror.com', 'registry.npm.taobao.org'].find(s => registry.includes(s))
+      && ['registry.npmmirror.com', 'registry.npm.taobao.org'].some(s => registry.includes(s))
     ) {
       mirror = 'https://npmmirror.com/mirrors/electron/';
     }

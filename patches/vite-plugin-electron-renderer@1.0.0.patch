@@ -1,0 +1,22 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 13fcf6d3a6cb867d779abbb30289abf673d58320..a57c056d2226000b4fb169f110440818fdb095ce 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -308,7 +308,7 @@ const BUNDLE_OUT_DIR = `${CACHE_DIR}/bundled`;
+ const BUNDLE_CJS_OUT_DIR = `${CACHE_DIR}/bundled-cjs`;
+ const TAG = "[electron-renderer]";
+ const RE_ESCAPE = /[\\^$.*+?()[\]{}|]/g;
+-const SCRIPT_EXT_RE = /\.[cm]?[jt]sx?(?:[?#].*)?$/;
++const SCRIPT_EXT_RE = /\.(?:[cm]?[jt]sx?|vue)(?:[?#].*)?$/; // [patched] support .vue SFCs
+ function renderer(options = {}) {
+ 	return createRenderer(options, false);
+ }
+@@ -474,7 +474,7 @@ function rewriteStaticImports(code, program, externalModules) {
+ 	const rewrites = [];
+ 	for (const node of program.body) {
+ 		if (node.type === "ExpressionStatement" && node.directive && rewrites.length === 0) continue;
+-		if (node.type !== "ImportDeclaration") break;
++		if (node.type !== "ImportDeclaration") continue; // [patched] scan all top-level nodes (imports can appear after statements in compiled output e.g. .vue SFCs)
+ 		if (externalModules.has(node.source.value)) rewrites.push({
+ 			start: node.start,
+ 			end: node.end,
