@@ -1,3 +1,7 @@
+## [3.0.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.5.1...v3.0.0) (2026-08-29)
+
+- feat: use vite replace tsdown  [31770ab](https://github.com/tomjs/vite-plugin-electron/commit/31770ab)
+
 ## [2.5.1](https://github.com/tomjs/vite-plugin-electron/compare/v2.5.0...v2.5.1) (2026-02-01)
 
 - fix: mirror url  [08d5fb8](https://github.com/tomjs/vite-plugin-electron/commit/08d5fb8)
