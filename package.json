@@ -6,7 +6,7 @@
   "description": "A simple vite plugin for electron, supports esm/cjs, support esm in electron v28+",
   "author": {
     "name": "Tom Gao",
-    "email": "tom@tomgao.cc"
+    "email": "tom@tomgao.cn"
   },
   "license": "MIT",
   "repository": {
