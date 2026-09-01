@@ -1,3 +1,7 @@
+## [3.0.1](https://github.com/tomjs/vite-plugin-electron/compare/v3.0.0...v3.0.1) (2026-09-01)
+
+- chore: change email  [b0dfb2a](https://github.com/tomjs/vite-plugin-electron/commit/b0dfb2a)
+
 ## [3.0.0](https://github.com/tomjs/vite-plugin-electron/compare/v2.5.1...v3.0.0) (2026-08-29)
 
 - feat: use vite replace tsdown  [31770ab](https://github.com/tomjs/vite-plugin-electron/commit/31770ab)
