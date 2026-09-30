@@ -1,3 +1,7 @@
+## [3.0.2](https://github.com/tomjs/vite-plugin-electron/compare/v3.0.1...v3.0.2) (2026-09-30)
+
+- fix: devtools won't open on Linux #1  [715f309](https://github.com/tomjs/vite-plugin-electron/commit/715f309)
+
 ## [3.0.1](https://github.com/tomjs/vite-plugin-electron/compare/v3.0.0...v3.0.1) (2026-09-01)
 
 - chore: change email  [b0dfb2a](https://github.com/tomjs/vite-plugin-electron/commit/b0dfb2a)
