@@ -157,7 +157,10 @@ async function startup(options: PluginOptions) {
 
   // start electron app
   process.electronApp = spawn(electron as any, args, {
-    stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+    stdio: process.platform === 'linux'
+      // reserve file descriptor 3 for Chromium; put Node IPC on file descriptor 4
+      ? ['inherit', 'inherit', 'inherit', 'ignore', 'ipc']
+      : ['inherit', 'inherit', 'inherit', 'ipc'],
   });
 
   // exit process after electron app exit
